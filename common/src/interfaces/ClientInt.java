@@ -12,4 +12,5 @@ package interfaces;
 public interface ClientInt {
     //------------maroof--------------
     // ghadaaaaaaa
+    //gggggggggggggggggggg
 }
