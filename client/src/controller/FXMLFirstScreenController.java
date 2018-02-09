@@ -1,11 +1,5 @@
 package controller;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -74,9 +68,9 @@ public class FXMLFirstScreenController implements Initializable {
     //private implementation of methods
     private void connect() throws IOException {
         String receviedIP = serverIpTextField.getText().trim();
-        final String regexIP = "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$";
+        final String REGEX_IP = "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$";
 
-        if (receviedIP.matches(regexIP)) {
+        if (receviedIP.matches(REGEX_IP)) {
             invalidIpMessage.setVisible(false);
             
             Platform.runLater(new Runnable() {

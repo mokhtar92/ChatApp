@@ -13,7 +13,7 @@
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveLoginWindow" onMousePressed="#setMousePosition" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLLoginController">
     <children>
         <Label fx:id="invalidEmailPasswordMessage" layoutX="533.0" layoutY="641.0" minHeight="16" minWidth="69" text="* Invalid Email/Password, try again!" textFill="RED" visible="false" />
-      <JFXTextField fx:id="loginEmailTextField" focusColor="#3c999c" layoutX="424.0" layoutY="522.0" prefHeight="50.0" prefWidth="450.0" promptText="Email" style="-fx-text-inner-color: #FFFFFF;">
+      <JFXTextField fx:id="loginEmailTextField" focusColor="#3c999c" layoutX="424.0" layoutY="522.0" prefHeight="50.0" prefWidth="450.0" promptText="Email" style="-fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font></JFXTextField>
@@ -30,7 +30,7 @@
             <Image url="@../resources/chat_logo.png" />
          </image>
       </ImageView>
-      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#3c999c" layoutX="424.0" layoutY="582.0" prefHeight="50.0" prefWidth="450.0" promptText="Password" style="-fx-text-inner-color: #FFFFFF;">
+      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#3c999c" layoutX="424.0" layoutY="582.0" prefHeight="50.0" prefWidth="450.0" promptText="Password" style="-fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font></JFXPasswordField>
@@ -66,5 +66,18 @@
             <Image url="@../resources/password_icon.png" />
          </image>
       </ImageView>
+      <Label layoutX="541.0" layoutY="734.0" text="don't have account ?" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="702.0" layoutY="734.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
