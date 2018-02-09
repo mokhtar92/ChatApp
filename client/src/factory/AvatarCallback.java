@@ -20,5 +20,4 @@ public class AvatarCallback implements Callback<ListView<String>, ListCell<Strin
     public ListCell<String> call(ListView<String> param) {
         return new AvatarListCell();
     }
-    
 }

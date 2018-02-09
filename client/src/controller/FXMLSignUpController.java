@@ -49,9 +49,6 @@ public class FXMLSignUpController implements Initializable{
 
     @FXML
     private ComboBox<String> ChooseAvatarComboBox;
-
-    @FXML
-    private ImageView avatarImageView;
     
     @FXML
     private DatePicker signUpDatePicker;
@@ -62,7 +59,7 @@ public class FXMLSignUpController implements Initializable{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                myStage = (Stage) avatarImageView.getScene().getWindow();
+                myStage = (Stage) firstNameTextField.getScene().getWindow();
             }
         });
         
