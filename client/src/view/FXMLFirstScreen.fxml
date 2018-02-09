@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLFirstScreenController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveServerWindow" onMousePressed="#setMousePosition" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLFirstScreenController">
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
+        <Label fx:id="invalidIpMessage" layoutX="551.0" layoutY="639.0" minHeight="16" minWidth="69" text="* Invalid IP address, try again!" textFill="RED" visible="false" />
+      <JFXTextField fx:id="serverIpTextField" alignment="CENTER" focusColor="#3c999c" layoutX="507.0" layoutY="577.0" promptText="Enter IP number of server" style="-fx-text-inner-color: #FFFFFF;">
+         <font>
+            <Font name="Arial" size="25.0" />
+         </font></JFXTextField>
+      <JFXButton buttonType="RAISED" layoutX="569.0" layoutY="668.0" onMouseClicked="#connectToServer" prefHeight="50.0" prefWidth="160.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Connect" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <ImageView fitHeight="464.0" fitWidth="349.0" layoutX="467.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/chat_logo.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="1201.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#closeConnectToServerWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
+         <font>
+            <Font name="Bauhaus 93" size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button layoutX="1158.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#minimizeConnectToServerWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Bauhaus 93" size="25.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
