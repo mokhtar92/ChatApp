@@ -12,37 +12,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveSignUpWindow" onMousePressed="#setMousePosition" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLSignUpController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveSignUpWindow" onMousePressed="#setMousePosition" prefHeight="745.0" prefWidth="565.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLSignUpController">
    <children>
-      <TextField fx:id="firstNameTextField" layoutX="465.0" layoutY="285.0" prefHeight="45.0" prefWidth="350.0" promptText="First name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="firstNameTextField" layoutX="110.0" layoutY="262.0" prefHeight="45.0" prefWidth="350.0" promptText="First name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font></TextField>
-      <TextField fx:id="lastNameTextField" layoutX="465.0" layoutY="343.0" prefHeight="45.0" prefWidth="350.0" promptText="Last name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="lastNameTextField" layoutX="110.0" layoutY="320.0" prefHeight="45.0" prefWidth="350.0" promptText="Last name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="userameTextField" layoutX="465.0" layoutY="399.0" prefHeight="45.0" prefWidth="350.0" promptText="Username" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="countryTextField" layoutX="107.0" layoutY="488.0" prefHeight="45.0" prefWidth="350.0" promptText="Country" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="emailTextField" layoutX="465.0" layoutY="455.0" prefHeight="45.0" prefWidth="350.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="emailTextField" layoutX="107.0" layoutY="376.0" prefHeight="45.0" prefWidth="350.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="passwordTextField" layoutX="465.0" layoutY="511.0" prefHeight="45.0" prefWidth="350.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <PasswordField fx:id="passwordTextField" layoutX="107.0" layoutY="432.0" prefHeight="45.0" prefWidth="350.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <JFXButton buttonType="RAISED" layoutX="550.0" layoutY="692.0" onMouseClicked="#createNewAccount" prefHeight="50.0" prefWidth="180.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Create Account" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="195.0" layoutY="669.0" onAction="#signUp" prefHeight="50.0" prefWidth="180.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Create Account" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font></JFXButton>
-      <Button layoutX="1201.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#closeSignUpWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
+      <Button layoutX="517.0" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#closeSignUpWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
          <font>
             <Font name="Bauhaus 93" size="25.0" />
          </font>
@@ -50,7 +50,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="1155.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#minimizeSignUpWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
+      <Button layoutX="471.0" layoutY="-9.0" mnemonicParsing="false" onMouseClicked="#minimizeSignUpWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -58,22 +58,23 @@
             <Font name="Bauhaus 93" size="25.0" />
          </font>
       </Button>
-      <ComboBox fx:id="ChooseAvatarComboBox" layoutX="540.0" layoutY="67.0" prefHeight="200.0" prefWidth="200.0" promptText="          Select Avatar" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 100;" visibleRowCount="6">
+      <Label layoutX="239.0" layoutY="134.0" text="Selecct Avatar" textFill="WHITE" />
+      <ComboBox fx:id="ChooseAvatarComboBox" layoutX="185.0" layoutY="44.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 100; -fx-text-inner-fill: #FFFFFF;" visibleRowCount="2">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ComboBox>
-      <Label layoutX="465.0" layoutY="621.0" prefHeight="45.0" prefWidth="350.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Date of birth" textFill="#afb0b2">
+      <Label layoutX="110.0" layoutY="598.0" prefHeight="45.0" prefWidth="350.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Date of birth" textFill="#afb0b2">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <DatePicker fx:id="signUpDatePicker" layoutX="651.0" layoutY="628.0" prefWidth="150.0" style="-fx-background-color: transparent;" />
-      <Label layoutX="462.0" layoutY="568.0" prefHeight="45.0" prefWidth="350.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Gender" textFill="#afb0b2">
+      <DatePicker fx:id="signUpDatePicker" layoutX="296.0" layoutY="605.0" prefWidth="150.0" style="-fx-background-color: transparent;" />
+      <Label layoutX="107.0" layoutY="545.0" prefHeight="45.0" prefWidth="350.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Gender" textFill="#afb0b2">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <JFXRadioButton fx:id="maleRadioBtn" layoutX="593.0" layoutY="576.0" selected="true" text="Male" textFill="#afb0b2">
+      <JFXRadioButton fx:id="maleRadioBtn" layoutX="238.0" layoutY="553.0" selected="true" text="Male" textFill="#afb0b2">
          <toggleGroup>
             <ToggleGroup fx:id="Gender" />
          </toggleGroup>
@@ -81,7 +82,7 @@
             <Font size="20.0" />
          </font>
       </JFXRadioButton>
-      <JFXRadioButton layoutX="695.0" layoutY="576.0" text="Female" textFill="#afb0b2" toggleGroup="$Gender">
+      <JFXRadioButton layoutX="340.0" layoutY="553.0" text="Female" textFill="#afb0b2" toggleGroup="$Gender">
          <font>
             <Font size="20.0" />
          </font>

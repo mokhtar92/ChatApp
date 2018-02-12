@@ -5,3 +5,9 @@
 .mainFxmlClass {
 
 }
+
+.friend {
+    -fx-text-fill: #FF0000;
+
+    
+}

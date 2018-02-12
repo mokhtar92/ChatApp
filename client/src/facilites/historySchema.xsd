@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:element name="history" type="historyType"/>
+
+    <xs:complexType name="historyType">
+        <xs:sequence>
+            <xs:element name="message" type="MessageType" maxOccurs="unbounded" />    
+        </xs:sequence>
+        <xs:attribute name="owner" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="MessageType">
+        <xs:sequence>
+            <xs:element name="from" type="xs:string"/>
+            <xs:element name="to" type="xs:string"  />
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="color" type="xs:string"/>
+            <xs:element name="size" type="fontSize"/>
+            <xs:element name="family" type="fontFamily"/>
+            <xs:element name="style" type="xs:string"/>
+            <xs:element name="weight" type="xs:string"/>
+            <xs:element name="decoration" type="xs:string"/>
+            <xs:element name="body" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="fontSize">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:minExclusive value="8"/>
+            <xs:maxExclusive value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="fontFamily">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Arial"/>
+            <xs:enumeration value="Times"/>
+            <xs:enumeration value="Courier New"/>
+            <xs:enumeration value="Comic Sans MS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    
+</xs:schema>
+

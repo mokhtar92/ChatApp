@@ -3,4 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package resources;
+package interfaces;
+
+/**
+ *
+ * @author Hanaa
+ */
+public interface NotificationInt {
+     public void createNotification (String title , String content , String ImgUrl);
+}

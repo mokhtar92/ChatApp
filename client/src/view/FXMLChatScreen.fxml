@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -7,8 +10,113 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="controller.FXMLChatScreenController">
-    <stylesheets>
-        <URL value="@/resources/fxmlchatscreen.css" />
-    </stylesheets>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveChatWindow" onMousePressed="#setMousePosition" prefHeight="767.0" prefWidth="1185.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLChatScreenController">
+   <right>
+      <Pane prefHeight="800.0" prefWidth="250.0" style="-fx-background-color: #1c2038;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="userImage" fitHeight="150.0" fitWidth="200.0" layoutX="50.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/man.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="userName" layoutX="42.0" layoutY="182.0" text="Username name" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="userAvailabilityComboBox" layoutX="106.0" layoutY="232.0" prefHeight="31.0" prefWidth="116.0" visibleRowCount="3">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ComboBox>
+            <TextArea fx:id="userStatusTextArea" layoutX="29.0" layoutY="282.0" onInputMethodTextChanged="#onStatusChanged" prefHeight="89.0" prefWidth="193.0" promptText="Enter your status here." wrapText="true" />
+            <Label fx:id="adsArea" alignment="CENTER" layoutX="18.0" layoutY="443.0" prefHeight="255.0" prefWidth="216.0" text="Ads are shown here" textFill="WHITE" />
+            <Label layoutX="77.0" layoutY="422.0" text="Advertisement" textFill="#afb0b2" />
+            <Label layoutX="29.0" layoutY="237.0" text="availability" textFill="WHITE" />
+         </children>
+      </Pane>
+   </right>
+   <top>
+      <Pane prefHeight="55.0" prefWidth="1280.0" style="-fx-background-color: #454762;" stylesheets="@../resources/fxmlchatscreen.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="1124.0" layoutY="4.0" mnemonicParsing="false" onMouseClicked="#closeChatWindow" style="-fx-background-color: transparent;" text="X" textFill="WHITE">
+               <font>
+                  <Font name="Bauhaus 93" size="25.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button layoutX="1077.0" layoutY="-7.0" mnemonicParsing="false" onMouseClicked="#minimizeChatWindow" style="-fx-background-color: transparent;" text="_" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="Bauhaus 93" size="25.0" />
+               </font>
+            </Button>
+         </children></Pane>
+   </top>
+   <left>
+      <BorderPane prefHeight="755.0" prefWidth="361.0" BorderPane.alignment="CENTER">
+         <top>
+            <Pane prefHeight="50.0" prefWidth="361.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="138.0" layoutY="7.0" text="Friends" textFill="#454762">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+         </top>
+         <center>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <content>
+                  <ListView fx:id="friendsListView" prefHeight="660.0" prefWidth="358.0" />
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </left>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <bottom>
+            <Pane prefHeight="58.0" prefWidth="669.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField layoutX="134.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="428.0" promptText="Write a message and press enter to send ..." />
+                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="14.0" layoutY="10.0" onMouseClicked="#saveChatHistory" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/save_chat_icon.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="72.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <image>
+                        <Image url="@../resources/add_file_icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </bottom>
+         <top>
+            <TabPane fx:id="chatTabPane" prefHeight="648.0" prefWidth="669.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="my friend">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <VBox fx:id="chatVBox" prefHeight="590.0" prefWidth="560.0" />
+                           </content>
+                        </ScrollPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </top></BorderPane>
+   </center>
+</BorderPane>
