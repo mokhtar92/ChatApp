@@ -1,6 +1,8 @@
 package model;
 
+import entity.Message;
 import entity.User;
+import interfaces.ClientInt;
 import interfaces.ServerInt;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -31,7 +33,11 @@ public class Service {
         }
         return isEffected;
     }
-    
+    public static User getUser(String email,String password) throws RemoteException{
+        
+            User user=getServer().getUser(email, password);
+            return user;
+    }
     public static ServerInt getServer(){
         ServerInt server = null;
         try{
@@ -42,4 +48,11 @@ public class Service {
         }
         return server;
     }
+    public static void register(ClientInt client,User user) throws RemoteException{
+        getServer().register(client, user);
+    }
+    public static void tellOne(Message message) throws RemoteException{
+        getServer().tellOne(message);
+    }
+    
 }

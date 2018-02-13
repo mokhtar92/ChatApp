@@ -27,8 +27,8 @@ public class UserSession {
     /**
      * @param user the user to set
      */
-    public void setUser(User user) {
-        this.user = user;
+    public static void setUser(User user1) {
+        user = user1;
     }
     
 }

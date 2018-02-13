@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 /**
  *
@@ -32,7 +32,7 @@ public class Operation {
             user.setEmail(resultSet.getString(4));
             user.setPassword(resultSet.getString(5));
             user.setCountry(resultSet.getString(6));
-//            user.setBirthDate(new Date(resultSet.getString(7)));
+            user.setBirthDate(resultSet.getDate(7));
             user.setGender(resultSet.getString(8));
             user.setMyStatus(resultSet.getString(9));
             users.add(user);

@@ -96,12 +96,12 @@ public class FXMLChatScreenController implements Initializable {
         displayComboBox();
         displayFriendList();
         server = Service.getServer();
-        server = Service.getServer();
+    
         user = UserSession.getUser();
 
         try {
             client = new ClientImpl(this);
-            server.register(client, user);
+            Service.register(client, user);
 
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,7 +122,7 @@ public class FXMLChatScreenController implements Initializable {
                 try {
                     message.setBody(msg);
 
-                    server.tellOne(message);
+                    Service.tellOne(message);
 
                 } catch (RemoteException ex) {
                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
