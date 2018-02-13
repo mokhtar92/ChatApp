@@ -27,9 +27,6 @@ public class Message implements Serializable {
     private String fontWeight;
     private Boolean underline;
 
-    public Message() {
-    }
-
     public Message(int fontsSize, String from, String to, String fontColor, String fontFamily, String fontStyle, String body, String fontWeight, Boolean underline) {
         this.fontsSize = fontsSize;
         this.from = from;

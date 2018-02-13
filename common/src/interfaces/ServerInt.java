@@ -33,5 +33,4 @@ public interface ServerInt extends Remote {
     public void createGroup(ArrayList<String> group) throws RemoteException;
 
     public void sendFile(entity.FileSender file) throws RemoteException;
-    //public void notifyFriends(boolean status) throws RemoteException;
 }
