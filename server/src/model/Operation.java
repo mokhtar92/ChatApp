@@ -41,10 +41,5 @@ public class Operation {
         return users;
        
 };
-  public void ChangeStatus(User user,String Status) throws SQLException{
-        String query="update ITI_CHATAPP_USER set myStatus='"+Status+"' where Recid='"+user.getRecId()+"'";
-        Database db=Database.getInstance();
-        PreparedStatement preparedStatement =db.getPreparedStatement(query);
-        ResultSet resultSet=preparedStatement.executeQuery();
-  }
+ 
 }
