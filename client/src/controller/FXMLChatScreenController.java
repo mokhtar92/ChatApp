@@ -151,6 +151,7 @@ public class FXMLChatScreenController implements Initializable {
             public void run() {
               NotificationInt impl = new NotificationImpl() ;
                 impl.createNotification("Acconcement", message, "resources/chat_logo.png");
+                adsArea.setText(adsArea.getText()+"\n"+message);
             }
         });
         
