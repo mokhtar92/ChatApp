@@ -32,7 +32,7 @@ public class Service {
         return isEffected;
     }
     
-    private ServerInt getServer(){
+    public static ServerInt getServer(){
         ServerInt server = null;
         try{
             Registry reg = LocateRegistry.getRegistry("127.0.0.1", 2000);
