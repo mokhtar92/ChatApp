@@ -6,7 +6,6 @@
 package model;
 
 ;
-import controller.FXMLChatScreenController;
 import entity.FileSender;
 import entity.Message;
 import interfaces.ClientInt;
@@ -23,26 +22,17 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
    
     static int file_Id = 0;
     public static HashMap<String,FileSender> files = new HashMap<>();
-    FXMLChatScreenController chat;
+
     public ClientImpl() throws RemoteException {
-       
-    }
-    public ClientImpl(FXMLChatScreenController chat) throws RemoteException {
-        this.chat=chat;
+        
     }
 
     @Override
   public void recieve(Message message)throws RemoteException {
-      
-        chat.getMessage(message);
-        
+        //chat.render(message);
         
     }
-  @Override
-  public void recieveAnnoncement(String message)throws RemoteException{
   
-      chat.getAnnoncement(message);
-  }
   @Override
     public void reciveFile(String path, String filename,boolean append, byte[] data, int dataLength) {
 

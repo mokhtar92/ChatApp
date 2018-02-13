@@ -6,7 +6,6 @@ package controller;
  * and open the template in the editor.
  */
 import entity.User;
-import interfaces.ServerInt;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -24,7 +23,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.NotificationImpl;
@@ -57,15 +55,12 @@ public class FXMLServerScreenController implements Initializable {
     TableColumn<User, String> country;
     @FXML
     PieChart chart;
-    @FXML 
-    TextArea annoncementTextArea ;
     Operation operation = null;
     ObservableList<User> data;
-   
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         ObservableList<PieChart.Data> list = FXCollections.observableArrayList(
                 new PieChart.Data("male", 50),
                 new PieChart.Data("female", 40)
@@ -106,7 +101,10 @@ public class FXMLServerScreenController implements Initializable {
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                ServerImpl.startServer();
+
+                NotificationImpl impl = new NotificationImpl();
+                impl.createNotification("hgh", "jhgh", "resources/chat_logo.png");
+                ServerImpl.startSer();
                 stop.setDisable(false);
                 start.setDisable(true);
 
@@ -118,7 +116,7 @@ public class FXMLServerScreenController implements Initializable {
             public void handle(MouseEvent event) {
 
                 try {
-                    ServerImpl.stopServer();
+                    ServerImpl.stop();
                     start.setDisable(false);
                     stop.setDisable(true);
                 } catch (RemoteException | NotBoundException ex) {
@@ -127,12 +125,5 @@ public class FXMLServerScreenController implements Initializable {
             }
         });
     }
-    @FXML
-    public void SendAnnoncement(MouseEvent event) throws RemoteException{
-        String msg=annoncementTextArea.getText().trim();
-        if(msg!=null&&msg!=""){
-            
-            ServerImpl.sendAnnoncement(msg);
-        }
-    }
+
 }
