@@ -3,7 +3,9 @@ package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import oracle.jdbc.OracleDriver;
 
 public class Database {
@@ -11,6 +13,8 @@ public class Database {
     private static Connection con;
     private static Database opr;
     private static PreparedStatement ps = null;
+    private static PreparedStatement psUpdatable = null;
+   
 
     static {
         try {
@@ -32,7 +36,7 @@ public class Database {
 
     private static Connection getConnection() throws SQLException {
         if (con == null) {
-            con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe","CHAT_APP","chat_app");
+            con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:orcl","CHAT_APP","chat_app");
         }
         return con;
     }
@@ -40,6 +44,7 @@ public class Database {
     public PreparedStatement getPreparedStatement(String query) {
         try {
             ps = getConnection().prepareStatement(query);
+                               
         } catch (SQLException ex) {
             release();
             ex.printStackTrace(System.out);
@@ -47,6 +52,19 @@ public class Database {
 
         return ps;
     }
+    
+     public PreparedStatement getPreparedStatementUpdatable(String query) {
+        try {
+        psUpdatable = getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                               
+        } catch (SQLException ex) {
+            release();
+            ex.printStackTrace(System.out);
+        }
+
+        return psUpdatable;
+    }
+    
 
     public void release() {
         try {

@@ -12,17 +12,17 @@ import java.util.regex.Pattern;
  */
 public class User implements Serializable {
 
-    private Long recId;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String country;
-    private Date birthDate;
-    private String gender;
-    private String myStatus;
-    private Boolean active;
-    private String imgURL;
+    Long recId;
+    String firstName;
+    String lastName;
+    String email;
+    String password;
+    String country;
+    Date birthDate;
+    String gender;
+    String myStatus;
+    Boolean active;
+    String imgURL;
 
     public String getImgURL() {
         return imgURL;

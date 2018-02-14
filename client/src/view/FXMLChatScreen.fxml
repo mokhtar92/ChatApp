@@ -24,7 +24,7 @@
                   <Font name="System Bold" size="22.0" />
                </font>
             </Label>
-            <ComboBox fx:id="userAvailabilityComboBox" layoutX="106.0" layoutY="232.0" onAction="#onStatusChanged" prefHeight="31.0" prefWidth="116.0" visibleRowCount="3">
+            <ComboBox fx:id="userAvailabilityComboBox" layoutX="106.0" layoutY="232.0" prefHeight="31.0" prefWidth="116.0" visibleRowCount="3">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

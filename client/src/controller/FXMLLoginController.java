@@ -3,8 +3,6 @@ package controller;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import entity.User;
-import interfaces.ClientInt;
-import interfaces.ServerInt;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,9 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import model.ClientImpl;
 import model.Service;
-import model.UserSession;
 
 /**
  *
@@ -34,7 +30,6 @@ public class FXMLLoginController implements Initializable {
     private Stage myStage;
     private double xOffset = 0;
     private double yOffset = 0;
-    private ServerInt server=null;
     Service service = new Service();
 
     @FXML
@@ -52,17 +47,13 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void checkLogin(ActionEvent ev) {
         User user = new User();
-        
-       String email=loginEmailTextField.getText();
-       String password=loginPasswordTextField.getText();
-        user.setEmail(email);
-        user.setPassword(password);
+
+        user.setEmail(loginEmailTextField.getText());
+        user.setPassword(loginPasswordTextField.getText());
 
         if (service.checkLogin(user)) {
             invalidEmailPasswordMessage.setVisible(false);
             try {
-                user=Service.getUser(email, password);
-                UserSession.setUser(user);
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
