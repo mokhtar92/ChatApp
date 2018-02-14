@@ -25,8 +25,10 @@ hs_err_pid*
 /client/nbproject/private/
 /client/dist/
 /client/build/
+/client/nbproject/project.properties
 /server/build/
 /server/dist/
+/server/nbproject/project.properties
 /common/build/
 /common/dist/
-/servlets/nbproject/private/
+/common/nbproject/project.properties

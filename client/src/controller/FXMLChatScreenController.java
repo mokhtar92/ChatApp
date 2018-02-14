@@ -96,7 +96,6 @@ public class FXMLChatScreenController implements Initializable {
         displayComboBox();
         displayFriendList();
         server = Service.getServer();
-        server = Service.getServer();
         user = UserSession.getUser();
 
         try {

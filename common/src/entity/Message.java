@@ -40,6 +40,9 @@ public class Message implements Serializable {
         this.underline = underline;
     }
 
+    public Message() {
+    }
+
     public int getFontsSize() {
         return fontsSize;
     }

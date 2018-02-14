@@ -83,7 +83,7 @@
          <bottom>
             <Pane prefHeight="58.0" prefWidth="669.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField layoutX="134.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="428.0" promptText="Write a message and press enter to send ..." />
+                  <TextField fx:id="sendTextField" layoutX="134.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="428.0" promptText="Write a message and press enter to send ..." />
                   <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="14.0" layoutY="10.0" onMouseClicked="#saveChatHistory" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/save_chat_icon.png" />
