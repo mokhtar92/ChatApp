@@ -14,26 +14,35 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 import model.NotificationImpl;
 import model.Operation;
 import model.ServerImpl;
+import org.controlsfx.control.GridView;
 
 /**
  *
  * @author Ahmed_Mokhtar
  */
-public class FXMLServerScreenController implements Initializable {
+public class FXMLServerScreenController implements Initializable{
 
     @FXML
     Button stop;
@@ -55,18 +64,27 @@ public class FXMLServerScreenController implements Initializable {
     TableColumn<User, String> country;
     @FXML
     PieChart chart;
+    
+    @FXML
+     PieChart chart2;
+    
+    @FXML
+     Button updateBtn;
+    
+    @FXML
+      GridView myGrid;      
+      
+    
     Operation operation = null;
     ObservableList<User> data;
-
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        ObservableList<PieChart.Data> list = FXCollections.observableArrayList(
-                new PieChart.Data("male", 50),
-                new PieChart.Data("female", 40)
-        );
-        chart.setData(list);
+ 
         operation = new Operation();
+
+        drawStatistics();
+
         try {
 
             ArrayList<User> users = new ArrayList<>();
@@ -111,6 +129,13 @@ public class FXMLServerScreenController implements Initializable {
             }
         });
 
+        updateBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                drawStatistics();
+            }
+        });
+
         stop.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -124,6 +149,41 @@ public class FXMLServerScreenController implements Initializable {
                 }
             }
         });
+
     }
 
+    
+    public void drawStatistics ()
+    {
+
+        try {
+
+            IntegerProperty maleNumber = new SimpleIntegerProperty(operation.maleFemale("male"));
+            IntegerProperty femaleNumber = new SimpleIntegerProperty(operation.maleFemale("female"));
+
+            Data d11 = new Data("male", maleNumber.doubleValue());
+            //d11.pieValueProperty().bind(maleNumber);
+            d11.pieValueProperty().bindBidirectional(maleNumber);
+
+            Data d12 = new Data("female", femaleNumber.doubleValue());
+            d12.pieValueProperty().bindBidirectional(femaleNumber);
+
+            ObservableList<Data> sourceData1 = FXCollections.observableArrayList(d11, d12);
+
+            chart.setData(sourceData1);
+
+            System.out.println(maleNumber.getValue());
+            System.out.println(d11.pieValueProperty().isBound());
+            System.out.println(chart.getData());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+  
+
+    
 }
+

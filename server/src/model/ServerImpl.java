@@ -5,6 +5,7 @@
  */
 package model;
 
+import controller.FXMLServerScreenController;
 import entity.FileSender;
 import entity.Message;
 import entity.User;
@@ -29,40 +30,41 @@ import java.sql.SQLException;
  *
  * @author Hanaa
  */
-public class ServerImpl extends UnicastRemoteObject implements ServerInt{
-    
+public class ServerImpl extends UnicastRemoteObject implements ServerInt {
+
     private static HashMap<String, ClientInt> clients = new HashMap<>();
     private HashMap<String, ArrayList<String>> groups = new HashMap<>();
-    private HashMap<String,FileSender> files = new HashMap<>();
+    private HashMap<String, FileSender> files = new HashMap<>();
     static int group_Id = 0;
     static int file_Id = 0;
     ArrayList<Message> arrayList = new ArrayList<>();
     static Registry registry = null;
+
     static {
         try {
-            registry=LocateRegistry.createRegistry(2000);
+            registry = LocateRegistry.createRegistry(2000);
         } catch (RemoteException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public ServerImpl() throws RemoteException {
-      
+
     }
-    
+
     public static void startSer() {
         try {
-            Operation op=new Operation();
+            Operation op = new Operation();
             op.getUsers();
-            
+
             registry.rebind("chat", new ServerImpl());
-            
+
         } catch (RemoteException ex) {
-            
+
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
 
     public static void stop() throws RemoteException, NotBoundException {
@@ -71,13 +73,13 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt{
 
     @Override
     public void tellOthers(Message message) throws RemoteException {
-        
+
         for (int i = 0; i < clients.size(); i++) {
             ClientInt client = clients.get(i);
             client.recieve(message);
         }
     }
-    
+
     @Override
     public void tellOne(Message message) throws RemoteException {
         ClientInt client = clients.get(message.getFrom());
@@ -87,7 +89,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt{
             client.recieve(message);
         }
     }
-    
+
     @Override
     public void tellgroup(Message message, String group) throws RemoteException {
         ArrayList<String> selectedGroup = groups.get(group);
@@ -98,39 +100,39 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt{
             }
         }
     }
-    
+
     @Override
     public void register(ClientInt client, User user) throws RemoteException {
-        
+
         clients.put(user.getRecId() + "", client);
     }
-    
+
     @Override
     public void unregister(ClientInt client) throws RemoteException {
         clients.remove(client);
     }
-    
+
     @Override
     public void createGroup(ArrayList<String> group) throws RemoteException {
         group_Id++;
         groups.put(group_Id + "", group);
     }
+
     @Override
-   public void sendFile(FileSender fileSender)throws RemoteException{
-       file_Id++;
-       files.put(file_Id+"", fileSender);
+    public void sendFile(FileSender fileSender) throws RemoteException {
+        file_Id++;
+        files.put(file_Id + "", fileSender);
         System.out.println(files.size());
-        Message message=fileSender.getMessage();
+        Message message = fileSender.getMessage();
         message.setBody(fileSender.getFile().toString());
-         ClientInt client = clients.get(message.getFrom());
+        ClientInt client = clients.get(message.getFrom());
         if (clients.containsKey(message.getTo())) {
-             client = clients.get(message.getTo());
+            client = clients.get(message.getTo());
             client.sendFileToReciever(fileSender);
-           
-          
-            
+
         }
     }
+
     @Override
     public boolean checkLogin(User user) throws RemoteException {
         boolean isValid = false;
@@ -177,12 +179,13 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt{
                 ps.setString(3, user.getPassword());
                 ps.setString(4, user.getEmail());
                 ps.setString(5, user.getCountry());
-                ps.setString(8,user.getImgURL());
+                ps.setString(8, user.getImgURL());
                 ps.setDate(6, new java.sql.Date(user.getBirthDate().getTime()));
                 ps.setString(7, user.getGender());
                 int rowsEffected = ps.executeUpdate();
                 if (rowsEffected == 1) {
                     storedFlag = true;
+
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
