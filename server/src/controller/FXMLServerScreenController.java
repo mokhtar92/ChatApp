@@ -29,6 +29,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.NotificationImpl;
 import model.Operation;
+import model.ServerDbOperation;
 import model.ServerImpl;
 
 /**
@@ -59,7 +60,7 @@ public class FXMLServerScreenController implements Initializable {
     PieChart chart;
     @FXML 
     TextArea annoncementTextArea ;
-    Operation operation = null;
+  
     ObservableList<User> data;
    
 
@@ -71,12 +72,12 @@ public class FXMLServerScreenController implements Initializable {
                 new PieChart.Data("female", 40)
         );
         chart.setData(list);
-        operation = new Operation();
+        
         try {
 
             ArrayList<User> users = new ArrayList<>();
-            users = operation.getUsers();
-
+            
+            users=ServerDbOperation.getUser();
             this.data = FXCollections.observableArrayList();
             for (User user : users) {
                 data.add(user);
@@ -96,7 +97,7 @@ public class FXMLServerScreenController implements Initializable {
         gender.setCellValueFactory(
                 new PropertyValueFactory<User, String>("gender"));
         status.setCellValueFactory(
-                new PropertyValueFactory<User, String>("status"));
+                new PropertyValueFactory<User, String>("myStatus"));
         country.setCellValueFactory(
                 new PropertyValueFactory<User, String>("country"));
 

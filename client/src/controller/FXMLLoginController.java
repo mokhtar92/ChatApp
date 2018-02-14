@@ -61,9 +61,8 @@ public class FXMLLoginController implements Initializable {
         if (service.checkLogin(user)) {
             invalidEmailPasswordMessage.setVisible(false);
             try {
-                server=Service.getServer();
-                user=server.getUser(email, password);
-                UserSession userSession=new UserSession(user);
+                user=Service.getUser(email, password);
+                UserSession.setUser(user);
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
