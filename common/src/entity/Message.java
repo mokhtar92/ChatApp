@@ -14,18 +14,18 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 public class Message implements Serializable {
 
-    protected String from;
-    protected String to;
-    protected String body;
-    protected int fontsSize;
+    private String from;
+    private String to;
+    private String body;
+    private int fontsSize;
 
-    protected XMLGregorianCalendar date;
-    protected String fontColor;
-    protected String fontFamily;
-    protected String fontStyle;
+    private XMLGregorianCalendar date;
+    private String fontColor;
+    private String fontFamily;
+    private String fontStyle;
 
-    protected String fontWeight;
-    protected Boolean underline;
+    private String fontWeight;
+    private Boolean underline;
 
     public Message(int fontsSize, String from, String to, String fontColor, String fontFamily, String fontStyle, String body, String fontWeight, Boolean underline) {
         this.fontsSize = fontsSize;
@@ -38,6 +38,9 @@ public class Message implements Serializable {
         this.body = body;
         this.fontWeight = fontWeight;
         this.underline = underline;
+    }
+
+    public Message() {
     }
 
     public int getFontsSize() {

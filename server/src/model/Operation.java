@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 /**
  *
@@ -34,13 +34,14 @@ public class Operation {
             user.setEmail(resultSet.getString(4));
             user.setPassword(resultSet.getString(5));
             user.setCountry(resultSet.getString(6));
-//            user.setBirthDate(new Date(resultSet.getString(7)));
+            user.setBirthDate(resultSet.getDate(7));
             user.setGender(resultSet.getString(8));
             user.setMyStatus(resultSet.getString(9));
             users.add(user);
         }
 
         return users;
+<<<<<<< HEAD
 
     }
     
@@ -66,4 +67,9 @@ public class Operation {
         PreparedStatement preparedStatement =db.getPreparedStatement(query);
         ResultSet resultSet=preparedStatement.executeQuery();
   }
+=======
+       
+};
+ 
+>>>>>>> 1ec88efbd0679954433e9bd9f64294d72e1a531d
 }
