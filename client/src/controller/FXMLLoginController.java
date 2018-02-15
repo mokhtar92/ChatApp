@@ -34,7 +34,7 @@ public class FXMLLoginController implements Initializable {
     private Stage myStage;
     private double xOffset = 0;
     private double yOffset = 0;
-    private ServerInt server=null;
+    private ServerInt server = null;
     Service service = new Service();
 
     @FXML
@@ -52,16 +52,16 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void checkLogin(ActionEvent ev) {
         User user = new User();
-        
-       String email=loginEmailTextField.getText();
-       String password=loginPasswordTextField.getText();
+
+        String email = loginEmailTextField.getText();
+        String password = loginPasswordTextField.getText();
         user.setEmail(email);
         user.setPassword(password);
-
-        if (service.checkLogin(user)) {
+        Long userId = service.checkLogin(user);
+        if (userId != null || userId != 0L) {
             invalidEmailPasswordMessage.setVisible(false);
             try {
-                user=Service.getUser(email, password);
+                user = Service.getUser(email, password);
                 UserSession.setUser(user);
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
                 Scene scene = new Scene(root);

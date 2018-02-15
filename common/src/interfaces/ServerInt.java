@@ -12,9 +12,12 @@ import java.util.ArrayList;
  */
 public interface ServerInt extends Remote {
 
-    public boolean checkLogin(User user) throws RemoteException;
-
+//    public boolean checkLogin(User user) throws RemoteException;
+    public Long checkLogin(User user) throws RemoteException;
+    
     public boolean signUp(User user) throws RemoteException;
+    
+    public ArrayList<User> getFriendList(Long userId) throws RemoteException;
 
     public User getUser(String email, String password) throws RemoteException;
 

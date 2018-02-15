@@ -41,5 +41,30 @@ public class Operation {
         return users;
        
 };
+    
+        public User getUserById(Long id) throws SQLException{
+        User user = new User();
+        PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT * FROM ITI_CHATAPP_USER WHERE recid=?");
+        try {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user.setRecId(rs.getLong("recId"));
+                user.setFirstName(rs.getString("FirstName"));
+                user.setLastName(rs.getString("lastname"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setCountry(rs.getString("COUNTRY"));
+                user.setBirthDate(rs.getDate("BIRTHDATE"));
+                user.setGender(rs.getString("GENDER"));
+                user.setMyStatus(rs.getString("MYSTATUS"));
+                user.setImgURL(rs.getString("IMGURL"));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+        return user;
+    }
  
 }

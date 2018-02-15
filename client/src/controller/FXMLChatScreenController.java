@@ -52,7 +52,10 @@ public class FXMLChatScreenController implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private User user = null;
+    private Service service = new Service();
     Message message;
+    private ServerInt server = null;
+    private ClientInt client = null;
 
     @FXML
     private VBox chatVBox;
@@ -78,9 +81,8 @@ public class FXMLChatScreenController implements Initializable {
     private ComboBox<String> userAvailabilityComboBox;
 
     @FXML
-    private ListView<String> friendsListView;
-    private ServerInt server = null;
-    private ClientInt client = null;
+    private ListView<User> friendsListView;
+
 
     /**
      * Initializes the controller class.
@@ -195,16 +197,16 @@ public class FXMLChatScreenController implements Initializable {
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
-        options.addAll("online", "away", "busy");
+        options.addAll("available", "away", "busy");
         userAvailabilityComboBox.setItems(options);
         userAvailabilityComboBox.setButtonCell(new StatusListCell());
         userAvailabilityComboBox.setCellFactory(new StatusCallback());
     }
 
     private void displayFriendList() {
-        ObservableList<String> options = FXCollections.observableArrayList();
-        options.addAll("online", "away", "busy");
-        friendsListView.setItems(options);
+        ObservableList<User> friendsList = FXCollections.observableArrayList();
+        friendsList.addAll(service.getFriendList());
+        friendsListView.setItems(friendsList);
         friendsListView.setCellFactory(new FriendCallback());
     }
 
