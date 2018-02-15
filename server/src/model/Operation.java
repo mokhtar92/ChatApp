@@ -41,5 +41,14 @@ public class Operation {
         return users;
        
 };
- 
+ public boolean isFriend(Long userId,Long friendId) throws SQLException{
+        Database db=Database.getInstance();
+        String query="select * from ITI_CHATAPP_FRIENDLIST where (userid='"+userId+"'and friendid='"+friendId+"')or(userid='"+friendId+"'and friendid='"+userId+"')";
+        PreparedStatement preparedStatement =db.getPreparedStatement(query);
+        ResultSet resultSet=preparedStatement.executeQuery();
+        if(resultSet.next()){
+            return true;
+        }
+        return false;
+ }
 }

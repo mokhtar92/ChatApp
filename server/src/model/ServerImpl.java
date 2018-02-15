@@ -5,8 +5,10 @@
  */
 package model;
 
+import controller.FXMLServerScreenController;
 import entity.FileSender;
 import entity.Message;
+import entity.NotificationStatus;
 import entity.User;
 import java.io.File;
 import java.rmi.NotBoundException;
@@ -32,9 +34,14 @@ import java.util.Iterator;
  */
 public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
-    private static HashMap<String, ClientInt> clients = new HashMap<>();
+    private static HashMap<User, ClientInt> clients = new HashMap<>();
     private HashMap<String, ArrayList<String>> groups = new HashMap<>();
     private HashMap<String, FileSender> files = new HashMap<>();
+    static FXMLServerScreenController controller=null;
+
+    public static void  setController(FXMLServerScreenController c) {
+        controller = c;
+    }
     static int group_Id = 0;
     static int file_Id = 0;
     private static boolean serverFlag=false;
@@ -114,12 +121,17 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     @Override
     public void register(ClientInt client, User user) throws RemoteException {
 
-        clients.put(user.getRecId() + "", client);
-        System.out.println(clients.size());
+        clients.put(user, client);
+        try {
+            notifyFriends(user);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     @Override
-    public void unregister(ClientInt client) throws RemoteException {
+    public void unregister(ClientInt client,User user) throws RemoteException {
         clients.remove(client);
     }
 
@@ -208,6 +220,10 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
                 int rowsEffected = ps.executeUpdate();
                 if (rowsEffected == 1) {
                     storedFlag = true;
+                   
+                    controller.data.add(user);
+                    controller.usersTable.setItems(controller.data);
+                  
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
@@ -233,7 +249,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             user.setEmail(resultSet.getString(4));
             user.setPassword(resultSet.getString(5));
             user.setCountry(resultSet.getString(6));
-//            user.setBirthDate(new Date(resultSet.getString(7)));
+              user.setBirthDate(resultSet.getDate(7));
             user.setGender(resultSet.getString(8));
             user.setMyStatus(resultSet.getString(9));
 
@@ -255,5 +271,20 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-  }
+ }
+     
+     public void notifyFriends(User user) throws RemoteException, SQLException{
+           Iterator it = clients.entrySet().iterator();
+             while (it.hasNext()) {
+                 HashMap.Entry pair = (HashMap.Entry)it.next();
+                 User friend= (User)pair.getKey();
+                 ClientInt client= (ClientInt)pair.getValue();
+                if(client!=null){
+                    if(ServerDbOperation.isFriend(user.getRecId(),friend.getRecId())){
+                        client.recieveNotification(NotificationStatus.onlineStatus,user);
+                    }
+             }
+            }
+         
+     }
 }

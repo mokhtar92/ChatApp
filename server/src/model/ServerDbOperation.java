@@ -21,5 +21,7 @@ public class ServerDbOperation {
        users = operation.getUsers();
        return users;
     }
-    
+    public static boolean isFriend(Long userId,Long friendId) throws SQLException{
+        return operation.isFriend(userId, friendId);
+    }
 }

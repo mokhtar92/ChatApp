@@ -9,6 +9,7 @@ package model;
 import controller.FXMLChatScreenController;
 import entity.FileSender;
 import entity.Message;
+import entity.User;
 import interfaces.ClientInt;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,24 +45,26 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
       chat.getAnnoncement(message);
   }
   @Override
+  public void recieveNotification(int status,User user)throws RemoteException{
+      chat.getNotification(status,user);
+  }
+  @Override
     public void reciveFile(String path, String filename,boolean append, byte[] data, int dataLength) {
 
         try {
-            File f  ; 
-            
             String [] split = path.split("\\.(?=[^\\.]+$)");
-            //handle not write extesion 
+             File file =null ; 
             if(split.length <2){
                 split = filename.split("\\.(?=[^\\.]+$)");
                 String extension = "."+split[1];
-                f = new File(path+extension);
+                file = new File(path+extension);
             }else{
-                f = new File(path);
+                file = new File(path);
             }
             
 
-            f.createNewFile();
-            FileOutputStream out = new FileOutputStream(f, append);
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file, append);
             out.write(data, 0, dataLength);
             out.flush();
             out.close();

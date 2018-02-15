@@ -2,6 +2,7 @@ package interfaces;
 
 import entity.FileSender;
 import entity.Message;
+import entity.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -15,7 +16,9 @@ import java.rmi.RemoteException;
 public interface ClientInt extends Remote{
     public void recieve(Message message)throws RemoteException;
     public void recieveAnnoncement(String message)throws RemoteException;
+     public void recieveNotification(int status,User user)throws RemoteException;
     public void reciveFile(String path ,String filename, boolean append, byte [] data , int dataLength)throws RemoteException;
     public void sendFileToReciever(FileSender file)throws RemoteException;
+   
     
 }

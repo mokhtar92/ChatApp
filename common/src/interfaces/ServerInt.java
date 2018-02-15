@@ -28,10 +28,9 @@ public interface ServerInt extends Remote {
 
     public void register(ClientInt client, User user) throws RemoteException;
 
-    public void unregister(ClientInt client) throws RemoteException;
+    public void unregister(ClientInt client,User user) throws RemoteException;
 
     public void createGroup(ArrayList<String> group) throws RemoteException;
 
     public void sendFile(entity.FileSender file) throws RemoteException;
-    //public void notifyFriends(boolean status) throws RemoteException;
 }

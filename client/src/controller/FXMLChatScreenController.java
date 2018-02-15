@@ -6,6 +6,7 @@
 package controller;
 
 import entity.Message;
+import entity.NotificationStatus;
 import entity.User;
 import factory.FriendCallback;
 import factory.StatusCallback;
@@ -145,7 +146,7 @@ public class FXMLChatScreenController implements Initializable {
 
     }
     public void getAnnoncement(String message){
-        System.out.println(message);
+   
          Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -156,6 +157,17 @@ public class FXMLChatScreenController implements Initializable {
         });
         
     }
+     public void getNotification(int Status,User user){
+          Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+              NotificationInt impl = new NotificationImpl() ;
+              if(Status==NotificationStatus.onlineStatus)
+                impl.createNotification("Acconcement", user.getFirstName()+" become online", "resources/chat_logo.png");
+            }
+        });
+     
+     }
     @FXML
     public void onStatusChanged(ActionEvent event) {
         try {

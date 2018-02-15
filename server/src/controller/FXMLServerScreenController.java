@@ -27,10 +27,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import model.NotificationImpl;
-import model.Operation;
 import model.ServerDbOperation;
 import model.ServerImpl;
+import model.UserTable;
 
 /**
  *
@@ -43,7 +42,7 @@ public class FXMLServerScreenController implements Initializable {
     @FXML
     Button start;
     @FXML
-    TableView<User> usersTable;
+    public TableView<User> usersTable;
     @FXML
     TableColumn<User, String> firstName;
     @FXML
@@ -61,7 +60,7 @@ public class FXMLServerScreenController implements Initializable {
     @FXML 
     TextArea annoncementTextArea ;
   
-    ObservableList<User> data;
+   public ObservableList<User> data;
    
 
     @Override
@@ -72,22 +71,7 @@ public class FXMLServerScreenController implements Initializable {
                 new PieChart.Data("female", 40)
         );
         chart.setData(list);
-        
-        try {
-
-            ArrayList<User> users = new ArrayList<>();
-            
-            users=ServerDbOperation.getUser();
-            this.data = FXCollections.observableArrayList();
-            for (User user : users) {
-                data.add(user);
-
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+       ServerImpl.setController(this);
         firstName.setCellValueFactory(
                 new PropertyValueFactory<User, String>("firstName"));
         lastName.setCellValueFactory(
@@ -100,9 +84,8 @@ public class FXMLServerScreenController implements Initializable {
                 new PropertyValueFactory<User, String>("myStatus"));
         country.setCellValueFactory(
                 new PropertyValueFactory<User, String>("country"));
-
-        usersTable.setItems(data);
-
+        UserTable table=new UserTable(usersTable);
+        usersTable.setItems(table.getData());
         stop.setDisable(true);
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
