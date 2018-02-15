@@ -25,12 +25,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -53,7 +55,10 @@ public class FXMLChatScreenController implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private User user = null;
+    private Service service = new Service();
     Message message;
+    private ServerInt server = null;
+    private ClientInt client = null;
 
     @FXML
     private VBox chatVBox;
@@ -79,9 +84,19 @@ public class FXMLChatScreenController implements Initializable {
     private ComboBox<String> userAvailabilityComboBox;
 
     @FXML
-    private ListView<String> friendsListView;
-    private ServerInt server = null;
-    private ClientInt client = null;
+    private ListView<User> friendsListView;
+
+    @FXML
+    private ColorPicker messageColorPicker;
+
+    @FXML
+    private ComboBox<String> fontSizeComboBox;
+
+    @FXML
+    private ComboBox<String> fontStyleComboBox;
+
+    @FXML
+    private ComboBox<String> fontFamilyComboBox;
 
     /**
      * Initializes the controller class.
@@ -96,8 +111,11 @@ public class FXMLChatScreenController implements Initializable {
         });
         displayComboBox();
         displayFriendList();
+        setUserProfile();
+        setMessageFormatter();
+
         server = Service.getServer();
-    
+
         user = UserSession.getUser();
 
         try {
@@ -145,29 +163,33 @@ public class FXMLChatScreenController implements Initializable {
         });
 
     }
-    public void getAnnoncement(String message){
-   
-         Platform.runLater(new Runnable() {
+
+    public void getAnnoncement(String message) {
+
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
-              NotificationInt impl = new NotificationImpl() ;
+                NotificationInt impl = new NotificationImpl();
                 impl.createNotification("Acconcement", message, "resources/chat_logo.png");
-                adsArea.setText(adsArea.getText()+"\n"+message);
+                adsArea.setText(adsArea.getText() + "\n" + message);
             }
         });
-        
+
     }
-     public void getNotification(int Status,User user){
-          Platform.runLater(new Runnable() {
+
+    public void getNotification(int Status, User user) {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
-              NotificationInt impl = new NotificationImpl() ;
-              if(Status==NotificationStatus.onlineStatus)
-                impl.createNotification("Acconcement", user.getFirstName()+" become online", "resources/chat_logo.png");
+                NotificationInt impl = new NotificationImpl();
+                if (Status == NotificationStatus.onlineStatus) {
+                    impl.createNotification("Acconcement", user.getFirstName() + " become online", "resources/chat_logo.png");
+                }
             }
         });
-     
-     }
+
+    }
+
     @FXML
     public void onStatusChanged(ActionEvent event) {
         try {
@@ -176,6 +198,18 @@ public class FXMLChatScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    public void addFriend() {
+
+    }
+
+    public void addGroupChat() {
+
+    }
+
+    public void viewFriendRequests() {
 
     }
 
@@ -189,6 +223,7 @@ public class FXMLChatScreenController implements Initializable {
 
     public void closeChatWindow() {
         myStage.close();
+        System.exit(0);
     }
 
     public void minimizeChatWindow() {
@@ -207,16 +242,16 @@ public class FXMLChatScreenController implements Initializable {
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
-        options.addAll("online", "away", "busy");
+        options.addAll("available", "away", "busy");
         userAvailabilityComboBox.setItems(options);
         userAvailabilityComboBox.setButtonCell(new StatusListCell());
         userAvailabilityComboBox.setCellFactory(new StatusCallback());
     }
 
     private void displayFriendList() {
-        ObservableList<String> options = FXCollections.observableArrayList();
-        options.addAll("online", "away", "busy");
-        friendsListView.setItems(options);
+        ObservableList<User> friendsList = FXCollections.observableArrayList();
+        friendsList.addAll(service.getFriendList());
+        friendsListView.setItems(friendsList);
         friendsListView.setCellFactory(new FriendCallback());
     }
 
@@ -224,5 +259,28 @@ public class FXMLChatScreenController implements Initializable {
         myStage.setX(event.getScreenX() - xOffset);
         myStage.setY(event.getScreenY() - yOffset);
     }
- 
+
+    private void setUserProfile() {
+        User currentUser = UserSession.getUser();
+        if (currentUser != null) {
+            userImage.setImage(new Image(currentUser.getImgURL()));
+            userName.setText(currentUser.getFirstName());
+            userName.setStyle("-fx-text-alignment: center;");
+            userAvailabilityComboBox.setValue(currentUser.getMyStatus());
+        }
+
+    }
+
+    private void setMessageFormatter() {
+        fontFamilyComboBox.getItems().addAll("Arial", "Calibri", "Verdana");
+        fontFamilyComboBox.setValue("Arial");
+
+        fontSizeComboBox.getItems().addAll("10", "15", "20");
+        fontSizeComboBox.setValue("10");
+
+        fontStyleComboBox.getItems().addAll("Regular", "Bold", "Italic");
+        fontStyleComboBox.setValue("Regular");
+
+    }
+
 }

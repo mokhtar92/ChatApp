@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -41,6 +44,7 @@ public class Operation {
         return users;
        
 };
+
  public boolean isFriend(Long userId,Long friendId) throws SQLException{
         Database db=Database.getInstance();
         String query="select * from ITI_CHATAPP_FRIENDLIST where (userid='"+userId+"'and friendid='"+friendId+"')or(userid='"+friendId+"'and friendid='"+userId+"')";
@@ -51,4 +55,56 @@ public class Operation {
         }
         return false;
  }
+    
+        public User getUserById(Long id) throws SQLException{
+        User user = new User();
+        PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT * FROM ITI_CHATAPP_USER WHERE recid=?");
+        try {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user.setRecId(rs.getLong("recId"));
+                user.setFirstName(rs.getString("FirstName"));
+                user.setLastName(rs.getString("lastname"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setCountry(rs.getString("COUNTRY"));
+                user.setBirthDate(rs.getDate("BIRTHDATE"));
+                user.setGender(rs.getString("GENDER"));
+                user.setMyStatus(rs.getString("MYSTATUS"));
+                user.setImgURL(rs.getString("IMGURL"));
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+        return user;
+    }
+
+    public int maleFemale(String gender)
+  {  
+      int result = 0;
+      try {
+          Statement stmt=Database.getInstance().getPreparedStatementUpdatable(gender);
+          String query;
+        
+          query = "select count (gender) from ITI_CHATAPP_USER where gender = '"+gender+"'";
+          
+          ResultSet rs=stmt.executeQuery(query);
+          
+          while(rs.next()) 
+          {
+              //result = rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3);
+              result =rs.getInt(1);
+          }
+          
+          return result;
+        //  con.close();
+          
+      } catch (SQLException ex) {
+           Logger.getLogger(Operation.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return result; 
+  }
+
 }

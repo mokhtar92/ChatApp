@@ -35,6 +35,11 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </JFXButton>
+            <JFXButton fx:id="updateBtn" buttonType="RAISED" layoutX="104.0" layoutY="522.0" prefHeight="50.0" prefWidth="150.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Update" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </JFXButton>
          </children>
       </Pane>
    </left>
@@ -63,10 +68,10 @@
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints maxHeight="541.0" minHeight="10.0" prefHeight="389.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="439.0" minHeight="10.0" prefHeight="372.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <PieChart fx:id="chart" />
+                        <PieChart fx:id="chart2" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                </content></Tab>

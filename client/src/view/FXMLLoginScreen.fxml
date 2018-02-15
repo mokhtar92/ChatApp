@@ -17,6 +17,10 @@
          <font>
             <Font size="20.0" />
          </font></JFXTextField>
+      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#3c999c" layoutX="56.0" layoutY="552.0" prefHeight="50.0" prefWidth="450.0" promptText="Password" style="-fx-text-inner-color: #afb0b2;">
+         <font>
+            <Font size="20.0" />
+         </font></JFXPasswordField>
       <JFXButton buttonType="RAISED" layoutX="201.0" layoutY="638.0" onAction="#checkLogin" prefHeight="50.0" prefWidth="160.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Login" textFill="WHITE">
          <font>
             <Font name="System Bold" size="28.0" />
@@ -25,15 +29,19 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
+      <Label layoutX="334.0" layoutY="704.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
       <ImageView fitHeight="375.0" fitWidth="320.0" layoutX="125.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/chat_logo.png" />
          </image>
       </ImageView>
-      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#3c999c" layoutX="56.0" layoutY="552.0" prefHeight="50.0" prefWidth="450.0" promptText="Password" style="-fx-text-inner-color: #afb0b2;">
-         <font>
-            <Font size="20.0" />
-         </font></JFXPasswordField>
       <Button layoutX="504.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeLoginWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
          <opaqueInsets>
             <Insets />
@@ -56,25 +64,17 @@
             <Insets />
          </opaqueInsets>
       </Button>
-      <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="468.0" layoutY="498.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView disable="true" fitHeight="38.0" fitWidth="40.0" layoutX="468.0" layoutY="498.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/email_icone.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="47.0" fitWidth="47.0" layoutX="464.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView disable="true" fitHeight="47.0" fitWidth="47.0" layoutX="464.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/password_icon.png" />
          </image>
       </ImageView>
       <Label layoutX="173.0" layoutY="704.0" text="don't have account ?" textFill="WHITE">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </Label>
-      <Label layoutX="334.0" layoutY="704.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
          <font>
             <Font size="17.0" />
          </font>

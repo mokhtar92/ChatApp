@@ -122,7 +122,7 @@ public class FXMLSignUpController implements Initializable {
 
         if (validation(user) && service.signUp(user)) {
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
                 stage.setScene(scene);

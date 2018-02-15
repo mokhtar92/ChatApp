@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import oracle.jdbc.OracleDriver;
 
@@ -11,6 +12,7 @@ public class Database {
     private static Connection con;
     private static Database opr;
     private static PreparedStatement ps = null;
+     private static PreparedStatement psUpdatable = null;
 
     static {
         try {
@@ -47,7 +49,17 @@ public class Database {
 
         return ps;
     }
+ public PreparedStatement getPreparedStatementUpdatable(String query) {
+        try {
+        psUpdatable = getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                               
+        } catch (SQLException ex) {
+            release();
+            ex.printStackTrace(System.out);
+        }
 
+        return psUpdatable;
+    }
     public void release() {
         try {
             if (ps != null) {

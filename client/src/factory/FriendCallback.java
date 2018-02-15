@@ -5,6 +5,7 @@
  */
 package factory;
 
+import entity.User;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
@@ -13,10 +14,10 @@ import javafx.util.Callback;
  *
  * @author Ahmed_Mokhtar
  */
-public class FriendCallback implements Callback<ListView<String>, ListCell<String>>{
+public class FriendCallback implements Callback<ListView<User>, ListCell<User>>{
 
     @Override
-    public ListCell<String> call(ListView<String> param) {
+    public ListCell<User> call(ListView<User> param) {
         return new FriendListCell();
     }
     

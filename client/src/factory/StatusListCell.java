@@ -26,8 +26,8 @@ public class StatusListCell extends ListCell<String>{
             ImageView imageView = null;
             
             switch(item){
-                case "online":
-                    imageView = new ImageView("/resources/online.png");
+                case "available":
+                    imageView = new ImageView("/resources/available.png");
                     break;
                    
                 case "away":

@@ -29,4 +29,7 @@ hs_err_pid*
 /server/dist/
 /common/build/
 /common/dist/
-/servlets/nbproject/private/
+client/nbproject/project.properties
+common/nbproject/project.properties
+server/nbproject/project.properties
+server/src/model/Operation.java

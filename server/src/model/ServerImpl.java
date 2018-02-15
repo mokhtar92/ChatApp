@@ -10,7 +10,6 @@ import entity.FileSender;
 import entity.Message;
 import entity.NotificationStatus;
 import entity.User;
-import java.io.File;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -34,6 +33,8 @@ import java.util.Iterator;
  */
 public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
+
+    Operation opr = new Operation();
     private static HashMap<User, ClientInt> clients = new HashMap<>();
     private HashMap<String, ArrayList<String>> groups = new HashMap<>();
     private HashMap<String, FileSender> files = new HashMap<>();
@@ -44,7 +45,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     }
     static int group_Id = 0;
     static int file_Id = 0;
-    private static boolean serverFlag=false;
+    private static boolean serverFlag = false;
     ArrayList<Message> arrayList = new ArrayList<>();
 
     public static boolean isServerFlag() {
@@ -72,9 +73,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             Operation op = new Operation();
             op.getUsers();
-            serverFlag=true;
+            serverFlag = true;
             registry.rebind("chat", new ServerImpl());
-            
 
         } catch (RemoteException ex) {
 
@@ -87,7 +87,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     public static void stopServer() throws RemoteException, NotBoundException {
         registry.unbind("chat");
     }
-     
+
     @Override
     public void tellOthers(Message message) throws RemoteException {
 
@@ -155,36 +155,37 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         }
     }
+
     public static void sendAnnoncement(String message) throws RemoteException {
-       
-             Iterator it = clients.entrySet().iterator();
-             while (it.hasNext()) {
-                 HashMap.Entry pair = (HashMap.Entry)it.next();
-                 ClientInt client= (ClientInt)pair.getValue();
-                if(client!=null){
-                 client.recieveAnnoncement(message);
-             }
+
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            ClientInt client = (ClientInt) pair.getValue();
+            if (client != null) {
+                client.recieveAnnoncement(message);
             }
-             
-        
+        }
+
     }
+
     @Override
-    public boolean checkLogin(User user) throws RemoteException {
-        boolean isValid = false;
+    public Long checkLogin(User user) throws RemoteException {
+        Long userID = 0L;
         PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT * FROM ITI_CHATAPP_USER WHERE email=? AND password=?");
         try {
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getPassword());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                isValid = true;
+                userID = rs.getLong("recId");
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
         } finally {
             Database.getInstance().release();
         }
-        return isValid;
+        return userID;
     }
 
     private boolean checkEmailExist(User user) {
@@ -207,22 +208,26 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     public boolean signUp(User user) throws RemoteException {
         boolean storedFlag = false;
         if (!checkEmailExist(user)) {
-            PreparedStatement ps = Database.getInstance().getPreparedStatement("INSERT INTO ITI_CHATAPP_USER (firstName,lastName,password,email,country,birthdate,Gender,imgURL) VALUES (?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = Database.getInstance().getPreparedStatement("INSERT INTO ITI_CHATAPP_USER (firstName,lastName,password,email,country,birthdate,Gender,imgURL, myStatus) VALUES (?,?,?,?,?,?,?,?,?)");
             try {
                 ps.setString(1, user.getFirstName());
                 ps.setString(2, user.getLastName());
                 ps.setString(3, user.getPassword());
                 ps.setString(4, user.getEmail());
                 ps.setString(5, user.getCountry());
-                ps.setString(8, user.getImgURL());
                 ps.setDate(6, new java.sql.Date(user.getBirthDate().getTime()));
                 ps.setString(7, user.getGender());
+                ps.setString(8, user.getImgURL());
+                user.setMyStatus("available");
+                ps.setString(9, user.getMyStatus());
+                
                 int rowsEffected = ps.executeUpdate();
                 if (rowsEffected == 1) {
                     storedFlag = true;
                    
                     controller.data.add(user);
-                    controller.usersTable.setItems(controller.data);
+                    //controller.usersTable.setItems(controller.data);
+                    controller.updateTabelView();
                   
                 }
             } catch (SQLException ex) {
@@ -232,6 +237,38 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         }
         return storedFlag;
+    }
+
+    @Override
+    public ArrayList<User> getFriendList(Long userId) {
+        ArrayList<User> list = new ArrayList<>();
+        PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT FRIENDID FROM ITI_CHATAPP_FRIENDLIST WHERE USERID=?");
+        try {
+            ps.setLong(1, userId);
+            ResultSet rs = ps.executeQuery();
+            boolean flag=rs.next();
+            if(flag){
+            while (flag) {
+                User user = opr.getUserById(rs.getLong("FRIENDID"));
+                list.add(user);
+                flag=rs.next();
+            }
+            }else{
+          /* PreparedStatement ps2 = Database.getInstance().getPreparedStatement("SELECT USERID FROM ITI_CHATAPP_FRIENDLIST WHERE FRIENDID=?");
+             ps2.setLong(1, userId);
+             rs = ps2.executeQuery();
+             flag=rs.next();
+             while (flag) {
+                User user = opr.getUserById(rs.getLong("USERID"));
+                list.add(user);
+                flag=rs.next();
+            }*/
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+        return list;
+
     }
 
     public User getUser(String email, String password) throws RemoteException {
@@ -249,30 +286,31 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             user.setEmail(resultSet.getString(4));
             user.setPassword(resultSet.getString(5));
             user.setCountry(resultSet.getString(6));
-              user.setBirthDate(resultSet.getDate(7));
+            user.setBirthDate(resultSet.getDate(7));
             user.setGender(resultSet.getString(8));
             user.setMyStatus(resultSet.getString(9));
+            user.setImgURL(resultSet.getString(10));
 
-            return user;
-        }
+                return user;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
+
     @Override
-     public void ChangeStatus(User user,String Status) throws RemoteException{
-        String query="update ITI_CHATAPP_USER set myStatus='"+Status+"' where Recid='"+user.getRecId()+"'";
-        Database db=Database.getInstance();
-        PreparedStatement preparedStatement =db.getPreparedStatement(query);
+    public void ChangeStatus(User user, String Status) throws RemoteException {
+        String query = "update ITI_CHATAPP_USER set myStatus='" + Status + "' where Recid='" + user.getRecId() + "'";
+        Database db = Database.getInstance();
+        PreparedStatement preparedStatement = db.getPreparedStatement(query);
         try {
             preparedStatement.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
- }
-     
+    }
      public void notifyFriends(User user) throws RemoteException, SQLException{
            Iterator it = clients.entrySet().iterator();
              while (it.hasNext()) {
