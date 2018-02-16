@@ -33,7 +33,9 @@ public interface ServerInt extends Remote {
 
     public void unregister(ClientInt client,User user) throws RemoteException;
 
-    public void createGroup(ArrayList<String> group) throws RemoteException;
+    public void createGroup(ArrayList<User> group) throws RemoteException;
 
+    public int getGroupId(ArrayList<User> group) throws RemoteException;
+    
     public void sendFile(entity.FileSender file) throws RemoteException;
 }

@@ -25,7 +25,7 @@ public class FriendListCell extends ListCell<User> {
 
         if (friend != null && !empty) {
             Text username = new Text(friend.getFirstName() + " " + friend.getLastName());
-
+            
             ImageView userImg = new ImageView(friend.getImgURL());
             userImg.setFitWidth(80);
             userImg.setFitHeight(80);

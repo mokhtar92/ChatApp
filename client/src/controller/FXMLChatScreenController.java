@@ -14,17 +14,23 @@ import factory.StatusListCell;
 import interfaces.ClientInt;
 import interfaces.NotificationInt;
 import interfaces.ServerInt;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -38,6 +44,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.ClientImpl;
 import model.NotificationImpl;
@@ -204,9 +211,27 @@ public class FXMLChatScreenController implements Initializable {
     public void addFriend() {
 
     }
-
-    public void addGroupChat() {
-
+    @FXML
+    public void addGroupChat(MouseEvent event) {
+      /*  Platform.runLater(new Runnable() {
+            @Override
+            public void run() { */
+        try {
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMLGroupScreen.fxml"));
+            Parent parent = loader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(parent);
+            stage.setScene(scene);
+            stage.setTitle("Create New Group");
+            stage.show();
+               
+       
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+//}});
     }
 
     public void viewFriendRequests() {
@@ -221,7 +246,8 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void closeChatWindow() {
+    public void closeChatWindow() throws RemoteException {
+        Service.Unregister(client, UserSession.getUser());
         myStage.close();
         System.exit(0);
     }
@@ -271,16 +297,51 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    private void setMessageFormatter() {
-        fontFamilyComboBox.getItems().addAll("Arial", "Calibri", "Verdana");
+     private void setMessageFormatter(){
+        fontFamilyComboBox.getItems().addAll("Arial", "Segoe UI Semibold", "Bell MT", "Brush Script MT");
         fontFamilyComboBox.setValue("Arial");
-
-        fontSizeComboBox.getItems().addAll("10", "15", "20");
+        fontFamilyComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String previousStyle = sendTextField.getStyle();
+                sendTextField.setStyle(previousStyle + "-fx-font-family: \""+ newValue + "\";");
+            }
+        });
+        
+        fontSizeComboBox.getItems().addAll("10", "12", "14", "16");
         fontSizeComboBox.setValue("10");
-
-        fontStyleComboBox.getItems().addAll("Regular", "Bold", "Italic");
-        fontStyleComboBox.setValue("Regular");
-
+        fontSizeComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String previousStyle = sendTextField.getStyle();
+                sendTextField.setStyle(previousStyle + "-fx-font-size: "+ newValue + "pt;");
+            }
+        });
+       
+        fontStyleComboBox.getItems().addAll("normal", "bold","italic");
+        fontStyleComboBox.setValue("regular");
+        fontStyleComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                String previousStyle = sendTextField.getStyle();
+                if (newValue.equals("bold")) {
+                    sendTextField.setStyle(previousStyle + "-fx-font-weight: " + newValue +";");
+                } else if (newValue.equals("italic")) {
+                    sendTextField.setStyle(previousStyle + "-fx-font-style: " + newValue +";");
+                } else {
+                    sendTextField.setStyle("-fx-font-style: " + newValue +";");
+                }
+            }
+        });
+        
+        messageColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
+            @Override
+            public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
+                String hexColor = Integer.toHexString(messageColorPicker.getValue().hashCode()); 
+                String previousStyle = sendTextField.getStyle();
+                sendTextField.setStyle(previousStyle + "-fx-text-inner-color: #" + hexColor +";");
+            }
+        });
     }
 
 }
