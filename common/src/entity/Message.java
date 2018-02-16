@@ -23,10 +23,10 @@ public class Message implements Serializable {
     private String fontColor;
     private String fontFamily;
     private String fontStyle;
-
     private String fontWeight;
     private Boolean underline;
 
+    
     public Message() {
     }
 

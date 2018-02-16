@@ -78,6 +78,11 @@ public class FXMLServerScreenController implements Initializable {
         
         operation = new Operation();
         drawStatistics();
+        try {
+            Draw2();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
        ServerImpl.setController(this);
         firstName.setCellValueFactory(
                 new PropertyValueFactory<User, String>("firstName"));
@@ -107,6 +112,13 @@ public class FXMLServerScreenController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
               drawStatistics();
+                try {
+                    Draw2();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                updateTabelView();
+              
             }
         });
 
@@ -137,20 +149,35 @@ public class FXMLServerScreenController implements Initializable {
 
         IntegerProperty maleNumber = new SimpleIntegerProperty(operation.maleFemale("male"));
         IntegerProperty femaleNumber = new SimpleIntegerProperty(operation.maleFemale("female"));
-        Data d11 = new Data("male", maleNumber.doubleValue());
+        Data d11 = new Data("male :"+maleNumber.intValue()+"", maleNumber.doubleValue());
         //d11.pieValueProperty().bind(maleNumber);
         d11.pieValueProperty().bindBidirectional(maleNumber);
-        Data d12 = new Data("female", femaleNumber.doubleValue());
+        Data d12 = new Data("female :"+femaleNumber.intValue()+"", femaleNumber.doubleValue());
         d12.pieValueProperty().bindBidirectional(femaleNumber);
         ObservableList<Data> sourceData1 = FXCollections.observableArrayList(d11, d12);
         chart.setData(sourceData1);
         System.out.println(maleNumber.getValue());
         System.out.println(d11.pieValueProperty().isBound());
         System.out.println(chart.getData());
-
+         
     }
     public void updateTabelView(){
         UserTable table=new UserTable(usersTable);
         usersTable.setItems(table.getData());
     }
+    
+   public void Draw2() throws RemoteException
+   {
+    ServerImpl impl = new ServerImpl();
+     int allOnlineUsers= impl.GetClientcount();
+     int offLineUsers = operation.getAllUser()-allOnlineUsers;
+     Data d11 = new Data("online :"+allOnlineUsers+"",allOnlineUsers);
+     Data d22 = new Data("offline : "+offLineUsers+"", offLineUsers);
+     ObservableList<Data> sourceData =FXCollections.observableArrayList(d11,d22);
+     chart2.setData(sourceData);
+     
+     
+   }
+    
+    
 }

@@ -107,4 +107,24 @@ public class Operation {
       return result; 
   }
 
+    //maroof
+    public int getAllUser() {
+        int result = 0;
+        try {
+
+            String query;
+
+            query = "select count(RECID) from ITI_CHATAPP_USER";
+            Statement stmt = Database.getInstance().getPreparedStatementUpdatable(query);
+             ResultSet rs = stmt.executeQuery(query);
+             while (rs.next()) {
+                result = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Operation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    
 }
