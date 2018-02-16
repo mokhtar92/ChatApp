@@ -230,9 +230,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
                 if (rowsEffected == 1) {
                     storedFlag = true;
                    
-                    controller.data.add(user);
+//                    controller.data.add(user);
                     //controller.usersTable.setItems(controller.data);
-                    controller.updateTabelView();
+               //     controller.updateTabelView();
                   
                 }
             } catch (SQLException ex) {
