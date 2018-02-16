@@ -67,7 +67,15 @@ public class Service {
     public static void register(ClientInt client, User user) throws RemoteException {
         getServer().register(client, user);
     }
-
+    public static void Unregister(ClientInt client, User user) throws RemoteException {
+        getServer().unregister(client, user);
+    }
+    public static void createGroup(ArrayList<User> group) throws RemoteException{
+        getServer().createGroup(group);
+    }
+    public static int getGroupId(ArrayList<User> group) throws RemoteException{
+       return getServer().getGroupId(group);
+    }
     public static void tellOne(Message message) throws RemoteException {
         getServer().tellOne(message);
     }

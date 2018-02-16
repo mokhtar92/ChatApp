@@ -36,7 +36,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     Operation opr = new Operation();
     private static HashMap<User, ClientInt> clients = new HashMap<>();
-    private HashMap<String, ArrayList<String>> groups = new HashMap<>();
+    private HashMap<String, ArrayList<User>> groups = new HashMap<>();
     private HashMap<String, FileSender> files = new HashMap<>();
     static FXMLServerScreenController controller=null;
 
@@ -109,10 +109,10 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void tellgroup(Message message, String group) throws RemoteException {
-        ArrayList<String> selectedGroup = groups.get(group);
-        for (String id : selectedGroup) {
-            if (clients.containsKey(id)) {
-                ClientInt client = clients.get(id);
+        ArrayList<User> selectedGroup = groups.get(group);
+        for (User user : selectedGroup) {
+            if (clients.containsKey(user.getRecId())) {
+                ClientInt client = clients.get(user.getRecId());
                 client.recieve(message);
             }
         }
@@ -136,9 +136,10 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     }
 
     @Override
-    public void createGroup(ArrayList<String> group) throws RemoteException {
+    public void createGroup(ArrayList<User> group) throws RemoteException {
         group_Id++;
         groups.put(group_Id + "", group);
+        System.out.println("group created"+groups.size());
     }
 
     @Override
@@ -155,6 +156,10 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         }
     }
+    @Override
+     public int getGroupId(ArrayList<User> group) throws RemoteException{
+         return group_Id;
+     }
 
     public static void sendAnnoncement(String message) throws RemoteException {
 
@@ -225,9 +230,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
                 if (rowsEffected == 1) {
                     storedFlag = true;
                    
-                    //controller.data.add(user);
-                    //controller.usersTable.setItems(controller.data);
-                  //  controller.updateTabelView();
+
                   
                 }
             } catch (SQLException ex) {
