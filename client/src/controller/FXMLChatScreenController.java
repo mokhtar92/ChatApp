@@ -35,6 +35,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -211,13 +212,12 @@ public class FXMLChatScreenController implements Initializable {
     public void addFriend() {
 
     }
+
     @FXML
     public void addGroupChat(MouseEvent event) {
-      /*  Platform.runLater(new Runnable() {
-            @Override
-            public void run() { */
+
         try {
-            
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMLGroupScreen.fxml"));
             Parent parent = loader.load();
             Stage stage = new Stage();
@@ -225,13 +225,10 @@ public class FXMLChatScreenController implements Initializable {
             stage.setScene(scene);
             stage.setTitle("Create New Group");
             stage.show();
-               
-       
-            
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-//}});
     }
 
     public void viewFriendRequests() {
@@ -247,7 +244,7 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void closeChatWindow() throws RemoteException {
-        Service.Unregister(client, UserSession.getUser());
+        Service.Unregister(client, user);
         myStage.close();
         System.exit(0);
     }
@@ -265,6 +262,13 @@ public class FXMLChatScreenController implements Initializable {
         yOffset = event.getSceneY();
     }
 
+    public void insertNewChatTab(String name) {
+        Tab newChaTab = new Tab(name);
+        newChaTab.setClosable(true);
+        chatTabPane.getTabs().add(newChaTab);
+        chatTabPane.getSelectionModel().select(newChaTab);
+    }
+
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
@@ -278,7 +282,7 @@ public class FXMLChatScreenController implements Initializable {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(service.getFriendList());
         friendsListView.setItems(friendsList);
-        friendsListView.setCellFactory(new FriendCallback());
+        friendsListView.setCellFactory(new FriendCallback(this));
     }
 
     private void move(MouseEvent event) {
@@ -297,49 +301,49 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-     private void setMessageFormatter(){
+    private void setMessageFormatter() {
         fontFamilyComboBox.getItems().addAll("Arial", "Segoe UI Semibold", "Bell MT", "Brush Script MT");
         fontFamilyComboBox.setValue("Arial");
         fontFamilyComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String previousStyle = sendTextField.getStyle();
-                sendTextField.setStyle(previousStyle + "-fx-font-family: \""+ newValue + "\";");
+                sendTextField.setStyle(previousStyle + "-fx-font-family: \"" + newValue + "\";");
             }
         });
-        
+
         fontSizeComboBox.getItems().addAll("10", "12", "14", "16");
         fontSizeComboBox.setValue("10");
         fontSizeComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String previousStyle = sendTextField.getStyle();
-                sendTextField.setStyle(previousStyle + "-fx-font-size: "+ newValue + "pt;");
+                sendTextField.setStyle(previousStyle + "-fx-font-size: " + newValue + "pt;");
             }
         });
-       
-        fontStyleComboBox.getItems().addAll("normal", "bold","italic");
+
+        fontStyleComboBox.getItems().addAll("normal", "bold", "italic");
         fontStyleComboBox.setValue("regular");
         fontStyleComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 String previousStyle = sendTextField.getStyle();
                 if (newValue.equals("bold")) {
-                    sendTextField.setStyle(previousStyle + "-fx-font-weight: " + newValue +";");
+                    sendTextField.setStyle(previousStyle + "-fx-font-weight: " + newValue + ";");
                 } else if (newValue.equals("italic")) {
-                    sendTextField.setStyle(previousStyle + "-fx-font-style: " + newValue +";");
+                    sendTextField.setStyle(previousStyle + "-fx-font-style: " + newValue + ";");
                 } else {
-                    sendTextField.setStyle("-fx-font-style: " + newValue +";");
+                    sendTextField.setStyle("-fx-font-style: " + newValue + ";");
                 }
             }
         });
-        
+
         messageColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
             @Override
             public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-                String hexColor = Integer.toHexString(messageColorPicker.getValue().hashCode()); 
+                String hexColor = Integer.toHexString(messageColorPicker.getValue().hashCode());
                 String previousStyle = sendTextField.getStyle();
-                sendTextField.setStyle(previousStyle + "-fx-text-inner-color: #" + hexColor +";");
+                sendTextField.setStyle(previousStyle + "-fx-text-inner-color: #" + hexColor + ";");
             }
         });
     }

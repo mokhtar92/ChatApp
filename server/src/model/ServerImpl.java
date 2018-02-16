@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -33,14 +34,13 @@ import java.util.Iterator;
  */
 public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
-
     Operation opr = new Operation();
     private static HashMap<User, ClientInt> clients = new HashMap<>();
     private HashMap<String, ArrayList<User>> groups = new HashMap<>();
     private HashMap<String, FileSender> files = new HashMap<>();
-    static FXMLServerScreenController controller=null;
+    static FXMLServerScreenController controller = null;
 
-    public static void  setController(FXMLServerScreenController c) {
+    public static void setController(FXMLServerScreenController c) {
         controller = c;
     }
     static int group_Id = 0;
@@ -127,19 +127,24 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     @Override
-    public void unregister(ClientInt client,User user) throws RemoteException {
-        clients.remove(client);
+    public void unregister(ClientInt client, User user) throws RemoteException {
+
+        for (User key : clients.keySet()) {
+            if (key.getRecId().equals(user.getRecId())) {
+                clients.remove(key);
+            }
+        }
     }
 
     @Override
     public void createGroup(ArrayList<User> group) throws RemoteException {
         group_Id++;
         groups.put(group_Id + "", group);
-        System.out.println("group created"+groups.size());
+        System.out.println("group created" + groups.size());
     }
 
     @Override
@@ -156,10 +161,11 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         }
     }
+
     @Override
-     public int getGroupId(ArrayList<User> group) throws RemoteException{
-         return group_Id;
-     }
+    public int getGroupId(ArrayList<User> group) throws RemoteException {
+        return group_Id;
+    }
 
     public static void sendAnnoncement(String message) throws RemoteException {
 
@@ -225,13 +231,11 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
                 ps.setString(8, user.getImgURL());
                 user.setMyStatus("available");
                 ps.setString(9, user.getMyStatus());
-                
+
                 int rowsEffected = ps.executeUpdate();
                 if (rowsEffected == 1) {
                     storedFlag = true;
-                   
 
-                  
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace(System.out);
@@ -249,15 +253,15 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
-            boolean flag=rs.next();
-            if(flag){
-            while (flag) {
-                User user = opr.getUserById(rs.getLong("FRIENDID"));
-                list.add(user);
-                flag=rs.next();
-            }
-            }else{
-          /* PreparedStatement ps2 = Database.getInstance().getPreparedStatement("SELECT USERID FROM ITI_CHATAPP_FRIENDLIST WHERE FRIENDID=?");
+            boolean flag = rs.next();
+            if (flag) {
+                while (flag) {
+                    User user = opr.getUserById(rs.getLong("FRIENDID"));
+                    list.add(user);
+                    flag = rs.next();
+                }
+            } else {
+                /* PreparedStatement ps2 = Database.getInstance().getPreparedStatement("SELECT USERID FROM ITI_CHATAPP_FRIENDLIST WHERE FRIENDID=?");
              ps2.setLong(1, userId);
              rs = ps2.executeQuery();
              flag=rs.next();
@@ -282,17 +286,17 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-            User user = new User();
-            user.setRecId(resultSet.getLong(1));
-            user.setFirstName(resultSet.getString(2));
-            user.setLastName(resultSet.getString(3));
-            user.setEmail(resultSet.getString(4));
-            user.setPassword(resultSet.getString(5));
-            user.setCountry(resultSet.getString(6));
-            user.setBirthDate(resultSet.getDate(7));
-            user.setGender(resultSet.getString(8));
-            user.setMyStatus(resultSet.getString(9));
-            user.setImgURL(resultSet.getString(10));
+                User user = new User();
+                user.setRecId(resultSet.getLong(1));
+                user.setFirstName(resultSet.getString(2));
+                user.setLastName(resultSet.getString(3));
+                user.setEmail(resultSet.getString(4));
+                user.setPassword(resultSet.getString(5));
+                user.setCountry(resultSet.getString(6));
+                user.setBirthDate(resultSet.getDate(7));
+                user.setGender(resultSet.getString(8));
+                user.setMyStatus(resultSet.getString(9));
+                user.setImgURL(resultSet.getString(10));
 
                 return user;
             }
@@ -314,24 +318,24 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     public void notifyFriends(User user) throws RemoteException, SQLException{
-           Iterator it = clients.entrySet().iterator();
-             while (it.hasNext()) {
-                 HashMap.Entry pair = (HashMap.Entry)it.next();
-                 User friend= (User)pair.getKey();
-                 ClientInt client= (ClientInt)pair.getValue();
-                if(client!=null){
-                    if(ServerDbOperation.isFriend(user.getRecId(),friend.getRecId())){
-                        client.recieveNotification(NotificationStatus.onlineStatus,user);
-                    }
-             }
+
+    public void notifyFriends(User user) throws RemoteException, SQLException {
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            User friend = (User) pair.getKey();
+            ClientInt client = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (ServerDbOperation.isFriend(user.getRecId(), friend.getRecId())) {
+                    client.recieveNotification(NotificationStatus.onlineStatus, user);
+                }
             }
-         
-     }
-     
-     //maroof
-     public  int GetClientcount()
-     {
-       return clients.size();
-     }
+        }
+
+    }
+
+    //maroof
+    public int GetClientcount() {
+        return clients.size();
+    }
 }

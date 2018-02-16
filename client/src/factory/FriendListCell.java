@@ -5,6 +5,7 @@
  */
 package factory;
 
+import controller.FXMLChatScreenController;
 import entity.User;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
@@ -18,6 +19,12 @@ import javafx.scene.text.Text;
  * @author Ahmed_Mokhtar
  */
 public class FriendListCell extends ListCell<User> {
+
+    FXMLChatScreenController controller;
+    
+    FriendListCell(FXMLChatScreenController controller) {
+        this.controller=controller;
+    }
 
     @Override
     protected void updateItem(User friend, boolean empty) {
@@ -35,28 +42,13 @@ public class FriendListCell extends ListCell<User> {
             statusImg.setFitHeight(25);
             
             HBox hBox = new HBox(userImg, username, statusImg);
+            hBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    controller.insertNewChatTab(friend.getFirstName());
+                }
+            });
             setGraphic(hBox);
-//            ImageView userImg = new ImageView("/resources/man.png");
-//            userImg.setFitWidth(80);
-//            userImg.setFitHeight(80);
-//            
-//            ImageView statusImg = new ImageView("/resources/online.png");
-//            statusImg.setFitWidth(25);
-//            statusImg.setFitHeight(25);
-//           
-//            
-//            Text username = new Text("  " + item + "  ");
-//            
-//            HBox hBox = new HBox(userImg, username, statusImg);
-//            
-//            hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent event) {
-//                    System.out.println("friend item is pressed");
-//                }
-//            });
-//            
-//            setGraphic(hBox);
 
         } else {
             setGraphic(null);

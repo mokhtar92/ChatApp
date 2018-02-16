@@ -6,12 +6,15 @@
 package controller;
 
 import entity.User;
+import factory.FriendCallBack2;
 import factory.FriendCallback;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -19,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -75,20 +79,22 @@ public class FXMLGroupScreenController implements Initializable {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(service.getFriendList());
         friendsListView.setItems(friendsList);
-        friendsListView.setCellFactory(new FriendCallback());
+        friendsListView.setCellFactory(new FriendCallBack2());
     }
- private void displaySelectedMemebers() {
+
+    private void displaySelectedMemebers() {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(groupMembers);
         selectedMembers.setItems(friendsList);
         selectedMembers.setCellFactory(new FriendCallback());
     }
+
     private void chooseMemebers() {
         User user = new User();
         user = (User) friendsListView.getSelectionModel().getSelectedItem();
         if (!groupMembers.contains(user)) {
             groupMembers.add(user);
-        }else{
+        } else {
             groupMembers.remove(user);
         }
         displaySelectedMemebers();
