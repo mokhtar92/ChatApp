@@ -287,13 +287,15 @@ public class FXMLChatScreenController implements Initializable {
         });
 
     }
-
-    public void getNotification(int Status, User user) {
+    public TabPane getChatTabPane(){
+        return  chatTabPane;
+    }
+    public void getNotification(int status, User user) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 NotificationInt impl = new NotificationImpl();
-                if (Status == NotificationStatus.onlineStatus) {
+                if (status == NotificationStatus.onlineStatus) {
                     impl.createNotification("Acconcement", user.getFirstName() + " become online", "resources/chat_logo.png");
                 }
             }
