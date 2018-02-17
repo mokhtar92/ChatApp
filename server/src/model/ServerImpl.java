@@ -305,8 +305,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
      */
     @Override
     public boolean sendFriendRequest(String email, Long userID) throws RemoteException {
-        Long friendID = opr.getUserByEmail(email);
+        Long friendID = opr.getUserIdByEmail(email);
         boolean isSend = false;
+        User user = new User();
         PreparedStatement ps = Database.getInstance().getPreparedStatement("INSERT INTO ITI_CHATAPP_FRIENDREQUEST (SENDERID, RECEIVERID) VALUES(?,?)");
         try {
             ps.setLong(1, userID);
@@ -314,6 +315,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             int rowsEffected = ps.executeUpdate();
             if (rowsEffected == 1) {
                 isSend = true;
+                user = opr.getUserById(friendID);
+                requestNotification(user);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -452,7 +455,21 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+   public void requestNotification(User user) throws RemoteException, SQLException {
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            User friend = (User) pair.getKey();
+            ClientInt client = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (user.getRecId().equals(friend.getRecId())) {
+                    client.requestNotification(NotificationStatus.friendRequest, user);
+                }
+            }
+        }
+    }
+    
     public void notifyFriends(User user) throws RemoteException, SQLException {
         Iterator it = clients.entrySet().iterator();
         while (it.hasNext()) {

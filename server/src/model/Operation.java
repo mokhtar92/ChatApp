@@ -83,7 +83,7 @@ public class Operation {
         return user;
     }
 
-    public Long getUserByEmail(String email) {
+    public Long getUserIdByEmail(String email) {
         Long friendID = -1L;
         PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT recid FROM ITI_CHATAPP_USER WHERE email=?");
         try {

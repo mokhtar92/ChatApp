@@ -128,7 +128,7 @@ public class FXMLChatScreenController implements Initializable {
 
     @FXML
     private ComboBox<String> fontFamilyComboBox;
-    
+
     @FXML
     private Tab friendListTab;
 
@@ -181,7 +181,7 @@ public class FXMLChatScreenController implements Initializable {
                     } else {
                         message.getTo().add(tab.getId());
                         Service.tellOne(message);
-                        
+
                     }
                     System.out.println(tab.getId());
 
@@ -212,16 +212,16 @@ public class FXMLChatScreenController implements Initializable {
                             }
                         }
                         if (message.getFrom().equals(user.getRecId() + "")) {
-                            
+
                             if (tab.getId().equals(message.getTo().get(0))) {
                                 Oneflag = true;
-                                
+
                             }
                         } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
-                           
+
                             if (tab.getId().equals(message.getFrom())) {
                                 Oneflag = true;
-                              
+
                             }
                         }
 
@@ -229,7 +229,7 @@ public class FXMLChatScreenController implements Initializable {
                 }
                 if (!flag && group != null) {
                     try {
-                        
+
                         insertNewChatTab(Service.getGroupName(group), user, true, group);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -237,7 +237,7 @@ public class FXMLChatScreenController implements Initializable {
                 } else if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
                     if (!message.getFrom().equals(user.getRecId())) {
                         try {
-           
+
                             User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
                             User sender = Service.getUserById(Long.parseLong(message.getFrom()));
                             insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
@@ -249,7 +249,7 @@ public class FXMLChatScreenController implements Initializable {
                         }
                     }
                 }
-             
+
                 for (Tab tab : tabs) {
 
                     if (tab.getId() != null) {
@@ -259,8 +259,8 @@ public class FXMLChatScreenController implements Initializable {
                         } else {
 
                             if (tab.getId().equals(group)) {
-                               controllers.get(i).showMessage(message);
-                               //controllers.get(i).getMessages(message);
+                                controllers.get(i).showMessage(message);
+                                //controllers.get(i).getMessages(message);
 
                             }
                         }
@@ -288,17 +288,29 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void getNotification(int Status, User user) {
+    public void getNotification(int status, User user) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 NotificationInt impl = new NotificationImpl();
-                if (Status == NotificationStatus.onlineStatus) {
+                if (status == NotificationStatus.onlineStatus) {
                     impl.createNotification("Acconcement", user.getFirstName() + " become online", "resources/chat_logo.png");
                 }
             }
         });
 
+    }
+
+    public void requestNotification(int status, User user) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NotificationInt impl = new NotificationImpl();
+                if (status == NotificationStatus.friendRequest) {
+                    impl.createNotification("Acconcement", user.getFirstName() + " Sent friend Request to you", user.getImgURL());
+                }
+            }
+        });
     }
 
     @FXML
@@ -337,21 +349,27 @@ public class FXMLChatScreenController implements Initializable {
         dialog.setContentText("Friend Email:");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent() && service.isEmailExist(result.get())) {
-            if (!isValidRequest(result.get(), getRequestedList)) {
+        if (result.isPresent() && service.isEmailExist(result.get().toLowerCase()) ) {
+            if (!isValidRequest(result.get().toLowerCase(), getRequestedList)) {
                 notification.createNotification("Alert", "You have already sent friend request to this person", "/resources/decline.png");
-            } else if (!isValidRequest(result.get(), allRequest)) {
+            } 
+            else if (!isValidRequest(result.get().toLowerCase(), allRequest)) {
                 notification.createNotification("Alert", "You have invitation from this person please check your requests", "/resources/decline.png");
-            } else if (!isValidRequest(result.get(), service.getFriendList())) {
+            } 
+            else if (!isValidRequest(result.get().toLowerCase(), service.getFriendList())) {
                 notification.createNotification("Alert", "You have this friend in your contacts", "/resources/decline.png");
-            } else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
+            } 
+            else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
                 notification.createNotification("Alert", "Can't send friend request to your account", "/resources/decline.png");
-            } else {
-                service.sendFriendRequest(result.get());
+            }  
+            else {
+                service.sendFriendRequest(result.get().toLowerCase());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
             }
-
-        } else {
+        } else if (result.get().equals("")){
+             notification.createNotification("Alert", "Closed", "/resources/decline.png");
+        }
+        else {
             notification.createNotification("Alert", "Enter valid user email", "/resources/decline.png");
         }
     }
@@ -381,21 +399,21 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void saveChatHistory() throws JAXBException, IOException {
-        int i=0;
+        int i = 0;
         ArrayList<Message> messages = null;
-        ObservableList<Tab> tabs=chatTabPane.getTabs();
-        Tab selectedTab=chatTabPane.getSelectionModel().getSelectedItem();
-    for (Tab tab : tabs) {
+        ObservableList<Tab> tabs = chatTabPane.getTabs();
+        Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+        for (Tab tab : tabs) {
 
-                    if (tab.getId() != null) {
-                       if(tab.getId().equals(selectedTab.getId())){
-                       messages=controllers.get(i).getMessages();
-                       }
-                        i++;
-                    }
-
+            if (tab.getId() != null) {
+                if (tab.getId().equals(selectedTab.getId())) {
+                    messages = controllers.get(i).getMessages();
                 }
-        
+                i++;
+            }
+
+        }
+
         //chat object to contain messages
         Chat myChat = new Chat();
         myChat.getMessage().addAll(messages);
@@ -458,9 +476,11 @@ public class FXMLChatScreenController implements Initializable {
         chatTabPane.getTabs().add(newChaTab);
         chatTabPane.getSelectionModel().select(newChaTab);
     }
-    public void updateFriendList(){
+
+    public void updateFriendList() {
         displayFriendList();
     }
+
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();

@@ -48,6 +48,10 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
   public void recieveNotification(int status,User user)throws RemoteException{
       chat.getNotification(status,user);
   }
+   @Override
+  public void requestNotification(int status,User user)throws RemoteException{
+      chat.requestNotification(status,user);
+  }
   @Override
     public void reciveFile(String path, String filename,boolean append, byte[] data, int dataLength) {
 
