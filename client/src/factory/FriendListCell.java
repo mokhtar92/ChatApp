@@ -7,6 +7,9 @@ package factory;
 
 import controller.FXMLChatScreenController;
 import entity.User;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
@@ -45,7 +48,11 @@ public class FriendListCell extends ListCell<User> {
             hBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    controller.insertNewChatTab(friend.getFirstName());
+                    try {
+                        controller.insertNewChatTab(friend.getFirstName(), friend,false,null);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             setGraphic(hBox);

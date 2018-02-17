@@ -88,12 +88,16 @@ public class FXMLSignUpController implements Initializable {
             //errorEmail.setText("Invalid Email");
             isValid = false;
         }
-        
+
         LocalDate localDate = signUpDatePicker.getValue();
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        Date date = Date.from(instant);
-        if (!user.setBirthDate(date)) {
-            //errorBd.setText("Invalid Date -enter date after 2003- ");
+        if (localDate != null) {
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date date = Date.from(instant);
+            if (!user.setBirthDate(date)) {
+                //errorBd.setText("Invalid Date -enter date after 2003- ");
+                isValid = false;
+            }
+        } else {
             isValid = false;
         }
 
@@ -101,17 +105,20 @@ public class FXMLSignUpController implements Initializable {
             // errorCountry.setText("Invalid country");
             isValid = false;
         }
-        
+
         if (maleRadioBtn.isSelected()) {
             user.setGender("male");
         }
-        
+
         if (!maleRadioBtn.isSelected()) {
             user.setGender("female");
         }
 
-        if (!user.setImgURL(options.get(ChooseAvatarComboBox.getSelectionModel().getSelectedIndex()))) {
+        if (ChooseAvatarComboBox.getSelectionModel().getSelectedIndex() == -1) {
             isValid = false;
+        } else {
+            user.setImgURL(options.get(ChooseAvatarComboBox.getSelectionModel().getSelectedIndex()));
+            isValid = true;
         }
         return isValid;
     }

@@ -50,7 +50,13 @@ public class FXMLGroupScreenController implements Initializable {
     private TextField groupName;
     ArrayList<User> groupMembers = null;
     private Stage myStage;
+    FXMLChatScreenController controller;
 
+    public FXMLGroupScreenController(FXMLChatScreenController controller) {
+        this.controller=controller;
+    }
+
+    
     /**
      * Initializes the controller class.
      */
@@ -106,10 +112,11 @@ public class FXMLGroupScreenController implements Initializable {
         if (name != null && !name.equals("")) {
             if (groupMembers.size() > 1) {
                 groupMembers.add(UserSession.getUser());
-                Service.createGroup(groupMembers);
-                int groupId = Service.getGroupId(groupMembers);
-                UserGroups.addGroup(groupId + "", groupMembers);
-                UserGroups.addGroupName(name);
+                Service.createGroup(groupMembers,name);
+                int groupId = Service.getGroupId();
+                UserGroups.addGroup("group"+groupId, groupMembers);
+                UserGroups.setGroupName("group"+groupId,name);
+                controller.insertNewChatTab(name,UserSession.getUser(),true,"group"+groupId);
                 myStage.close();
             } else {
                 errorField.setText("select more than one User");

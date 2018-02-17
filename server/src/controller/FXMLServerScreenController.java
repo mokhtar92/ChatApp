@@ -156,10 +156,7 @@ public class FXMLServerScreenController implements Initializable {
         d12.pieValueProperty().bindBidirectional(femaleNumber);
         ObservableList<Data> sourceData1 = FXCollections.observableArrayList(d11, d12);
         chart.setData(sourceData1);
-        System.out.println(maleNumber.getValue());
-        System.out.println(d11.pieValueProperty().isBound());
-        System.out.println(chart.getData());
-         
+        
     }
     public void updateTabelView(){
         UserTable table=new UserTable(usersTable);

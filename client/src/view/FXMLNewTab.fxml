@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane prefHeight="700.0" prefWidth="575.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutY="642.0" prefHeight="60.0" prefWidth="575.0" BorderPane.alignment="CENTER">
+          <children>
+              <TextField fx:id="sendTextField" layoutX="125.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="388.0" promptText="Write a message and press enter to send ..." />
+              <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="14.0" layoutY="10.0" onMouseClicked="#saveChatHistory" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                      <Image url="@../resources/save_chat_icon.png" />
+                  </image>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </ImageView>
+              <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="72.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <image>
+                      <Image url="@../resources/add_file_icon.png" />
+                  </image>
+              </ImageView>
+              <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="524.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <image>
+                      <Image url="@../resources/paint_pallet_icone.png" />
+                  </image>
+              </ImageView>
+              <MenuButton alignment="CENTER" layoutX="525.0" layoutY="18.0" mnemonicParsing="false" popupSide="TOP" prefHeight="5.0" prefWidth="5.0" style="-fx-background-color: transparent;">
+                  <font>
+                      <Font size="10.0" />
+                  </font>
+                  <items>
+                      <MenuItem mnemonicParsing="false">
+                          <graphic>
+                              <ColorPicker fx:id="messageColorPicker" prefWidth="50.0" />
+                          </graphic>
+                      </MenuItem>
+                      <MenuItem mnemonicParsing="false">
+                          <graphic>
+                              <ComboBox fx:id="fontFamilyComboBox" prefWidth="150.0" visibleRowCount="3" />
+                          </graphic>
+                      </MenuItem>
+                      <MenuItem mnemonicParsing="false">
+                          <graphic>
+                              <ComboBox fx:id="fontStyleComboBox" prefWidth="150.0" visibleRowCount="3" />
+                          </graphic>
+                      </MenuItem>
+                      <MenuItem mnemonicParsing="false">
+                          <graphic>
+                              <ComboBox fx:id="fontSizeComboBox" prefWidth="150.0" />
+                          </graphic>
+                      </MenuItem>
+                  </items>
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+              </MenuButton>
+          </children>
+      </Pane>
+   </children>
+</Pane>

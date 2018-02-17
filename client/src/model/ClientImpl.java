@@ -33,9 +33,9 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
     }
 
     @Override
-  public void recieve(Message message)throws RemoteException {
+  public void recieve(Message message,String group)throws RemoteException {
       
-        chat.getMessage(message);
+        chat.getMessage(message,group);
         
         
     }

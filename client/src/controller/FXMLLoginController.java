@@ -53,12 +53,12 @@ public class FXMLLoginController implements Initializable {
     private void checkLogin(ActionEvent ev) {
         User user = new User();
 
-        String email = loginEmailTextField.getText();
+        String email = loginEmailTextField.getText().toLowerCase();
         String password = loginPasswordTextField.getText();
         user.setEmail(email);
         user.setPassword(password);
         Long userId = service.checkLogin(user);
-        if (userId != null || userId != 0L) {
+        if (userId != null && userId != 0L) {
             invalidEmailPasswordMessage.setVisible(false);
             try {
                 user = Service.getUser(email, password);

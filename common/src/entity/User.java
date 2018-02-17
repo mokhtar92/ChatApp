@@ -95,7 +95,7 @@ public class User implements Serializable {
     }
 
     public boolean setFirstName(String firstName) {
-        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(firstName).matches()) {
+        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(firstName).matches() && firstName.length() < 20) {
             this.firstName = firstName;
             return true;
         }
@@ -107,7 +107,7 @@ public class User implements Serializable {
     }
 
     public boolean setLastName(String lastName) {
-        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(lastName).matches()) {
+        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(lastName).matches() && lastName.length() < 20) {
             this.lastName = lastName;
             return true;
         }
@@ -119,7 +119,7 @@ public class User implements Serializable {
     }
 
     public boolean setEmail(String email) {
-        if (Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches()) {
+        if (Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").matcher(email).matches() && email.length() < 50) {
             this.email = email;
             return true;
         }
@@ -132,7 +132,7 @@ public class User implements Serializable {
 
     public boolean setPassword(String password) {
 
-        if (password.length() >= 5) {
+        if (password.length() >= 5 && password.length() < 25) {
             this.password = password;
             return true;
         }
@@ -144,7 +144,7 @@ public class User implements Serializable {
     }
 
     public boolean setCountry(String country) {
-        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(country).matches()) {
+        if (Pattern.compile("^[\\p{L} .'-]+$").matcher(country).matches() && country.length() < 20) {
             this.country = country;
             return true;
         }

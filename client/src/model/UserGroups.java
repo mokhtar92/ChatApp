@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class UserGroups {
     private static HashMap<String, ArrayList<User>> groups = new HashMap<>();
-    private static ArrayList<String> groupName=new ArrayList<>();
+    private static HashMap<String,String> groupName=new HashMap<>();
 
     public static HashMap<String, ArrayList<User>> getGroups() {
         return groups;
@@ -25,17 +25,17 @@ public class UserGroups {
         UserGroups.groups = groups;
     }
 
-    public static ArrayList<String> getGroupName() {
-        return groupName;
+    public static String getGroupName(String id) {
+        return groupName.get(id);
     }
 
-    public static void setGroupName(ArrayList<String> groupName) {
-        UserGroups.groupName = groupName;
+    public static void setGroupName(String id,String name) {
+        groupName.put(id,name);
     }
     public static void addGroup(String id,ArrayList<User> users){
         groups.put(id, users);
     }
-    public static void addGroupName(String name){
+    /*public static void addGroupName(String name){
         groupName.add(name);
-    }
+    }*/
 }

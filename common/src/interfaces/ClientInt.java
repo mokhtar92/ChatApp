@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
 
 
 public interface ClientInt extends Remote{
-    public void recieve(Message message)throws RemoteException;
+    public void recieve(Message message,String group)throws RemoteException;
     public void recieveAnnoncement(String message)throws RemoteException;
      public void recieveNotification(int status,User user)throws RemoteException;
     public void reciveFile(String path ,String filename, boolean append, byte [] data , int dataLength)throws RemoteException;
