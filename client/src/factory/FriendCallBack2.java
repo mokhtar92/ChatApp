@@ -5,7 +5,6 @@
  */
 package factory;
 
-import controller.FXMLChatScreenController;
 import entity.User;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -13,23 +12,13 @@ import javafx.util.Callback;
 
 /**
  *
- * @author Ahmed_Mokhtar
+ * @author Hanaa
  */
-public class FriendCallback implements Callback<ListView<User>, ListCell<User>>{
-    
-    FXMLChatScreenController controller;
-
-    public FriendCallback(FXMLChatScreenController aThis) {
-        controller = aThis;
-    }
-
-    public FriendCallback() {
-    
-    }
+public class FriendCallBack2 implements Callback<ListView<User>, ListCell<User>>{
 
     @Override
     public ListCell<User> call(ListView<User> param) {
-        return new FriendListCell(controller);
+        return new FriendListCell2();
     }
     
 }
