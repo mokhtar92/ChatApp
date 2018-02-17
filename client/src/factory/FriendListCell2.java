@@ -49,27 +49,6 @@ public class FriendListCell2 extends ListCell<User> {
                 }
             });
             setGraphic(hBox);
-//            ImageView userImg = new ImageView("/resources/man.png");
-//            userImg.setFitWidth(80);
-//            userImg.setFitHeight(80);
-//            
-//            ImageView statusImg = new ImageView("/resources/online.png");
-//            statusImg.setFitWidth(25);
-//            statusImg.setFitHeight(25);
-//           
-//            
-//            Text username = new Text("  " + item + "  ");
-//            
-//            HBox hBox = new HBox(userImg, username, statusImg);
-//            
-//            hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent event) {
-//                    System.out.println("friend item is pressed");
-//                }
-//            });
-//            
-//            setGraphic(hBox);
 
         } else {
             setGraphic(null);

@@ -175,6 +175,7 @@ public class FXMLChatScreenController implements Initializable {
                     } else {
                         message.getTo().add(tab.getId());
                         Service.tellOne(message);
+                        
                     }
                     System.out.println(tab.getId());
 
@@ -205,16 +206,16 @@ public class FXMLChatScreenController implements Initializable {
                             }
                         }
                         if (message.getFrom().equals(user.getRecId() + "")) {
-                            System.out.println("enter1");
+                            
                             if (tab.getId().equals(message.getTo().get(0))) {
                                 Oneflag = true;
-                                System.out.println("enter1");
+                                
                             }
                         } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
-                            System.out.println("enter2");
+                           
                             if (tab.getId().equals(message.getFrom())) {
                                 Oneflag = true;
-                                System.out.println("enter2");
+                              
                             }
                         }
 
@@ -222,8 +223,7 @@ public class FXMLChatScreenController implements Initializable {
                 }
                 if (!flag && group != null) {
                     try {
-                        System.out.println("group name" + UserGroups.getGroupName(group));
-                        System.out.println("group id " + group);
+                        
                         insertNewChatTab(Service.getGroupName(group), user, true, group);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -231,7 +231,7 @@ public class FXMLChatScreenController implements Initializable {
                 } else if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
                     if (!message.getFrom().equals(user.getRecId())) {
                         try {
-                            System.out.println("enter individual tab");
+           
                             User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
                             User sender = Service.getUserById(Long.parseLong(message.getFrom()));
                             insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
@@ -243,17 +243,18 @@ public class FXMLChatScreenController implements Initializable {
                         }
                     }
                 }
+             
                 for (Tab tab : tabs) {
 
                     if (tab.getId() != null) {
                         if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
                             controllers.get(i).showMessage(message);
-                            System.out.println("tell one");
+                            controllers.get(i).getMessages(message);
                         } else {
 
                             if (tab.getId().equals(group)) {
-                                controllers.get(i).showMessage(message);
-                                System.err.println("tell group");
+                               controllers.get(i).showMessage(message);
+                               //controllers.get(i).getMessages(message);
 
                             }
                         }
@@ -372,21 +373,24 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void saveChatHistory() throws JAXBException, IOException {
+        int i=0;
+        ArrayList<Message> messages = null;
+        ObservableList<Tab> tabs=chatTabPane.getTabs();
+        Tab selectedTab=chatTabPane.getSelectionModel().getSelectedItem();
+    for (Tab tab : tabs) {
 
-        // for test list    
-        List<String> ToList = new ArrayList<>();
-        ToList.add("mohamed");
+                    if (tab.getId() != null) {
+                       if(tab.getId().equals(selectedTab.getId())){
+                       messages=controllers.get(i).getMessages();
+                       }
+                        i++;
+                    }
 
-        // messages for test
-        Message m = new Message("Ahmed", ToList, "hi mohamed ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
-        Message m2 = new Message("Ahmed", ToList, "hi khaled ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
-        Message m3 = new Message("Ahmed", ToList, "hi sayed ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
-
+                }
+        
         //chat object to contain messages
         Chat myChat = new Chat();
-        myChat.getMessage().add(m);
-        myChat.getMessage().add(m2);
-        myChat.getMessage().add(m3);
+        myChat.getMessage().addAll(messages);
 
         // create fileChooser save Dialoge
         FileChooser fileChooser = new FileChooser();

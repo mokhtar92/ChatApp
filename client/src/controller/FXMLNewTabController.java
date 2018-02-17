@@ -5,7 +5,9 @@
  */
 package controller;
 
+import entity.Message;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -36,9 +38,7 @@ public class FXMLNewTabController implements Initializable{
 
     @FXML
     private ComboBox<String> fontFamilyComboBox;
-    
-    
-    
+  
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
