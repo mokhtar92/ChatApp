@@ -35,6 +35,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -126,6 +128,9 @@ public class FXMLChatScreenController implements Initializable {
 
     @FXML
     private ComboBox<String> fontFamilyComboBox;
+    
+    @FXML
+    private Tab friendListTab;
 
     /**
      * Initializes the controller class.
@@ -143,6 +148,7 @@ public class FXMLChatScreenController implements Initializable {
         setUserProfile();
         setMessageFormatter();
         displayRequestList();
+
         message = new Message();
         server = Service.getServer();
         user = UserSession.getUser();
@@ -274,7 +280,7 @@ public class FXMLChatScreenController implements Initializable {
             @Override
             public void run() {
                 NotificationInt impl = new NotificationImpl();
-                impl.createNotification("Acconcement", message, "resources/chat_logo.png");
+                impl.createNotification("Acconcement", message, "resources/announce.png");
                 adsArea.setText(adsArea.getText() + "\n" + message);
             }
         });
@@ -337,6 +343,8 @@ public class FXMLChatScreenController implements Initializable {
                 notification.createNotification("Alert", "You have invitation from this person please check your requests", "/resources/decline.png");
             } else if (!isValidRequest(result.get(), service.getFriendList())) {
                 notification.createNotification("Alert", "You have this friend in your contacts", "/resources/decline.png");
+            } else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
+                notification.createNotification("Alert", "Can't send friend request to your account", "/resources/decline.png");
             } else {
                 service.sendFriendRequest(result.get());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
@@ -446,7 +454,9 @@ public class FXMLChatScreenController implements Initializable {
         chatTabPane.getTabs().add(newChaTab);
         chatTabPane.getSelectionModel().select(newChaTab);
     }
-
+    public void updateFriendList(){
+        displayFriendList();
+    }
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
@@ -463,11 +473,11 @@ public class FXMLChatScreenController implements Initializable {
         friendsListView.setCellFactory(new FriendCallback(this));
     }
 
-    private void displayRequestList() {
+    public void displayRequestList() {
         ObservableList<User> friendRequests = FXCollections.observableArrayList();
         friendRequests.addAll(service.getAllRequest());
         requestsListView.setItems(friendRequests);
-        requestsListView.setCellFactory(new RequestCallback());
+        requestsListView.setCellFactory(new RequestCallback(this));
     }
 
     private void move(MouseEvent event) {

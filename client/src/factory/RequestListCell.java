@@ -5,6 +5,7 @@
  */
 package factory;
 
+import controller.FXMLChatScreenController;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -16,26 +17,31 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import model.Service;
 
-
 /**
  *
  * @author Ahmed_Mokhtar
  */
-public class RequestListCell extends ListCell<User>{
+public class RequestListCell extends ListCell<User> {
 
+    FXMLChatScreenController controller;
     Service service = new Service();
+
+    RequestListCell(FXMLChatScreenController controller) {
+        this.controller = controller;
+    }
+
     @Override
     protected void updateItem(User request, boolean empty) {
         super.updateItem(request, empty);
-        
+
         if (request != null) {
-            Text username = new Text(request.getFirstName()+ " " + request.getLastName());
+            Text username = new Text(request.getFirstName() + " " + request.getLastName());
             username.setTextAlignment(TextAlignment.CENTER);
-            
+
             ImageView userImage = new ImageView(request.getImgURL());
             userImage.setFitWidth(80);
             userImage.setFitHeight(80);
-            
+
             ImageView acceptButton = new ImageView("/resources/accept.png");
             acceptButton.setFitWidth(25);
             acceptButton.setFitHeight(25);
@@ -43,9 +49,10 @@ public class RequestListCell extends ListCell<User>{
                 @Override
                 public void handle(MouseEvent event) {
                     service.acceptFriendRequest(request.getRecId());
+                    controller.displayRequestList();
                 }
             });
-            
+
             ImageView declineButton = new ImageView("/resources/decline.png");
             declineButton.setFitWidth(25);
             declineButton.setFitHeight(25);
@@ -53,20 +60,20 @@ public class RequestListCell extends ListCell<User>{
                 @Override
                 public void handle(MouseEvent event) {
                     service.deleteFriendRequest(request.getRecId());
+                    controller.displayRequestList();
                 }
             });
-            
-            
+
             HBox hBox = new HBox(acceptButton, declineButton);
-            
+
             VBox vBox = new VBox(userImage, username, hBox);
-            
+
             setGraphic(vBox);
-            
+
         } else {
             setGraphic(null);
         }
-       
+
     }
-    
+
 }
