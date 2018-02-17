@@ -102,8 +102,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     @Override
     public void tellOne(Message message) throws RemoteException {
 
-        if (users.containsKey(message.getTo())) {
-            ClientInt client = users.get(message.getTo());
+        if (users.containsKey(message.getTo().get(0))) {
+            ClientInt client = users.get(message.getTo().get(0));
             client.recieve(message, null);
             client = users.get(message.getFrom());
             client.recieve(message, null);
@@ -162,8 +162,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         Message message = fileSender.getMessage();
         message.setBody(fileSender.getFile().toString());
         ClientInt client = users.get(message.getFrom());
-        if (users.containsKey(message.getTo())) {
-            client = users.get(message.getTo());
+        if (users.containsKey(message.getTo().get(0))) {
+            client = users.get(message.getTo().get(0));
             client.sendFileToReciever(fileSender);
 
         }

@@ -5,9 +5,11 @@
  */
 package controller;
 
+import entity.Chat;
 import entity.Message;
 import entity.NotificationStatus;
 import entity.User;
+import entity.XmlHandler;
 import factory.FriendCallback;
 import factory.RequestCallback;
 import factory.StatusCallback;
@@ -15,12 +17,15 @@ import factory.StatusListCell;
 import interfaces.ClientInt;
 import interfaces.NotificationInt;
 import interfaces.ServerInt;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +58,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.xml.bind.JAXBException;
 import model.ClientImpl;
 import model.NotificationImpl;
 import model.Service;
@@ -76,7 +83,7 @@ public class FXMLChatScreenController implements Initializable {
     private ServerInt server = null;
     private ClientInt client = null;
     private NotificationImpl notification = new NotificationImpl();
-    private ArrayList<TempchatMessageController>controllers=new ArrayList<>();
+    private ArrayList<TempchatMessageController> controllers = new ArrayList<>();
 
     @FXML
     private VBox chatVBox;
@@ -160,14 +167,14 @@ public class FXMLChatScreenController implements Initializable {
 
                 try {
                     Tab tab = chatTabPane.getSelectionModel().getSelectedItem();
-                  
+
                     message.setBody(msg);
-                    
-                    if(tab.getId().contains("group")){
-                    Service.tellGroup(message,tab.getId());
-                    }else{
-                        message.setTo(tab.getId());
-                         Service.tellOne(message);
+
+                    if (tab.getId().contains("group")) {
+                        Service.tellGroup(message, tab.getId());
+                    } else {
+                        message.getTo().add(tab.getId());
+                        Service.tellOne(message);
                     }
                     System.out.println(tab.getId());
 
@@ -181,100 +188,79 @@ public class FXMLChatScreenController implements Initializable {
         }
     }
 
-    public void getMessage(Message message,String group) {
+    public void getMessage(Message message, String group) {
         Label label = new Label(message.getBody());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 ObservableList<Tab> tabs = chatTabPane.getTabs();
-                int i=0;
-                boolean flag=false;
-                boolean Oneflag=false;
+                int i = 0;
+                boolean flag = false;
+                boolean Oneflag = false;
                 for (Tab tab : tabs) {
-                    if(tab.getId()!=null){
-                    if(group!=null){
-                       if( tab.getId().equals(group)){
-                           flag=true;
-                       }
-                    }
-                        if(message.getFrom().equals(user.getRecId()+"")){
-                            System.out.println("enter1");
-                        if( tab.getId().equals(message.getTo())){
-                           Oneflag=true;
-                            System.out.println("enter1");
+                    if (tab.getId() != null) {
+                        if (group != null) {
+                            if (tab.getId().equals(group)) {
+                                flag = true;
+                            }
                         }
-                        }else if(message.getTo().equals(user.getRecId()+"")){
+                        if (message.getFrom().equals(user.getRecId() + "")) {
+                            System.out.println("enter1");
+                            if (tab.getId().equals(message.getTo().get(0))) {
+                                Oneflag = true;
+                                System.out.println("enter1");
+                            }
+                        } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
                             System.out.println("enter2");
-                          if(tab.getId().equals(message.getFrom())){
-                             Oneflag=true;
-                          System.out.println("enter2");
-                          }
+                            if (tab.getId().equals(message.getFrom())) {
+                                Oneflag = true;
+                                System.out.println("enter2");
+                            }
                         }
-                        
-                    
+
+                    }
                 }
-                }
-                if(!flag&&group!=null){
+                if (!flag && group != null) {
                     try {
-                        System.out.println("group name"+UserGroups.getGroupName(group));
-                         System.out.println("group id "+group);
-                        insertNewChatTab(Service.getGroupName(group), user, true,group);
+                        System.out.println("group name" + UserGroups.getGroupName(group));
+                        System.out.println("group id " + group);
+                        insertNewChatTab(Service.getGroupName(group), user, true, group);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    }}
-                else if(!Oneflag&&message.getTo()!=null&&message.getFrom()!=null){
-                        if(!message.getFrom().equals(user.getRecId())){
+                    }
+                } else if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
+                    if (!message.getFrom().equals(user.getRecId())) {
                         try {
-                              System.out.println("enter individual tab");
-                            User reciver=Service.getUserById(Long.parseLong(message.getTo()));
-                            User sender=Service.getUserById(Long.parseLong(message.getFrom()));
-                            insertNewChatTab(sender.getFirstName(),sender, Oneflag,null);
+                            System.out.println("enter individual tab");
+                            User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
+                            User sender = Service.getUserById(Long.parseLong(message.getFrom()));
+                            insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
                         } catch (RemoteException ex) {
-                    
+
                             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (SQLException ex) {
                             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        }
+                    }
                 }
                 for (Tab tab : tabs) {
-                   
+
                     if (tab.getId() != null) {
-                        if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo()))&&group==null) {
-                            controllers.get(i).showMessage(message); 
+                        if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
+                            controllers.get(i).showMessage(message);
                             System.out.println("tell one");
-                        } else{
-                        
-                            if(tab.getId().equals(group)){
-                                controllers.get(i).showMessage(message); 
+                        } else {
+
+                            if (tab.getId().equals(group)) {
+                                controllers.get(i).showMessage(message);
                                 System.err.println("tell group");
-                                
+
                             }
                         }
-                            
-                        
-                        i++;     
+
+                        i++;
                     }
-                    
-                   /* else{
-                                if(group!=null){
-                                    try {
-                                        System.out.println("reciver tell group");
-                                        insertNewChatTab(group, user, true);
-                                    } catch (RemoteException ex) {
-                                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }else{
-                                    try {
-                                         System.out.println("reciver tell one");
-                                        insertNewChatTab(message.getFrom(), user, false);
-                                    } catch (RemoteException ex) {
-                                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                    
-                                }
-                                getMessage(message, group);
-                            }*/
+
                 }
                 chatVBox.getChildren().add(label);
             }
@@ -319,7 +305,6 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-
     /**
      * ************** Send Friend Request **************
      */
@@ -348,14 +333,11 @@ public class FXMLChatScreenController implements Initializable {
         if (result.isPresent() && service.isEmailExist(result.get())) {
             if (!isValidRequest(result.get(), getRequestedList)) {
                 notification.createNotification("Alert", "You have already sent friend request to this person", "/resources/decline.png");
-            } 
-            else if (!isValidRequest(result.get(), allRequest)) {
+            } else if (!isValidRequest(result.get(), allRequest)) {
                 notification.createNotification("Alert", "You have invitation from this person please check your requests", "/resources/decline.png");
-            } 
-            else if (!isValidRequest(result.get(), service.getFriendList())) {
+            } else if (!isValidRequest(result.get(), service.getFriendList())) {
                 notification.createNotification("Alert", "You have this friend in your contacts", "/resources/decline.png");
-            } 
-            else {
+            } else {
                 service.sendFriendRequest(result.get());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
             }
@@ -365,15 +347,13 @@ public class FXMLChatScreenController implements Initializable {
         }
     }
 
-
-
     @FXML
     public void addGroupChat(MouseEvent event) {
 
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/FXMLGroupScreen.fxml"));
-             FXMLGroupScreenController groupController = new FXMLGroupScreenController(this);
+            FXMLGroupScreenController groupController = new FXMLGroupScreenController(this);
             loader.setController(groupController);
             Parent parent = loader.load();
             Stage stage = new Stage();
@@ -391,7 +371,33 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void saveChatHistory() {
+    public void saveChatHistory() throws JAXBException, IOException {
+
+        // for test list    
+        List<String> ToList = new ArrayList<>();
+        ToList.add("mohamed");
+
+        // messages for test
+        Message m = new Message("Ahmed", ToList, "hi mohamed ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
+        Message m2 = new Message("Ahmed", ToList, "hi khaled ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
+        Message m3 = new Message("Ahmed", ToList, "hi sayed ..", "12", "red", "20-2-2012", "20:12", "ARIAL", "bold");
+
+        //chat object to contain messages
+        Chat myChat = new Chat();
+        myChat.getMessage().add(m);
+        myChat.getMessage().add(m2);
+        myChat.getMessage().add(m3);
+
+        // create fileChooser save Dialoge
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showSaveDialog(myStage);
+
+        // calling saving method
+        XmlHandler xmlHandler = new XmlHandler();
+        xmlHandler.SaveXml(file, myChat.getMessage());
 
     }
 
@@ -418,14 +424,14 @@ public class FXMLChatScreenController implements Initializable {
         yOffset = event.getSceneY();
     }
 
-    public void insertNewChatTab(String name, User user,boolean isGroup,String groupId) throws RemoteException {
+    public void insertNewChatTab(String name, User user, boolean isGroup, String groupId) throws RemoteException {
         Tab newChaTab = new Tab(name);
-        if(!isGroup){
-        newChaTab.setId(user.getRecId() + "");
-        }else{
-            
+        if (!isGroup) {
+            newChaTab.setId(user.getRecId() + "");
+        } else {
+
             newChaTab.setId(groupId);
-            
+
         }
         newChaTab.setClosable(true);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TempchatMessage.fxml"));
@@ -456,7 +462,7 @@ public class FXMLChatScreenController implements Initializable {
         friendsListView.setItems(friendsList);
         friendsListView.setCellFactory(new FriendCallback(this));
     }
-    
+
     private void displayRequestList() {
         ObservableList<User> friendRequests = FXCollections.observableArrayList();
         friendRequests.addAll(service.getAllRequest());
