@@ -6,16 +6,23 @@
 package factory;
 
 import controller.FXMLChatScreenController;
+import entity.NotificationStatus;
 import entity.User;
+import interfaces.NotificationInt;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import model.NotificationImpl;
 
 /**
  *
@@ -48,11 +55,33 @@ public class FriendListCell extends ListCell<User> {
             hBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-                    try {
-                        controller.insertNewChatTab(friend.getFirstName(), friend,false,null);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+              Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                TabPane tabPane = controller.getChatTabPane();
+                    ObservableList<Tab> tabs = tabPane.getTabs();
+                    boolean flag=false;
+                    for (Tab tab : tabs) {
+                        if(tab.getId()!=null){
+
+                        if (tab.getId().equals(friend.getRecId()+"")) {
+                         	tabPane.getSelectionModel().select(tab);
+                                flag=true;
+                        } 
+                        
+                        
+}
                     }
+                    if(!flag){
+                            try {
+                                controller.insertNewChatTab(friend.getFirstName(), friend,false,null);
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+            }
+            }
+        });
+                   
                 }
             });
             setGraphic(hBox);
