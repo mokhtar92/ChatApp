@@ -12,7 +12,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveServerWindow" onMousePressed="#setMousePosition" prefHeight="745.0" prefWidth="565.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLFirstScreenController">
     <children>
-        <Label fx:id="invalidIpMessage" layoutX="551.0" layoutY="639.0" minHeight="16" minWidth="69" text="* Invalid IP address, try again!" textFill="RED" visible="false" />
+        <Label fx:id="invalidIpMessage" layoutX="195.0" layoutY="634.0" minHeight="16" minWidth="69" text="* Invalid IP address, try again!" textFill="RED" visible="false" />
       <JFXTextField fx:id="serverIpTextField" alignment="CENTER" focusColor="#3c999c" layoutX="131.0" layoutY="573.0" promptText="Enter IP number of server" style="-fx-text-inner-color: #afb0b2;">
          <font>
             <Font name="Arial" size="25.0" />
