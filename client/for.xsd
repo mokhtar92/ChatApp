@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="chat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="message"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="message">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="from" type="xs:string"/>
+        <xs:element name="to" type="xs:string" maxOccurs="unbounded" />
+       <xs:element name="body" type="xs:string"/>
+        <xs:element name="fontSize" type="xs:string"/>
+       <xs:element name="fontColor" type="xs:string"/>
+      <xs:element name="date" type="xs:string"/>
+      <xs:element name="time" type="xs:string"/>
+      <xs:element name="fontFamily" type="xs:string"/>
+       <xs:element name="fontStyle" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+ 
+</xs:schema>

@@ -5,18 +5,23 @@
  */
 package controller;
 
+import entity.Chat;
 import entity.Message;
 import entity.NotificationStatus;
 import entity.User;
+import entity.XmlHandler;
 import factory.FriendCallback;
 import factory.StatusCallback;
 import factory.StatusListCell;
 import interfaces.ClientInt;
 import interfaces.NotificationInt;
 import interfaces.ServerInt;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +50,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.xml.bind.JAXBException;
 import model.ClientImpl;
 import model.NotificationImpl;
 import model.Service;
@@ -132,10 +139,7 @@ public class FXMLChatScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        message = new Message();
-        //Just for Testing :))
-        message.setFrom("1");
-        message.setTo("21");
+      
 
     }
 
@@ -238,8 +242,36 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void saveChatHistory() {
-
+    public void saveChatHistory() throws JAXBException, IOException {
+   
+     // for test list    
+    List <String> ToList = new ArrayList<>();
+    ToList.add("mohamed");
+    
+   // messages for test
+    Message m = new Message("Ahmed", ToList, "hi mohamed ..", "12", "red","20-2-2012","20:12", "ARIAL", "bold");
+    Message m2 = new Message("Ahmed", ToList, "hi khaled ..", "12", "red","20-2-2012","20:12", "ARIAL", "bold");
+    Message m3 = new Message("Ahmed", ToList, "hi sayed ..", "12", "red","20-2-2012","20:12", "ARIAL", "bold");
+    
+    //chat object to contain messages
+    Chat myChat = new Chat(); 
+    myChat.getMessage().add(m);
+    myChat.getMessage().add(m2);
+    myChat.getMessage().add(m3);
+    
+        // create fileChooser save Dialoge
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+       
+        File file = fileChooser.showSaveDialog(myStage);
+        
+      // calling saving method
+       XmlHandler xmlHandler = new XmlHandler();
+      xmlHandler.SaveXml(file, myChat.getMessage());
+        
+    
+          
     }
 
     public void sendFile() {
