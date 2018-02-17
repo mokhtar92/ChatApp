@@ -288,8 +288,8 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public TabPane getChatTabPane(){
-        return  chatTabPane;
+    public TabPane getChatTabPane() {
+        return chatTabPane;
     }
 
     public void getNotification(int status, User user) {
@@ -311,7 +311,7 @@ public class FXMLChatScreenController implements Initializable {
             public void run() {
                 NotificationInt impl = new NotificationImpl();
                 if (status == NotificationStatus.friendRequest) {
-                    impl.createNotification("Acconcement", user.getFirstName() + " Sent friend Request to you", user.getImgURL());
+                    System.out.println(user); impl.createNotification("Acconcement", user.getFirstName()+" you have new friend request", user.getImgURL());
                 }
             }
         });
@@ -353,27 +353,22 @@ public class FXMLChatScreenController implements Initializable {
         dialog.setContentText("Friend Email:");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent() && service.isEmailExist(result.get().toLowerCase()) ) {
+        if (result.isPresent() && service.isEmailExist(result.get().toLowerCase())) {
             if (!isValidRequest(result.get().toLowerCase(), getRequestedList)) {
                 notification.createNotification("Alert", "You have already sent friend request to this person", "/resources/decline.png");
-            } 
-            else if (!isValidRequest(result.get().toLowerCase(), allRequest)) {
+            } else if (!isValidRequest(result.get().toLowerCase(), allRequest)) {
                 notification.createNotification("Alert", "You have invitation from this person please check your requests", "/resources/decline.png");
-            } 
-            else if (!isValidRequest(result.get().toLowerCase(), service.getFriendList())) {
+            } else if (!isValidRequest(result.get().toLowerCase(), service.getFriendList())) {
                 notification.createNotification("Alert", "You have this friend in your contacts", "/resources/decline.png");
-            } 
-            else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
+            } else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
                 notification.createNotification("Alert", "Can't send friend request to your account", "/resources/decline.png");
-            }  
-            else {
+            } else {
                 service.sendFriendRequest(result.get().toLowerCase());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
             }
-        } else if (result.get().equals("")){
-             notification.createNotification("Alert", "Closed", "/resources/decline.png");
-        }
-        else {
+        } else if (result.get().equals("")) {
+            notification.createNotification("Alert", "Closed", "/resources/decline.png");
+        } else {
             notification.createNotification("Alert", "Enter valid user email", "/resources/decline.png");
         }
     }
@@ -427,14 +422,12 @@ public class FXMLChatScreenController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        
         File file = fileChooser.showSaveDialog(myStage);
 
-        if (file != null)
-        {
-         // calling saving method
-         XmlHandler xmlHandler = new XmlHandler();
-         xmlHandler.SaveXml(file, myChat.getMessage());
+        if (file != null) {
+            // calling saving method
+            XmlHandler xmlHandler = new XmlHandler();
+            xmlHandler.SaveXml(file, myChat.getMessage());
         }
     }
 
@@ -486,6 +479,10 @@ public class FXMLChatScreenController implements Initializable {
 
     public void updateFriendList() {
         displayFriendList();
+    }
+
+    public void updateFriendRequest() {
+        displayRequestList();
     }
 
     //private method implementation
