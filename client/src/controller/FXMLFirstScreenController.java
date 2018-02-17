@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.Service;
 
 /**
  *
@@ -69,10 +70,15 @@ public class FXMLFirstScreenController implements Initializable {
     private void connect() throws IOException {
         String receviedIP = serverIpTextField.getText().trim();
         final String REGEX_IP = "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$";
-
-        if (receviedIP.matches(REGEX_IP)) {
+         Service.IP=receviedIP; 
+        if (receviedIP.matches(REGEX_IP))
+        {
             invalidIpMessage.setVisible(false);
-            
+            //maroof edit
+           //adding connect to valid ip another if 
+           if( Service.checkIp()==1)
+          
+           {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -85,7 +91,14 @@ public class FXMLFirstScreenController implements Initializable {
                     }
                 }
             });
+           }else
+           {
+            invalidIpMessage.setText("ip is not reachable");
+            serverIpTextField.clear();
+            invalidIpMessage.setVisible(true);
             
+           }
+           
         } else {
             serverIpTextField.clear();
             invalidIpMessage.setVisible(true);

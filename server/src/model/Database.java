@@ -35,7 +35,7 @@ public class Database {
     private static Connection getConnection() throws SQLException {
         if (con == null) {
             con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe","CHAT_APP","chat_app");
-           // con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:orcl","CHAT_APP","chat_app");
+            //con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:orcl","CHAT_APP","chat_app");
         }
         return con;
     }

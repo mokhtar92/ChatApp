@@ -288,6 +288,10 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
+    public TabPane getChatTabPane(){
+        return  chatTabPane;
+    }
+
     public void getNotification(int status, User user) {
         Platform.runLater(new Runnable() {
             @Override
@@ -423,12 +427,15 @@ public class FXMLChatScreenController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
+        
         File file = fileChooser.showSaveDialog(myStage);
 
-        // calling saving method
-        XmlHandler xmlHandler = new XmlHandler();
-        xmlHandler.SaveXml(file, myChat.getMessage());
-
+        if (file != null)
+        {
+         // calling saving method
+         XmlHandler xmlHandler = new XmlHandler();
+         xmlHandler.SaveXml(file, myChat.getMessage());
+        }
     }
 
     public void sendFile() {

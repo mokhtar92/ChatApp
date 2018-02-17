@@ -18,6 +18,8 @@ import java.util.ArrayList;
 public class Service {
 
     static Long userID = null;
+    //maroof edit
+    static public String IP = null;
 
     public Long checkLogin(User user) {
         try {
@@ -117,10 +119,11 @@ public class Service {
     public static ServerInt getServer() {
         ServerInt server = null;
         try {
-            Registry reg = LocateRegistry.getRegistry("127.0.0.1", 2000);
+            //maroof edit here
+            Registry reg = LocateRegistry.getRegistry(IP, 2000);
             server = (ServerInt) reg.lookup("chat");
         } catch (NotBoundException | RemoteException ex) {
-            ex.printStackTrace(System.out);
+           
         }
         return server;
     }
@@ -155,5 +158,18 @@ public class Service {
 
     public static User getUserById(long id) throws RemoteException, SQLException {
         return getServer().getUserById(id);
+    }
+    
+    //maroof adding for check ip 
+    public static int checkIp ()
+    {
+       if(getServer()==null)
+       {
+         return 0;
+       }
+       else
+       {
+        return 1;
+       }
     }
 }
