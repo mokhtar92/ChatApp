@@ -46,6 +46,9 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private Label invalidEmailPasswordMessage;
 
+    @FXML
+    private Label invalidOnlineUser;
+
     public FXMLLoginController() {
     }
 
@@ -63,20 +66,22 @@ public class FXMLLoginController implements Initializable {
             try {
                 user = Service.getUser(email, password);
                 UserSession.setUser(user);
-                if(!Service.isOnline(user.getRecId()+"")){
-                Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-                }else{
-                    //invalidEmailPasswordMessage.setText("this user already online");
+                if (!Service.isOnline(user.getRecId() + "")) {
+                    Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
+                    Scene scene = new Scene(root);
+                    Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    invalidOnlineUser.setVisible(true);
+                    invalidEmailPasswordMessage.setVisible(false);
                 }
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
             }
         } else {
             invalidEmailPasswordMessage.setVisible(true);
+            invalidOnlineUser.setVisible(false);
         }
 
     }
