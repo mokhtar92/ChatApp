@@ -175,7 +175,7 @@ public class FXMLChatScreenController implements Initializable {
 
         if (msg != null) {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                    message.setFrom(user.getRecId()+"");
+                message.setFrom(user.getRecId() + "");
                 try {
                     Tab tab = chatTabPane.getSelectionModel().getSelectedItem();
 
@@ -218,63 +218,65 @@ public class FXMLChatScreenController implements Initializable {
                             if (tab.getId().equals(group)) {
                                 flag = true;
                             }
-                        }else{
-                        if (message.getFrom().equals(user.getRecId() + "")) {
-                               
-                            if (tab.getId().equals(message.getTo().get(0))) {
-                                Oneflag = true;
+                        } else {
+                            if (message.getFrom().equals(user.getRecId() + "")) {
 
+                                if (tab.getId().equals(message.getTo().get(0))) {
+                                    Oneflag = true;
+
+                                }
+                            } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
+
+                                if (tab.getId().equals(message.getFrom())) {
+                                    Oneflag = true;
+
+                                }
                             }
-                        } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
-
-                            if (tab.getId().equals(message.getFrom())) {
-                                Oneflag = true;
-
-                            }
-                        }
                         }
                     }
                 }
                 if (group != null) {
-                    if(!flag){
-                    try {
-
-                        insertNewChatTab(Service.getGroupName(group), user, true, group);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    }}
-                } else {
-                    if(!Oneflag){
-                    if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
-                    if (!message.getFrom().equals(user.getRecId())) {
+                    if (!flag) {
                         try {
 
-                            User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
-                            User sender = Service.getUserById(Long.parseLong(message.getFrom()));
-                            insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
+                            insertNewChatTab(Service.getGroupName(group), user, true, group);
                         } catch (RemoteException ex) {
-
-                            Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
                             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }}
-            }
+                } else {
+                    if (!Oneflag) {
+                        if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
+                            if (!message.getFrom().equals(user.getRecId())) {
+                                try {
+
+                                    User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
+                                    User sender = Service.getUserById(Long.parseLong(message.getFrom()));
+                                    insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
+                                } catch (RemoteException ex) {
+
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                    }
+                }
                 for (Tab tab : tabs) {
 
                     if (tab.getId() != null) {
-                        if(group==null){
-                        if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
-                            try {
-                                controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        if (group == null) {
+                            if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
+                                try {
+                                    controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                controllers.get(i).getMessages(message);
                             }
-                            controllers.get(i).getMessages(message);
-                        }
                         } else {
 
                             if (tab.getId().equals(group)) {
@@ -301,16 +303,24 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void getAnnouncement(String message) {
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                NotificationInt impl = new NotificationImpl();
-                impl.createNotification("Announcement", message, "resources/announce.png");
-                adsArea.setText(message);
-            }
-        });
-
+        if (message.equals("###!!!")) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    myStage.close();
+                }
+            });
+            
+        } else {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    NotificationInt impl = new NotificationImpl();
+                    impl.createNotification("Announcement", message, "resources/announce.png");
+                    adsArea.setText(message);
+                }
+            });
+        }
     }
 
     public TabPane getChatTabPane() {
@@ -604,7 +614,7 @@ public class FXMLChatScreenController implements Initializable {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(service.getFriendList());
         friendsListView.setItems(friendsList);
-        friendsListView.setCellFactory(new FriendCallback(this,true));
+        friendsListView.setCellFactory(new FriendCallback(this, true));
     }
 
     public void displayRequestList() {

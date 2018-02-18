@@ -26,7 +26,6 @@ public class FXMLFirstScreenController implements Initializable {
     private Stage myStage;
     private double xOffset = 0;
     private double yOffset = 0;
-    
 
     @FXML
     private Label invalidIpMessage;
@@ -59,46 +58,40 @@ public class FXMLFirstScreenController implements Initializable {
     public void moveServerWindow(MouseEvent event) {
         move(event);
     }
-    
-    public void setMousePosition(MouseEvent event){
+
+    public void setMousePosition(MouseEvent event) {
         xOffset = event.getSceneX();
         yOffset = event.getSceneY();
     }
 
-    
     //private implementation of methods
     private void connect() throws IOException {
         String receviedIP = serverIpTextField.getText().trim();
         final String REGEX_IP = "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$";
-         Service.IP=receviedIP; 
-        if (receviedIP.matches(REGEX_IP))
-        {
+        Service.IP = receviedIP;
+        if (receviedIP.matches(REGEX_IP)) {
             invalidIpMessage.setVisible(false);
-            //maroof edit
-           //adding connect to valid ip another if 
-           if( Service.checkIp()==1)
-          
-           {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
-                        Scene scene = new Scene(root);
-                        myStage.setScene(scene);
-                    } catch (IOException ex) {
-                        Logger.getLogger(FXMLFirstScreenController.class.getName()).log(Level.SEVERE, null, ex);
+            //adding connect to valid ip another if 
+            if (Service.checkIp() == 1) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
+                            Scene scene = new Scene(root);
+                            myStage.setScene(scene);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLFirstScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                }
-            });
-           }else
-           {
-            invalidIpMessage.setText("ip is not reachable");
-            serverIpTextField.clear();
-            invalidIpMessage.setVisible(true);
-            
-           }
-           
+                });
+                
+            } else {
+                invalidIpMessage.setText("* IP is not reachable!");
+                serverIpTextField.clear();
+                invalidIpMessage.setVisible(true);
+            }
+
         } else {
             serverIpTextField.clear();
             invalidIpMessage.setVisible(true);
