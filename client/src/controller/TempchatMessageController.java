@@ -8,6 +8,8 @@ package controller;
 import entity.Message;
 import entity.User;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Service;
 
 /**
  * FXML Controller class
@@ -55,7 +58,7 @@ public class TempchatMessageController implements Initializable {
         vBox.getChildren().addAll(label);*/
     }
 
-    public void createMessageStyle(Message styledMessage, User sender, String messageCSS) {
+    public void createMessageStyle(Message styledMessage, User sender, String messageCSS) throws RemoteException, SQLException {
         Label label = new Label(styledMessage.getBody());
 
         HBox hBox;
@@ -76,8 +79,9 @@ public class TempchatMessageController implements Initializable {
         } else {
             label.getStyleClass().add("receiver");
             label.setStyle(messageCSS);
-
-            img = new ImageView(sender.getImgURL());
+            User receiver=Service.getUserById(Long.parseLong(styledMessage.getFrom()));
+            
+            img = new ImageView(receiver.getImgURL());
             img.setFitWidth(45);
             img.setFitHeight(45);
 

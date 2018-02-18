@@ -172,18 +172,22 @@ public class FXMLChatScreenController implements Initializable {
     @FXML
     public void sendMessage(KeyEvent event) {
         String msg = sendTextField.getText().trim();
+
         if (msg != null) {
             if (event.getCode().equals(KeyCode.ENTER)) {
-
+                    message.setFrom(user.getRecId()+"");
                 try {
                     Tab tab = chatTabPane.getSelectionModel().getSelectedItem();
 
                     message.setBody(msg);
 
                     if (tab.getId().contains("group")) {
+                        sendTextField.setText("");
                         Service.tellGroup(message, tab.getId());
+                        //message.getTo().add(user.getRecId()+"");
                     } else {
                         message.getTo().add(tab.getId());
+                        sendTextField.setText("");
                         Service.tellOne(message);
 
                     }
@@ -214,9 +218,9 @@ public class FXMLChatScreenController implements Initializable {
                             if (tab.getId().equals(group)) {
                                 flag = true;
                             }
-                        }
+                        }else{
                         if (message.getFrom().equals(user.getRecId() + "")) {
-
+                               
                             if (tab.getId().equals(message.getTo().get(0))) {
                                 Oneflag = true;
 
@@ -228,17 +232,20 @@ public class FXMLChatScreenController implements Initializable {
 
                             }
                         }
-
+                        }
                     }
                 }
-                if (!flag && group != null) {
+                if (group != null) {
+                    if(!flag){
                     try {
 
                         insertNewChatTab(Service.getGroupName(group), user, true, group);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
+                    }}
+                } else {
+                    if(!Oneflag){
+                    if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
                     if (!message.getFrom().equals(user.getRecId())) {
                         try {
 
@@ -252,19 +259,33 @@ public class FXMLChatScreenController implements Initializable {
                             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }
-
+                }}
+            }
                 for (Tab tab : tabs) {
 
                     if (tab.getId() != null) {
+                        if(group==null){
                         if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
-                            controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
+                            try {
+                                controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (SQLException ex) {
+                                Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             controllers.get(i).getMessages(message);
+                        }
                         } else {
 
                             if (tab.getId().equals(group)) {
-                                controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
-                                //controllers.get(i).getMessages(message);
+                                try {
+                                    controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
+                                    //controllers.get(i).getMessages(message);
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 
                             }
                         }
@@ -273,7 +294,7 @@ public class FXMLChatScreenController implements Initializable {
                     }
 
                 }
-                chatVBox.getChildren().add(label);
+                //chatVBox.getChildren().add(label);
             }
         });
 
