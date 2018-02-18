@@ -126,7 +126,19 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void register(ClientInt client, User user) throws RemoteException {
-
+        boolean flag = false;
+        Iterator it = users.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            String id = (String) pair.getKey();
+            ClientInt iteratorclient = (ClientInt) pair.getValue();
+            if (iteratorclient != null) {
+                if(id.equals(user.getRecId()+"")){
+                    flag=true;
+                }
+            }
+        }
+        if(!flag){
         clients.put(user, client);
         users.put(user.getRecId() + "", client);
         try {
@@ -134,16 +146,12 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        }
     }
 
     @Override
     public void unregister(ClientInt client, User user) throws RemoteException {
         users.remove(user.getRecId());
-        /* for (User key : users)) {
-            if (key.getRecId().equals(user.getRecId())) {
-                clients.remove(key);
-            }*/
         Iterator it = clients.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry) it.next();
