@@ -54,7 +54,7 @@
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="confirmPasswordTextField1" layoutX="426.0" layoutY="373.0" prefHeight="45.0" prefWidth="300.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <PasswordField fx:id="confirmPasswordTextField" layoutX="426.0" layoutY="373.0" prefHeight="45.0" prefWidth="300.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
