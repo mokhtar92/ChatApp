@@ -415,9 +415,9 @@ public class FXMLChatScreenController implements Initializable {
                 service.sendFriendRequest(result.get().toLowerCase());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
             }
-        } else if (result.get().equals("")) {
-            notification.createNotification("Alert", "Closed", "/resources/decline.png");
-        } else {
+        }else if(!result.isPresent() || result.get().equals("")){
+            notification.createNotification("Alert", "canceled", "/resources/decline.png");
+        }else {
             notification.createNotification("Alert", "Enter valid user email", "/resources/decline.png");
         }
     }

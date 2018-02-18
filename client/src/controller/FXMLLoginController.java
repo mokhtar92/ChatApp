@@ -63,11 +63,15 @@ public class FXMLLoginController implements Initializable {
             try {
                 user = Service.getUser(email, password);
                 UserSession.setUser(user);
+                if(!Service.isOnline(user.getRecId()+"")){
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLChatScreen.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
+                }else{
+                    //invalidEmailPasswordMessage.setText("this user already online");
+                }
             } catch (IOException ex) {
                 ex.printStackTrace(System.out);
             }

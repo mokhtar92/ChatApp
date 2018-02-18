@@ -46,6 +46,9 @@ public class FXMLSignUpController implements Initializable {
     private PasswordField passwordTextField;
 
     @FXML
+    private PasswordField confirmPasswordTextField;
+
+    @FXML
     private TextField lastNameTextField;
 
     @FXML
@@ -78,6 +81,10 @@ public class FXMLSignUpController implements Initializable {
         }
         if (!user.setLastName(lastNameTextField.getText())) {
             // errorLastName.setText("Invalid Name");
+            isValid = false;
+        }
+        if (!passwordTextField.getText().equals(confirmPasswordTextField.getText())) {
+            //errorConfirmPassword.setText("wrong password");
             isValid = false;
         }
         if (!user.setPassword(passwordTextField.getText())) {
@@ -114,11 +121,9 @@ public class FXMLSignUpController implements Initializable {
             user.setGender("female");
         }
 
-        if (ChooseAvatarComboBox.getSelectionModel().getSelectedIndex() == -1) {
+        if (ChooseAvatarComboBox.getSelectionModel().getSelectedIndex() == -1 || (!user.setImgURL(options.get(ChooseAvatarComboBox.getSelectionModel().getSelectedIndex())))) {
             isValid = false;
-        } else {
-            user.setImgURL(options.get(ChooseAvatarComboBox.getSelectionModel().getSelectedIndex()));
-            isValid = true;
+
         }
         return isValid;
     }
