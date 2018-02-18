@@ -10,12 +10,12 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="474.0" layoutY="71.0" mnemonicParsing="false" onMouseClicked="#createGroup" prefHeight="30.0" style="-fx-background-color: #5b5999; -fx-background-radius: 0 25 0 0;" text="Create" textFill="WHITE">
+      <Button layoutX="474.0" layoutY="71.0" mnemonicParsing="false" onMouseClicked="#createGroup" prefHeight="30.0" style="-fx-background-color: #3c999c; -fx-background-radius: 0 25 0 0;" text="Create" textFill="WHITE">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
       <TextField fx:id="groupName" layoutX="193.0" layoutY="71.0" prefHeight="30.0" prefWidth="275.0" />
-      <Label layoutX="60.0" layoutY="75.0" text="Group Name" textFill="#5b5999">
+      <Label layoutX="60.0" layoutY="75.0" text="Group Name" textFill="#3c999c">
          <font>
             <Font name="Arial Rounded MT Bold" size="20.0" />
          </font></Label>

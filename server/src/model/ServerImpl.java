@@ -87,6 +87,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     }
 
     public static void stopServer() throws RemoteException, NotBoundException {
+        sendAnnouncement("###!!!");
         registry.unbind("chat");
     }
 

@@ -10,18 +10,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveLoginWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #5b5999;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLLoginController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveLoginWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLLoginController">
     <children>
         <Label fx:id="invalidEmailPasswordMessage" layoutX="75.0" layoutY="488.0" prefHeight="22.0" prefWidth="250.0" text="* Invalid Email/Password, try again!" textFill="RED" visible="false" />
-      <JFXTextField fx:id="loginEmailTextField" focusColor="#25e4fe" layoutX="38.0" layoutY="381.0" prefHeight="40.0" prefWidth="325.0" promptText="Email" style="-fx-text-inner-color: #25e4fe;">
+      <Label fx:id="invalidOnlineUser" layoutX="109.0" layoutY="489.0" prefHeight="22.0" text="* this user is already online!" textFill="RED" visible="false" />
+      <JFXTextField fx:id="loginEmailTextField" focusColor="#3c999c" layoutX="38.0" layoutY="381.0" prefHeight="40.0" prefWidth="325.0" promptText="Email" style="-fx-text-inner-color: #FFFFFF;">
          <font>
             <Font size="20.0" />
          </font></JFXTextField>
-      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#25e4fe" layoutX="38.0" layoutY="434.0" prefHeight="40.0" prefWidth="325.0" promptText="Password" style="-fx-text-inner-color: #25e4fe;">
+      <JFXPasswordField fx:id="loginPasswordTextField" focusColor="#3c999c" layoutX="38.0" layoutY="434.0" prefHeight="40.0" prefWidth="325.0" promptText="Password" style="-fx-text-inner-color: #FFFFFF;">
          <font>
             <Font size="20.0" />
          </font></JFXPasswordField>
-      <JFXButton buttonType="RAISED" layoutX="140.0" layoutY="517.0" onAction="#checkLogin" prefHeight="40.0" prefWidth="120.0" ripplerFill="WHITE" style="-fx-background-color: #25e4fe; -fx-background-radius: 50;" text="Login" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="140.0" layoutY="517.0" onAction="#checkLogin" prefHeight="40.0" prefWidth="120.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Login" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
@@ -29,12 +30,12 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <Label layoutX="253.0" layoutY="565.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#25e4fe" underline="true">
+      <Label layoutX="255.0" layoutY="567.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
          <font>
-            <Font size="17.0" />
+            <Font size="16.0" />
          </font>
       </Label>
       <ImageView fitHeight="264.0" fitWidth="221.0" layoutX="90.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
@@ -42,7 +43,7 @@
             <Image url="@../resources/chat_logo.png" />
          </image>
       </ImageView>
-      <Button layoutX="339.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeLoginWindow" style="-fx-background-color: transparent;" text="X" textFill="#25e4fe">
+      <Button layoutX="339.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeLoginWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -53,7 +54,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="293.0" mnemonicParsing="false" onMouseClicked="#minimizeLoginWindow" style="-fx-background-color: transparent;" text="_" textFill="#25e4fe">
+      <Button layoutX="293.0" mnemonicParsing="false" onMouseClicked="#minimizeLoginWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -74,9 +75,9 @@
             <Image url="@../resources/password_icon.png" />
          </image>
       </ImageView>
-      <Label layoutX="92.0" layoutY="565.0" text="don't have account ?" textFill="WHITE">
+      <Label layoutX="94.0" layoutY="567.0" text="don't have account ?" textFill="WHITE">
          <font>
-            <Font size="17.0" />
+            <Font size="16.0" />
          </font>
       </Label>
     </children>

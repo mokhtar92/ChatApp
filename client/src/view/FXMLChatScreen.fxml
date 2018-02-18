@@ -30,7 +30,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveChatWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="950.0" stylesheets="@../resources/fxmlchatscreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLChatScreenController">
    <right>
-      <Pane prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #494787;" BorderPane.alignment="CENTER">
+      <Pane prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #1c2038;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="38.0" layoutY="288.0" onMouseClicked="#addFriend" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -72,7 +72,7 @@
       </Pane>
    </right>
    <top>
-      <Pane prefHeight="45.0" prefWidth="950.0" style="-fx-background-color: #5b5999;" stylesheets="@../resources/fxmlchatscreen.css" BorderPane.alignment="CENTER">
+      <Pane prefHeight="45.0" prefWidth="950.0" style="-fx-background-color: #454762;" stylesheets="@../resources/fxmlchatscreen.css" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="899.0" layoutY="-1.0" mnemonicParsing="false" onMouseClicked="#closeChatWindow" style="-fx-background-color: transparent;" text="X" textFill="WHITE">
                <font>
@@ -112,7 +112,7 @@
                      <content>
                         <ScrollPane style="-fx-background-color: #1c2038;">
                            <content>
-                              <ListView fx:id="friendsListView" maxWidth="220.0" prefHeight="480.0" />
+                              <ListView fx:id="friendsListView" maxWidth="215.0" prefHeight="475.0" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -121,7 +121,7 @@
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <ListView fx:id="requestsListView" prefHeight="480.0" prefWidth="220.0" />
+                              <ListView fx:id="requestsListView" prefHeight="475.0" prefWidth="215.0" />
                            </content>
                         </ScrollPane>
                      </content>
@@ -136,8 +136,8 @@
          <bottom>
             <Pane prefHeight="60.0" prefWidth="669.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="sendTextField" layoutX="120.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="325.0" promptText="Write a message and press enter to send ..." />
-                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="14.0" layoutY="10.0" onMouseClicked="#saveChatHistory" pickOnBounds="true" preserveRatio="true">
+                  <TextField fx:id="sendTextField" layoutX="110.0" layoutY="10.0" onKeyPressed="#sendMessage" prefHeight="39.0" prefWidth="335.0" promptText="Write a message and press enter to send ..." />
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="14.0" layoutY="13.0" onMouseClicked="#saveChatHistory" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/save_chat_icon.png" />
                      </image>
@@ -145,7 +145,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="70.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="60.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

@@ -10,24 +10,23 @@
 }
 
 .receiver {
-    -fx-background-color:  #5b5999;
+    -fx-background-color:  #454762;
     -fx-background-radius: 200 0 200 200;
     -fx-background-insets: 5;
     -fx-padding: 10;  
 }
 
 .friendList {
-    -fx-background-color:  #5b5999;
-    -fx-background-radius: 50 0 50 0;
+    -fx-background-color:  #454762;
+    -fx-background-radius: 30 0 30 0;
 }
 
 .requestList {
-    -fx-background-color:  #5b5999;
-    -fx-background-radius: 50 0 50 0;
+    -fx-background-color:  #454762;
+    -fx-background-radius: 30 0 30 0;
 }
 
 .listText {
     -fx-font-weight: bold;
-    -fx-font-size: 14pt;
-    -fx-text-inner-color: #FFFFFF;
+    -fx-font-size: 11pt;
 }
