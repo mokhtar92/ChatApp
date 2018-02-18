@@ -92,7 +92,7 @@ public class FXMLGroupScreenController implements Initializable {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(groupMembers);
         selectedMembers.setItems(friendsList);
-        selectedMembers.setCellFactory(new FriendCallback());
+        selectedMembers.setCellFactory(new FriendCallback(false));
     }
 
     private void chooseMemebers() {

@@ -30,9 +30,11 @@ import model.Service;
 public class FriendListCell extends ListCell<User> {
 
     FXMLChatScreenController controller;
+    boolean status;
 
-    FriendListCell(FXMLChatScreenController controller) {
+    FriendListCell(FXMLChatScreenController controller,boolean status) {
         this.controller = controller;
+        this.status=status;
     }
 
     @Override
@@ -53,6 +55,7 @@ public class FriendListCell extends ListCell<User> {
 
             HBox hBox = new HBox(userImg, username, statusImg);
             hBox.getStyleClass().add("friendList");
+            if(status){
             hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -87,7 +90,7 @@ public class FriendListCell extends ListCell<User> {
                     });
 
                 }
-            });
+            });}
             setGraphic(hBox);
 
         } else {

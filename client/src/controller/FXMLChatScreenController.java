@@ -258,12 +258,12 @@ public class FXMLChatScreenController implements Initializable {
 
                     if (tab.getId() != null) {
                         if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
-                            controllers.get(i).createMessageStyle(message,user,sendTextField.getStyle());
+                            controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
                             controllers.get(i).getMessages(message);
                         } else {
 
                             if (tab.getId().equals(group)) {
-                                controllers.get(i).createMessageStyle(message,user,sendTextField.getStyle());
+                                controllers.get(i).createMessageStyle(message, user, sendTextField.getStyle());
                                 //controllers.get(i).getMessages(message);
 
                             }
@@ -328,7 +328,8 @@ public class FXMLChatScreenController implements Initializable {
             public void run() {
                 NotificationInt impl = new NotificationImpl();
                 if (status == NotificationStatus.friendRequest) {
-                    impl.createNotification("Acconcement", user.getFirstName() + " Sent friend Request to you", user.getImgURL());
+                    System.out.println(user);
+                    impl.createNotification("Acconcement", user.getFirstName() + " you have new friend request", user.getImgURL());
                 }
             }
         });
@@ -416,53 +417,54 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void saveChatHistory() throws JAXBException, IOException {
-        Tab currentTab =chatTabPane.getSelectionModel().getSelectedItem();
-        if(!currentTab.getId().contains("group")){
-        int i = 0;
-        ArrayList<Message> messages = null;
-        ObservableList<Tab> tabs = chatTabPane.getTabs();
-        Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
-        for (Tab tab : tabs) {
+        Tab currentTab = chatTabPane.getSelectionModel().getSelectedItem();
+        if (!currentTab.getId().contains("group")) {
+            int i = 0;
+            ArrayList<Message> messages = null;
+            ObservableList<Tab> tabs = chatTabPane.getTabs();
+            Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+            for (Tab tab : tabs) {
 
-            if (tab.getId() != null) {
-                if (tab.getId().equals(selectedTab.getId())) {
-                    messages = controllers.get(i).getMessages();
+                if (tab.getId() != null) {
+                    if (tab.getId().equals(selectedTab.getId())) {
+                        messages = controllers.get(i).getMessages();
+                    }
+                    i++;
                 }
-                i++;
+
             }
 
-        }
+            //chat object to contain messages
+            Chat myChat = new Chat();
+            myChat.getMessage().addAll(messages);
 
-        //chat object to contain messages
-        Chat myChat = new Chat();
-        myChat.getMessage().addAll(messages);
+            // create fileChooser save Dialoge
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
+            fileChooser.getExtensionFilters().add(extFilter);
 
-        // create fileChooser save Dialoge
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
-        fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showSaveDialog(myStage);
 
-        File file = fileChooser.showSaveDialog(myStage);
-
-        if (file != null) {
-            // calling saving method
-            XmlHandler xmlHandler = new XmlHandler();
-            xmlHandler.SaveXml(file, myChat.getMessage());
-        }
+            if (file != null) {
+                // calling saving method
+                XmlHandler xmlHandler = new XmlHandler();
+                xmlHandler.SaveXml(file, myChat.getMessage());
+            }
         }
     }
 
     public void sendFile() throws RemoteException {
-        Tab selectedTab=chatTabPane.getSelectionModel().getSelectedItem();
-        if(!selectedTab.getId().contains("group")){
-        message.setFrom(UserSession.getUser().getRecId() + "");
-        message.getTo().add(chatTabPane.getSelectionModel().getSelectedItem().getId());
-        if (Service.isOnline(message.getTo().get(0))) {
-            chooseFile(message);
-        }
+        Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+        if (!selectedTab.getId().contains("group")) {
+            message.setFrom(UserSession.getUser().getRecId() + "");
+            message.getTo().add(chatTabPane.getSelectionModel().getSelectedItem().getId());
+            if (Service.isOnline(message.getTo().get(0))) {
+                chooseFile(message);
+            }
 
+        }
     }
-    }
+
     @FXML
     void chooseFile(Message message) throws RemoteException {
 
@@ -564,6 +566,10 @@ public class FXMLChatScreenController implements Initializable {
         displayFriendList();
     }
 
+    public void updateFriendRequest() {
+        displayRequestList();
+    }
+
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();
@@ -577,7 +583,7 @@ public class FXMLChatScreenController implements Initializable {
         ObservableList<User> friendsList = FXCollections.observableArrayList();
         friendsList.addAll(service.getFriendList());
         friendsListView.setItems(friendsList);
-        friendsListView.setCellFactory(new FriendCallback(this));
+        friendsListView.setCellFactory(new FriendCallback(this,true));
     }
 
     public void displayRequestList() {

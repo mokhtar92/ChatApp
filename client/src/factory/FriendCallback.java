@@ -18,18 +18,21 @@ import javafx.util.Callback;
 public class FriendCallback implements Callback<ListView<User>, ListCell<User>>{
     
     FXMLChatScreenController controller;
+    boolean status;
 
-    public FriendCallback(FXMLChatScreenController aThis) {
+    public FriendCallback(FXMLChatScreenController aThis,boolean status) {
         controller = aThis;
+        this.status=status;
     }
 
-    public FriendCallback() {
+    public FriendCallback(boolean status) {
+        this.status=status;
     
     }
 
     @Override
     public ListCell<User> call(ListView<User> param) {
-        return new FriendListCell(controller);
+        return new FriendListCell(controller,status);
     }
     
 }

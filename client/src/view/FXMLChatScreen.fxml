@@ -118,7 +118,7 @@
                         </ScrollPane>
                      </content>
                   </Tab>
-                <Tab text="Requests">
+                <Tab onSelectionChanged="#updateFriendRequest" text="Requests">
                      <content>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
