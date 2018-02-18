@@ -6,6 +6,7 @@
 package controller;
 
 import entity.Chat;
+import entity.FileSender;
 import entity.Message;
 import entity.NotificationStatus;
 import entity.User;
@@ -18,6 +19,8 @@ import interfaces.ClientInt;
 import interfaces.NotificationInt;
 import interfaces.ServerInt;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -41,6 +44,7 @@ import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
@@ -128,7 +132,7 @@ public class FXMLChatScreenController implements Initializable {
 
     @FXML
     private ComboBox<String> fontFamilyComboBox;
-    
+
     @FXML
     private Tab friendListTab;
 
@@ -181,7 +185,7 @@ public class FXMLChatScreenController implements Initializable {
                     } else {
                         message.getTo().add(tab.getId());
                         Service.tellOne(message);
-                        
+
                     }
                     System.out.println(tab.getId());
 
@@ -212,16 +216,16 @@ public class FXMLChatScreenController implements Initializable {
                             }
                         }
                         if (message.getFrom().equals(user.getRecId() + "")) {
-                            
+
                             if (tab.getId().equals(message.getTo().get(0))) {
                                 Oneflag = true;
-                                
+
                             }
                         } else if (message.getTo().get(0).equals(user.getRecId() + "")) {
-                           
+
                             if (tab.getId().equals(message.getFrom())) {
                                 Oneflag = true;
-                              
+
                             }
                         }
 
@@ -229,7 +233,7 @@ public class FXMLChatScreenController implements Initializable {
                 }
                 if (!flag && group != null) {
                     try {
-                        
+
                         insertNewChatTab(Service.getGroupName(group), user, true, group);
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -237,7 +241,7 @@ public class FXMLChatScreenController implements Initializable {
                 } else if (!Oneflag && message.getTo().get(0) != null && message.getFrom() != null) {
                     if (!message.getFrom().equals(user.getRecId())) {
                         try {
-           
+
                             User reciver = Service.getUserById(Long.parseLong(message.getTo().get(0)));
                             User sender = Service.getUserById(Long.parseLong(message.getFrom()));
                             insertNewChatTab(sender.getFirstName(), sender, Oneflag, null);
@@ -249,18 +253,18 @@ public class FXMLChatScreenController implements Initializable {
                         }
                     }
                 }
-             
+
                 for (Tab tab : tabs) {
 
                     if (tab.getId() != null) {
                         if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
-                            controllers.get(i).showMessage(message);
+                            controllers.get(i).createMessageStyle(message,user,sendTextField.getStyle());
                             controllers.get(i).getMessages(message);
                         } else {
 
                             if (tab.getId().equals(group)) {
-                               controllers.get(i).showMessage(message);
-                               //controllers.get(i).getMessages(message);
+                                controllers.get(i).createMessageStyle(message,user,sendTextField.getStyle());
+                                //controllers.get(i).getMessages(message);
 
                             }
                         }
@@ -275,32 +279,59 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void getAnnoncement(String message) {
+    public void getAnnouncement(String message) {
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 NotificationInt impl = new NotificationImpl();
-                impl.createNotification("Acconcement", message, "resources/announce.png");
-                adsArea.setText(adsArea.getText() + "\n" + message);
+                impl.createNotification("Announcement", message, "resources/announce.png");
+                adsArea.setText(message);
             }
         });
 
     }
-    public TabPane getChatTabPane(){
-        return  chatTabPane;
+
+    public TabPane getChatTabPane() {
+        return chatTabPane;
     }
+
     public void getNotification(int status, User user) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 NotificationInt impl = new NotificationImpl();
                 if (status == NotificationStatus.onlineStatus) {
-                    impl.createNotification("Acconcement", user.getFirstName() + " become online", "resources/chat_logo.png");
+                    impl.createNotification("Acconcement", user.getFirstName() + " become online", user.getImgURL());
                 }
             }
         });
 
+    }
+
+    public void getFileNotification(int status, User user) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NotificationInt impl = new NotificationImpl();
+                if (status == NotificationStatus.fileSendStatus) {
+                    impl.createNotification("File Sharing", user.getFirstName() + " send file to you", user.getImgURL());
+                }
+            }
+        });
+
+    }
+
+    public void requestNotification(int status, User user) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NotificationInt impl = new NotificationImpl();
+                if (status == NotificationStatus.friendRequest) {
+                    impl.createNotification("Acconcement", user.getFirstName() + " Sent friend Request to you", user.getImgURL());
+                }
+            }
+        });
     }
 
     @FXML
@@ -339,20 +370,21 @@ public class FXMLChatScreenController implements Initializable {
         dialog.setContentText("Friend Email:");
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent() && service.isEmailExist(result.get())) {
-            if (!isValidRequest(result.get(), getRequestedList)) {
+        if (result.isPresent() && service.isEmailExist(result.get().toLowerCase())) {
+            if (!isValidRequest(result.get().toLowerCase(), getRequestedList)) {
                 notification.createNotification("Alert", "You have already sent friend request to this person", "/resources/decline.png");
-            } else if (!isValidRequest(result.get(), allRequest)) {
+            } else if (!isValidRequest(result.get().toLowerCase(), allRequest)) {
                 notification.createNotification("Alert", "You have invitation from this person please check your requests", "/resources/decline.png");
-            } else if (!isValidRequest(result.get(), service.getFriendList())) {
+            } else if (!isValidRequest(result.get().toLowerCase(), service.getFriendList())) {
                 notification.createNotification("Alert", "You have this friend in your contacts", "/resources/decline.png");
             } else if (UserSession.getUser().getEmail().toLowerCase().equalsIgnoreCase(result.get().toLowerCase())) {
                 notification.createNotification("Alert", "Can't send friend request to your account", "/resources/decline.png");
             } else {
-                service.sendFriendRequest(result.get());
+                service.sendFriendRequest(result.get().toLowerCase());
                 notification.createNotification("Alert", "Your friend request sent", "/resources/accept.png");
             }
-
+        } else if (result.get().equals("")) {
+            notification.createNotification("Alert", "Closed", "/resources/decline.png");
         } else {
             notification.createNotification("Alert", "Enter valid user email", "/resources/decline.png");
         }
@@ -371,6 +403,7 @@ public class FXMLChatScreenController implements Initializable {
             Scene scene = new Scene(parent);
             stage.setScene(scene);
             stage.setTitle("Create New Group");
+            stage.setResizable(false);
             stage.show();
 
         } catch (IOException ex) {
@@ -383,21 +416,23 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void saveChatHistory() throws JAXBException, IOException {
-        int i=0;
+        Tab currentTab =chatTabPane.getSelectionModel().getSelectedItem();
+        if(!currentTab.getId().contains("group")){
+        int i = 0;
         ArrayList<Message> messages = null;
-        ObservableList<Tab> tabs=chatTabPane.getTabs();
-        Tab selectedTab=chatTabPane.getSelectionModel().getSelectedItem();
-    for (Tab tab : tabs) {
+        ObservableList<Tab> tabs = chatTabPane.getTabs();
+        Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+        for (Tab tab : tabs) {
 
-                    if (tab.getId() != null) {
-                       if(tab.getId().equals(selectedTab.getId())){
-                       messages=controllers.get(i).getMessages();
-                       }
-                        i++;
-                    }
-
+            if (tab.getId() != null) {
+                if (tab.getId().equals(selectedTab.getId())) {
+                    messages = controllers.get(i).getMessages();
                 }
-        
+                i++;
+            }
+
+        }
+
         //chat object to contain messages
         Chat myChat = new Chat();
         myChat.getMessage().addAll(messages);
@@ -407,18 +442,79 @@ public class FXMLChatScreenController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml files (*.xml)", "xml");
         fileChooser.getExtensionFilters().add(extFilter);
 
-        
         File file = fileChooser.showSaveDialog(myStage);
 
-        if (file != null)
-        {
-         // calling saving method
-         XmlHandler xmlHandler = new XmlHandler();
-         xmlHandler.SaveXml(file, myChat.getMessage());
+        if (file != null) {
+            // calling saving method
+            XmlHandler xmlHandler = new XmlHandler();
+            xmlHandler.SaveXml(file, myChat.getMessage());
+        }
         }
     }
 
-    public void sendFile() {
+    public void sendFile() throws RemoteException {
+        Tab selectedTab=chatTabPane.getSelectionModel().getSelectedItem();
+        if(!selectedTab.getId().contains("group")){
+        message.setFrom(UserSession.getUser().getRecId() + "");
+        message.getTo().add(chatTabPane.getSelectionModel().getSelectedItem().getId());
+        if (Service.isOnline(message.getTo().get(0))) {
+            chooseFile(message);
+        }
+
+    }
+    }
+    @FXML
+    void chooseFile(Message message) throws RemoteException {
+
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            FileSender fileSender = new FileSender();
+            fileSender.setFile(file);
+            fileSender.setMessage(message);
+            Service.sendFile(fileSender);
+        }
+
+    }
+
+    public void downloadFile(int file_id) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                FileSender fileSender = ClientImpl.files.get(file_id + "");
+                File file = fileSender.getFile();
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setInitialFileName(file.getName());
+                File pfile = fileChooser.showSaveDialog(null);
+                String path = pfile.getAbsolutePath();
+                Thread tr = new Thread(() -> {
+                    try {
+                        FileInputStream in = null;
+                        if (path == null) {
+                            return;
+                        }
+                        in = new FileInputStream(file);
+                        byte[] data = new byte[1024 * 1024];
+                        int dataLength = in.read(data);
+                        boolean append = false;
+                        while (dataLength > 0) {
+                            client.reciveFile(path, file.getName(), append, data, dataLength);
+                            dataLength = in.read(data);
+                            append = true;
+                        }
+
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+
+                tr.start();
+            }
+        });
 
     }
 
@@ -463,9 +559,11 @@ public class FXMLChatScreenController implements Initializable {
         chatTabPane.getTabs().add(newChaTab);
         chatTabPane.getSelectionModel().select(newChaTab);
     }
-    public void updateFriendList(){
+
+    public void updateFriendList() {
         displayFriendList();
     }
+
     //private method implementation
     private void displayComboBox() {
         ObservableList<String> options = FXCollections.observableArrayList();

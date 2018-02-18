@@ -10,27 +10,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveServerWindow" onMousePressed="#setMousePosition" prefHeight="745.0" prefWidth="565.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLFirstScreenController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveServerWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #5b5999;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLFirstScreenController">
     <children>
-        <Label fx:id="invalidIpMessage" layoutX="195.0" layoutY="634.0" minHeight="16" minWidth="69" text="* Invalid IP address, try again!" textFill="RED" visible="false" />
-      <JFXTextField fx:id="serverIpTextField" alignment="CENTER" focusColor="#3c999c" layoutX="131.0" layoutY="573.0" promptText="Enter IP number of server" style="-fx-text-inner-color: #afb0b2;">
+        <Label fx:id="invalidIpMessage" layoutX="103.0" layoutY="508.0" minHeight="16" minWidth="69" text="* Invalid IP address, try again!" textFill="RED" visible="false" />
+      <JFXTextField fx:id="serverIpTextField" alignment="CENTER" focusColor="#25e4fe" layoutX="87.0" layoutY="465.0" promptText="Enter IP number of server" style="-fx-text-inner-color: #25e4fe;">
          <font>
-            <Font name="Arial" size="25.0" />
+            <Font name="Arial" size="20.0" />
          </font></JFXTextField>
-      <JFXButton buttonType="RAISED" layoutX="193.0" layoutY="664.0" onMouseClicked="#connectToServer" prefHeight="50.0" prefWidth="160.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Connect" textFill="WHITE">
+      <JFXButton buttonType="RAISED" layoutX="140.0" layoutY="540.0" onMouseClicked="#connectToServer" prefHeight="40.0" prefWidth="120.0" ripplerFill="WHITE" style="-fx-background-color: #25e4fe; -fx-background-radius: 50;" text="Connect" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="28.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <ImageView fitHeight="375.0" fitWidth="320.0" layoutX="125.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="264.0" fitWidth="221.0" layoutX="90.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/chat_logo.png" />
          </image>
       </ImageView>
-      <Button layoutX="504.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeConnectToServerWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
+      <Button layoutX="343.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeConnectToServerWindow" style="-fx-background-color: transparent;" text="X" textFill="#25e4fe">
          <font>
             <Font name="Bauhaus 93" size="25.0" />
          </font>
@@ -38,7 +38,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="461.0" mnemonicParsing="false" onMouseClicked="#minimizeConnectToServerWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
+      <Button layoutX="300.0" mnemonicParsing="false" onMouseClicked="#minimizeConnectToServerWindow" style="-fx-background-color: transparent;" text="_" textFill="#25e4fe">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

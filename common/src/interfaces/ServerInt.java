@@ -51,4 +51,5 @@ public interface ServerInt extends Remote {
     public String getGroupName(String id) throws RemoteException;
     public void sendFile(entity.FileSender file) throws RemoteException;
     public User getUserById(long id)throws RemoteException, SQLException;
+    public boolean isOnline(String user_id) throws RemoteException;
 }

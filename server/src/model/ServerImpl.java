@@ -107,7 +107,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             client.recieve(message, null);
             client = users.get(message.getFrom());
             client.recieve(message, null);
-            System.out.println("message was delivered");
+
         }
 
     }
@@ -140,11 +140,31 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     @Override
     public void unregister(ClientInt client, User user) throws RemoteException {
         users.remove(user.getRecId());
-        for (User key : clients.keySet()) {
+        /* for (User key : users)) {
             if (key.getRecId().equals(user.getRecId())) {
                 clients.remove(key);
+            }*/
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            ClientInt iteratorClient = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (client.equals(iteratorClient)) {
+                    it.remove();
+                }
             }
         }
+        it = users.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            ClientInt iteratorClient = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (client.equals(iteratorClient)) {
+                    it.remove();
+                }
+            }
+        }
+
     }
 
     @Override
@@ -158,14 +178,19 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     public void sendFile(FileSender fileSender) throws RemoteException {
         file_Id++;
         files.put(file_Id + "", fileSender);
-        System.out.println(files.size());
         Message message = fileSender.getMessage();
-        message.setBody(fileSender.getFile().toString());
+//        message.setBody(fileSender.getFile().getName().toString());
         ClientInt client = users.get(message.getFrom());
+        User user = null;
+        try {
+            user = getUserById(Long.parseLong(message.getFrom()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (users.containsKey(message.getTo().get(0))) {
             client = users.get(message.getTo().get(0));
             client.sendFileToReciever(fileSender);
-
+            client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
         }
     }
 
@@ -179,7 +204,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         return groupsName.get(id);
     }
 
-    public static void sendAnnoncement(String message) throws RemoteException {
+    public static void sendAnnouncement(String message) throws RemoteException {
 
         Iterator it = clients.entrySet().iterator();
         while (it.hasNext()) {
@@ -305,8 +330,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
      */
     @Override
     public boolean sendFriendRequest(String email, Long userID) throws RemoteException {
-        Long friendID = opr.getUserByEmail(email);
+        Long friendID = opr.getUserIdByEmail(email);
         boolean isSend = false;
+        User user = new User();
         PreparedStatement ps = Database.getInstance().getPreparedStatement("INSERT INTO ITI_CHATAPP_FRIENDREQUEST (SENDERID, RECEIVERID) VALUES(?,?)");
         try {
             ps.setLong(1, userID);
@@ -314,6 +340,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             int rowsEffected = ps.executeUpdate();
             if (rowsEffected == 1) {
                 isSend = true;
+                user = opr.getUserById(friendID);
+                requestNotification(user);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
@@ -453,6 +481,20 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         }
     }
 
+    public void requestNotification(User user) throws RemoteException, SQLException {
+        Iterator it = clients.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            User friend = (User) pair.getKey();
+            ClientInt client = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (user.getRecId().equals(friend.getRecId())) {
+                    client.requestNotification(NotificationStatus.friendRequest, user);
+                }
+            }
+        }
+    }
+
     public void notifyFriends(User user) throws RemoteException, SQLException {
         Iterator it = clients.entrySet().iterator();
         while (it.hasNext()) {
@@ -477,5 +519,23 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     //maroof
     public int GetClientcount() {
         return clients.size();
+    }
+
+    @Override
+    public boolean isOnline(String user_id) throws RemoteException {
+        boolean flag = false;
+
+        Iterator it = users.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry pair = (HashMap.Entry) it.next();
+            String id = (String) pair.getKey();
+            ClientInt client = (ClientInt) pair.getValue();
+            if (client != null) {
+                if (id.equals(user_id)) {
+                    flag = true;
+                }
+            }
+        }
+        return flag;
     }
 }

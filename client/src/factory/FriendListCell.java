@@ -6,9 +6,7 @@
 package factory;
 
 import controller.FXMLChatScreenController;
-import entity.NotificationStatus;
 import entity.User;
-import interfaces.NotificationInt;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import model.NotificationImpl;
+import model.Service;
 
 /**
  *
@@ -31,9 +30,9 @@ import model.NotificationImpl;
 public class FriendListCell extends ListCell<User> {
 
     FXMLChatScreenController controller;
-    
+
     FriendListCell(FXMLChatScreenController controller) {
-        this.controller=controller;
+        this.controller = controller;
     }
 
     @Override
@@ -42,46 +41,51 @@ public class FriendListCell extends ListCell<User> {
 
         if (friend != null && !empty) {
             Text username = new Text(friend.getFirstName() + " " + friend.getLastName());
-            
+            username.getStyleClass().add("listText");
+
             ImageView userImg = new ImageView(friend.getImgURL());
             userImg.setFitWidth(80);
             userImg.setFitHeight(80);
-            
-            ImageView statusImg = new ImageView("/resources/"+friend.getMyStatus()+".png");
+
+            ImageView statusImg = new ImageView("/resources/" + friend.getMyStatus() + ".png");
             statusImg.setFitWidth(25);
             statusImg.setFitHeight(25);
-            
+
             HBox hBox = new HBox(userImg, username, statusImg);
-            hBox.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            hBox.getStyleClass().add("friendList");
+            hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-              Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                TabPane tabPane = controller.getChatTabPane();
-                    ObservableList<Tab> tabs = tabPane.getTabs();
-                    boolean flag=false;
-                    for (Tab tab : tabs) {
-                        if(tab.getId()!=null){
-
-                        if (tab.getId().equals(friend.getRecId()+"")) {
-                         	tabPane.getSelectionModel().select(tab);
-                                flag=true;
-                        } 
-                        
-                        
-}
-                    }
-                    if(!flag){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
                             try {
-                                controller.insertNewChatTab(friend.getFirstName(), friend,false,null);
-                            } catch (RemoteException ex) {
+                                if(Service.isOnline(friend.getRecId()+"")){
+                                    TabPane tabPane = controller.getChatTabPane();
+                                    ObservableList<Tab> tabs = tabPane.getTabs();
+                                    boolean flag = false;
+                                    for (Tab tab : tabs) {
+                                        if (tab.getId() != null) {
+                                            if (tab.getId().equals(friend.getRecId() + "")) {
+                                                tabPane.getSelectionModel().select(tab);
+                                                flag = true;
+                                            }
+                                            
+                                        }
+                                    }
+                                    if (!flag) {
+                                        try {
+                                            controller.insertNewChatTab(friend.getFirstName(), friend, false, null);
+                                        } catch (RemoteException ex) {
+                                            Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
+                                }   } catch (RemoteException ex) {
                                 Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
                             }
-            }
-            }
-        });
-                   
+}
+                    });
+
                 }
             });
             setGraphic(hBox);

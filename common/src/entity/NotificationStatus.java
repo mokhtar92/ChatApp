@@ -12,5 +12,7 @@ package entity;
 public class NotificationStatus {
     public static final int onlineStatus=1;
     public static final int offlineStatus=2;
+    public static final int friendRequest=3;
+    public static final int fileSendStatus=4;
     
 }

@@ -2,12 +2,32 @@
  * Empty Stylesheet file.
  */
 
-.mainFxmlClass {
-
+.sender {
+    -fx-background-color: #d3d3d3;
+    -fx-background-radius: 0 200 200 200;
+    -fx-background-insets: 5;
+    -fx-padding: 10;  
 }
 
-.friend {
-    -fx-text-fill: #FF0000;
+.receiver {
+    -fx-background-color:  #5b5999;
+    -fx-background-radius: 200 0 200 200;
+    -fx-background-insets: 5;
+    -fx-padding: 10;  
+}
 
-    
+.friendList {
+    -fx-background-color:  #5b5999;
+    -fx-background-radius: 50 0 50 0;
+}
+
+.requestList {
+    -fx-background-color:  #5b5999;
+    -fx-background-radius: 50 0 50 0;
+}
+
+.listText {
+    -fx-font-weight: bold;
+    -fx-font-size: 14pt;
+    -fx-text-inner-color: #FFFFFF;
 }

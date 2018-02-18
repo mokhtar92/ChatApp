@@ -42,11 +42,19 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
   @Override
   public void recieveAnnoncement(String message)throws RemoteException{
   
-      chat.getAnnoncement(message);
+      chat.getAnnouncement(message);
   }
   @Override
   public void recieveNotification(int status,User user)throws RemoteException{
       chat.getNotification(status,user);
+  }
+  @Override
+  public void recieveFileNotification(int status,User user)throws RemoteException{
+      chat.getFileNotification(status,user);
+  }
+   @Override
+  public void requestNotification(int status,User user)throws RemoteException{
+      chat.requestNotification(status,user);
   }
   @Override
     public void reciveFile(String path, String filename,boolean append, byte[] data, int dataLength) {
@@ -79,5 +87,6 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
          
      file_Id++;
        files.put(file_Id+"", fileSender);
+       chat.downloadFile(file_Id);
      }
 }

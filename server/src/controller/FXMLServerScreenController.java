@@ -141,7 +141,7 @@ public class FXMLServerScreenController implements Initializable {
         String msg=annoncementTextArea.getText().trim();
         if(msg!=null&&msg!=""){
             
-            ServerImpl.sendAnnoncement(msg);
+            ServerImpl.sendAnnouncement(msg);
         }
     }
     public void drawStatistics ()

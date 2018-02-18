@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,11 +10,17 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="485.0" layoutY="73.0" mnemonicParsing="false" onMouseClicked="#createGroup" text="Create" />
-      <TextField fx:id="groupName" layoutX="186.0" layoutY="73.0" prefHeight="25.0" prefWidth="243.0" />
-      <Label layoutX="78.0" layoutY="77.0" text="Group Name" />
-      <ListView fx:id="friendsListView" layoutX="78.0" layoutY="131.0" prefHeight="200.0" prefWidth="200.0" />
-      <Label fx:id="errorField" layoutX="415.0" layoutY="131.0" />
-      <ListView fx:id="selectedMembers" layoutX="363.0" layoutY="140.0" prefHeight="200.0" prefWidth="200.0" />
+      <Button layoutX="474.0" layoutY="71.0" mnemonicParsing="false" onMouseClicked="#createGroup" prefHeight="30.0" style="-fx-background-color: #5b5999; -fx-background-radius: 0 25 0 0;" text="Create" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Button>
+      <TextField fx:id="groupName" layoutX="193.0" layoutY="71.0" prefHeight="30.0" prefWidth="275.0" />
+      <Label layoutX="60.0" layoutY="75.0" text="Group Name" textFill="#5b5999">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="20.0" />
+         </font></Label>
+      <ListView fx:id="friendsListView" layoutX="60.0" layoutY="129.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="selectedMembers" layoutX="340.0" layoutY="129.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label fx:id="errorField" layoutX="208.0" layoutY="337.0" prefHeight="50.0" prefWidth="200.0" textAlignment="CENTER" textFill="RED" />
    </children>
 </AnchorPane>

@@ -6,12 +6,16 @@
 package controller;
 
 import entity.Message;
+import entity.User;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -19,14 +23,11 @@ import javafx.scene.layout.VBox;
  *
  * @author Hanaa
  */
-
 public class TempchatMessageController implements Initializable {
-@FXML
-private VBox vBox;
-    Message message;
-   
-  
-    ArrayList<Message> messages=new ArrayList<>();
+
+    @FXML
+    private VBox vBox;
+    ArrayList<Message> messages = new ArrayList<>();
 
     public ArrayList<Message> getMessages() {
         return messages;
@@ -35,13 +36,15 @@ private VBox vBox;
     public void setMessages(ArrayList<Message> messages) {
         this.messages = messages;
     }
-    public void getMessages(Message message){
+
+    public void getMessages(Message message) {
         messages.add(message);
     }
-    
+
     TempchatMessageController() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     /**
      * Initializes the controller class.
      */
@@ -51,9 +54,37 @@ private VBox vBox;
         /*Label label=new Label(message.getBody());
         vBox.getChildren().addAll(label);*/
     }
-    public void showMessage(Message message){
-    Label label=new Label(message.getBody());
-        vBox.getChildren().addAll(label);
+
+    public void createMessageStyle(Message styledMessage, User sender, String messageCSS) {
+        Label label = new Label(styledMessage.getBody());
+
+        HBox hBox;
+        ImageView img;
+
+        if (styledMessage.getFrom().equals(sender.getRecId().toString())) {
+            label.getStyleClass().add("sender");
+            label.setStyle(messageCSS);
+
+            img = new ImageView(sender.getImgURL());
+            img.setFitWidth(45);
+            img.setFitHeight(45);
+
+            hBox = new HBox(img, label);
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            vBox.getChildren().addAll(hBox);
+
+        } else {
+            label.getStyleClass().add("receiver");
+            label.setStyle(messageCSS);
+
+            img = new ImageView(sender.getImgURL());
+            img.setFitWidth(45);
+            img.setFitHeight(45);
+
+            hBox = new HBox(label, img);
+            hBox.setAlignment(Pos.CENTER_RIGHT);
+            vBox.getChildren().addAll(hBox);
+        }
     }
-    
+
 }
