@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -20,7 +21,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import model.NotificationImpl;
 import model.Service;
 
 /**
@@ -42,7 +42,7 @@ public class FriendListCell extends ListCell<User> {
         super.updateItem(friend, empty);
 
         if (friend != null && !empty) {
-            Text username = new Text(friend.getFirstName() + " " + friend.getLastName());
+            Label username = new Label(friend.getFirstName() + " " + friend.getLastName());
             username.getStyleClass().add("listText");
 
             ImageView userImg = new ImageView(friend.getImgURL());

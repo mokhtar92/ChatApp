@@ -31,6 +31,9 @@ public class FXMLFirstScreenController implements Initializable {
     private Label invalidIpMessage;
 
     @FXML
+    private Label notReachableIpMessage;
+
+    @FXML
     private JFXTextField serverIpTextField;
 
     @Override
@@ -85,16 +88,17 @@ public class FXMLFirstScreenController implements Initializable {
                         }
                     }
                 });
-                
+
             } else {
-                invalidIpMessage.setText("* IP is not reachable!");
                 serverIpTextField.clear();
-                invalidIpMessage.setVisible(true);
+                notReachableIpMessage.setVisible(true);
+                invalidIpMessage.setVisible(false);
             }
 
         } else {
             serverIpTextField.clear();
             invalidIpMessage.setVisible(true);
+            notReachableIpMessage.setVisible(false);
         }
     }
 

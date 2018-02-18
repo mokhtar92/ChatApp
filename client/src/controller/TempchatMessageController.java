@@ -45,7 +45,6 @@ public class TempchatMessageController implements Initializable {
     }
 
     TempchatMessageController() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -53,21 +52,34 @@ public class TempchatMessageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        /*Label label=new Label(message.getBody());
-        vBox.getChildren().addAll(label);*/
+       
     }
 
-    public void createMessageStyle(Message styledMessage, User sender, String messageCSS) throws RemoteException, SQLException {
+    public void createMessageStyle(Message styledMessage, User sender) throws RemoteException, SQLException {
+        
         Label label = new Label(styledMessage.getBody());
 
         HBox hBox;
         ImageView img;
+        String fontColor = "-fx-text-fill: #" + styledMessage.getFontColor() + ";";
+        String fontSize = "-fx-font-size: " + styledMessage.getFontSize() + "pt;";
+        String fontFamily = "-fx-font-family: \"" + styledMessage.getFontFamily() + "\";";
+        String fontStyle = "";
+
+        switch (styledMessage.getFontStyle()) {
+            case "bold":
+                fontStyle = "-fx-font-weight: " + styledMessage.getFontStyle() + ";";
+                break;
+
+            default:
+                fontStyle = "-fx-font-style: " + styledMessage.getFontStyle() + ";";
+        }
+        
+        String cssStyle = fontColor + fontSize + fontFamily + fontStyle;
 
         if (styledMessage.getFrom().equals(sender.getRecId().toString())) {
+            label.setStyle(cssStyle);
             label.getStyleClass().add("sender");
-            label.setStyle(messageCSS);
-
             img = new ImageView(sender.getImgURL());
             img.setFitWidth(45);
             img.setFitHeight(45);
@@ -77,10 +89,11 @@ public class TempchatMessageController implements Initializable {
             vBox.getChildren().addAll(hBox);
 
         } else {
+            label.setStyle(cssStyle);
             label.getStyleClass().add("receiver");
-            label.setStyle(messageCSS);
-            User receiver=Service.getUserById(Long.parseLong(styledMessage.getFrom()));
             
+            User receiver = Service.getUserById(Long.parseLong(styledMessage.getFrom()));
+
             img = new ImageView(receiver.getImgURL());
             img.setFitWidth(45);
             img.setFitHeight(45);
@@ -90,5 +103,4 @@ public class TempchatMessageController implements Initializable {
             vBox.getChildren().addAll(hBox);
         }
     }
-
 }

@@ -12,8 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import entity.User;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import model.Service;
 
@@ -35,7 +35,7 @@ public class RequestListCell extends ListCell<User> {
         super.updateItem(request, empty);
 
         if (request != null) {
-            Text username = new Text(request.getFirstName() + " " + request.getLastName());
+            Label username = new Label(request.getFirstName() + " " + request.getLastName());
             username.getStyleClass().add("listText");
             username.setTextAlignment(TextAlignment.CENTER);
 

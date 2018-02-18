@@ -160,8 +160,9 @@ public class User implements Serializable {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             if (birthDate.before(sdf.parse("2003-00-00 00:00:00"))) {
                 this.birthDate = birthDate;
+                return true;
             }
-            return true;
+            
         } catch (ParseException ex) {
             ex.printStackTrace(System.out);
         }

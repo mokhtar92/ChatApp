@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveServerOfflineWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLServerOfflineController">
+    <children>
+      <ImageView fitHeight="264.0" fitWidth="221.0" layoutX="89.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/server_is_offline.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="339.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeServerOfflineWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font name="Bauhaus 93" size="25.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button layoutX="293.0" mnemonicParsing="false" onMouseClicked="#minimizeServerOfflineWindow" style="-fx-background-color: transparent;" text="_" textFill="#3c999c">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Bauhaus 93" size="25.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Button>
+      <Label fx:id="serverIsOfflineLable" alignment="CENTER" layoutX="48.0" layoutY="359.0" text="Server is offline" textAlignment="CENTER" textFill="#3c999c" wrapText="true">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="40.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

@@ -23,9 +23,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Service;
@@ -64,6 +64,30 @@ public class FXMLSignUpController implements Initializable {
     private JFXRadioButton maleRadioBtn;
 
     @FXML
+    private Label invalidImage;
+
+    @FXML
+    private Label invalidIFName;
+
+    @FXML
+    private Label invalidLname;
+
+    @FXML
+    private Label invalidEmail;
+
+    @FXML
+    private Label invalidPassword;
+
+    @FXML
+    private Label invalidDate;
+    
+    @FXML
+    private Label invalidCountry;
+
+    @FXML
+    private Label invalidGeneralLable;
+
+    @FXML
     private ComboBox<String> ChooseAvatarComboBox;
 
     @FXML
@@ -75,25 +99,33 @@ public class FXMLSignUpController implements Initializable {
     private boolean validation(User user) {
         boolean isValid = true;
 
+        invalidImage.setVisible(false);
+        invalidIFName.setVisible(false);
+        invalidLname.setVisible(false);
+        invalidEmail.setVisible(false);
+        invalidPassword.setVisible(false);
+        invalidDate.setVisible(false);
+        invalidCountry.setVisible(false);
+
         if (!user.setFirstName(firstNameTextField.getText())) {
-            // errorFirstName.setText("Invalid Name");
             isValid = false;
+            invalidIFName.setVisible(!isValid);
         }
         if (!user.setLastName(lastNameTextField.getText())) {
-            // errorLastName.setText("Invalid Name");
             isValid = false;
+            invalidLname.setVisible(!isValid);
         }
         if (!passwordTextField.getText().equals(confirmPasswordTextField.getText())) {
-            //errorConfirmPassword.setText("wrong password");
             isValid = false;
+            invalidPassword.setVisible(!isValid);
         }
         if (!user.setPassword(passwordTextField.getText())) {
-            // errorPassword.setText("Invalid Password");
             isValid = false;
+            invalidPassword.setVisible(!isValid);
         }
         if (!user.setEmail(emailTextField.getText())) {
-            //errorEmail.setText("Invalid Email");
             isValid = false;
+            invalidEmail.setVisible(!isValid);
         }
 
         LocalDate localDate = signUpDatePicker.getValue();
@@ -101,16 +133,18 @@ public class FXMLSignUpController implements Initializable {
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date date = Date.from(instant);
             if (!user.setBirthDate(date)) {
-                //errorBd.setText("Invalid Date -enter date after 2003- ");
                 isValid = false;
+                invalidDate.setVisible(!isValid);
             }
+
         } else {
             isValid = false;
+            invalidDate.setVisible(!isValid);
         }
 
         if (!user.setCountry(countryTextField.getText())) {
-            // errorCountry.setText("Invalid country");
             isValid = false;
+            invalidCountry.setVisible(!isValid);
         }
 
         if (maleRadioBtn.isSelected()) {
@@ -123,7 +157,7 @@ public class FXMLSignUpController implements Initializable {
 
         if (ChooseAvatarComboBox.getSelectionModel().getSelectedIndex() == -1 || (!user.setImgURL(options.get(ChooseAvatarComboBox.getSelectionModel().getSelectedIndex())))) {
             isValid = false;
-
+            invalidImage.setVisible(!isValid);
         }
         return isValid;
     }
@@ -134,6 +168,8 @@ public class FXMLSignUpController implements Initializable {
 
         if (validation(user) && service.signUp(user)) {
             try {
+                invalidGeneralLable.setVisible(false);
+
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) ev.getSource()).getScene().getWindow();
@@ -143,7 +179,7 @@ public class FXMLSignUpController implements Initializable {
                 ex.printStackTrace(System.out);
             }
         } else {
-            //errorMsg.setText("Error Not stored");
+            invalidGeneralLable.setVisible(true);
         }
     }
 

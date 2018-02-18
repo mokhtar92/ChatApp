@@ -21,6 +21,7 @@ public class ChatClient extends Application {
 
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(false);
         stage.show();
     }
 

@@ -27,6 +27,8 @@
 }
 
 .listText {
+    -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
     -fx-font-size: 11pt;
+    -fx-padding: 10;
 }

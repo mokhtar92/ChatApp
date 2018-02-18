@@ -92,7 +92,7 @@
          <font>
             <Font name="System Bold" size="20.0" />
          </font></JFXButton>
-      <Label layoutX="283.0" layoutY="492.0" text="fields with * are invalid, try again!" textFill="RED" visible="false">
+      <Label fx:id="invalidGeneralLable" layoutX="283.0" layoutY="492.0" text="fields with * are invalid, try again!" textFill="RED" visible="false">
          <font>
             <Font size="16.0" />
          </font>
@@ -123,6 +123,11 @@
          </font>
       </Label>
       <Label fx:id="invalidImage" alignment="CENTER" layoutX="508.0" layoutY="112.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Label>
+      <Label fx:id="invalidCountry" alignment="CENTER" layoutX="407.0" layoutY="307.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
          <font>
             <Font size="45.0" />
          </font>

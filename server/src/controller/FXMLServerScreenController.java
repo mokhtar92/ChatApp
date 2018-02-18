@@ -43,39 +43,50 @@ public class FXMLServerScreenController implements Initializable {
 
     @FXML
     Button stop;
+    
     @FXML
     Button start;
+    
     @FXML
     public TableView<User> usersTable;
+    
     @FXML
     TableColumn<User, String> firstName;
+    
     @FXML
     TableColumn<User, String> lastName;
+    
     @FXML
     TableColumn<User, String> email;
+    
     @FXML
     TableColumn<User, String> gender;
+    
     @FXML
     TableColumn<User, String> status;
+    
     @FXML
     TableColumn<User, String> country;
+    
     @FXML
     PieChart chart;
+
+    @FXML
+    PieChart chart2;
+
+    @FXML
+    Button updateBtn;
     
     @FXML
-     PieChart chart2;
+    TextArea annoncementTextArea;
     
-    @FXML
-     Button updateBtn;
-    @FXML 
-    TextArea annoncementTextArea ;
-  Operation operation = null;
-   public ObservableList<User> data;
-   
+    Operation operation = null;
+    
+    public ObservableList<User> data;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         operation = new Operation();
         drawStatistics();
         try {
@@ -83,7 +94,7 @@ public class FXMLServerScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       ServerImpl.setController(this);
+        ServerImpl.setController(this);
         firstName.setCellValueFactory(
                 new PropertyValueFactory<User, String>("firstName"));
         lastName.setCellValueFactory(
@@ -104,21 +115,19 @@ public class FXMLServerScreenController implements Initializable {
                 ServerImpl.startServer();
                 stop.setDisable(false);
                 start.setDisable(true);
-
             }
         });
-        
+
         updateBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-              drawStatistics();
+                drawStatistics();
                 try {
                     Draw2();
                 } catch (RemoteException ex) {
                     Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 updateTabelView();
-              
             }
         });
 
@@ -136,45 +145,40 @@ public class FXMLServerScreenController implements Initializable {
             }
         });
     }
+
     @FXML
-    public void SendAnnoncement(MouseEvent event) throws RemoteException{
-        String msg=annoncementTextArea.getText().trim();
-        if(msg!=null&&msg!=""){
-            
+    public void SendAnnoncement(MouseEvent event) throws RemoteException {
+        String msg = annoncementTextArea.getText().trim();
+        if (msg != null && msg != "") {
+
             ServerImpl.sendAnnouncement(msg);
         }
     }
-    public void drawStatistics ()
-    {
+
+    public void drawStatistics() {
 
         IntegerProperty maleNumber = new SimpleIntegerProperty(operation.maleFemale("male"));
         IntegerProperty femaleNumber = new SimpleIntegerProperty(operation.maleFemale("female"));
-        Data d11 = new Data("male :"+maleNumber.intValue()+"", maleNumber.doubleValue());
-        //d11.pieValueProperty().bind(maleNumber);
+        Data d11 = new Data("male :" + maleNumber.intValue() + "", maleNumber.doubleValue());
         d11.pieValueProperty().bindBidirectional(maleNumber);
-        Data d12 = new Data("female :"+femaleNumber.intValue()+"", femaleNumber.doubleValue());
+        Data d12 = new Data("female :" + femaleNumber.intValue() + "", femaleNumber.doubleValue());
         d12.pieValueProperty().bindBidirectional(femaleNumber);
         ObservableList<Data> sourceData1 = FXCollections.observableArrayList(d11, d12);
         chart.setData(sourceData1);
-        
     }
-    public void updateTabelView(){
-        UserTable table=new UserTable(usersTable);
+
+    public void updateTabelView() {
+        UserTable table = new UserTable(usersTable);
         usersTable.setItems(table.getData());
     }
-    
-   public void Draw2() throws RemoteException
-   {
-    ServerImpl impl = new ServerImpl();
-     int allOnlineUsers= impl.GetClientcount();
-     int offLineUsers = operation.getAllUser()-allOnlineUsers;
-     Data d11 = new Data("online :"+allOnlineUsers+"",allOnlineUsers);
-     Data d22 = new Data("offline : "+offLineUsers+"", offLineUsers);
-     ObservableList<Data> sourceData =FXCollections.observableArrayList(d11,d22);
-     chart2.setData(sourceData);
-     
-     
-   }
-    
-    
+
+    public void Draw2() throws RemoteException {
+        ServerImpl impl = new ServerImpl();
+        int allOnlineUsers = impl.GetClientcount();
+        int offLineUsers = operation.getAllUser() - allOnlineUsers;
+        Data d11 = new Data("online :" + allOnlineUsers + "", allOnlineUsers);
+        Data d22 = new Data("offline : " + offLineUsers + "", offLineUsers);
+        ObservableList<Data> sourceData = FXCollections.observableArrayList(d11, d22);
+        chart2.setData(sourceData);
+    }
 }
