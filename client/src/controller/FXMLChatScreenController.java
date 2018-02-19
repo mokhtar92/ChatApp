@@ -336,7 +336,6 @@ public class FXMLChatScreenController implements Initializable {
                 }
             }
         });
-
     }
 
     public void requestNotification(int status, User user) {
@@ -440,7 +439,6 @@ public class FXMLChatScreenController implements Initializable {
             ObservableList<Tab> tabs = chatTabPane.getTabs();
             Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
             for (Tab tab : tabs) {
-
                 if (tab.getId() != null) {
                     if (tab.getId().equals(selectedTab.getId())) {
                         messages = controllers.get(i).getMessages();
@@ -506,7 +504,7 @@ public class FXMLChatScreenController implements Initializable {
             FileSender fileSender = new FileSender();
             fileSender.setFile(file);
             fileSender.setMessage(message);
-            Service.sendFile(fileSender);
+            //Service.sendFile(fileSender);
             String path="E://"+file.getName();
             Thread tr = new Thread(() -> {
                     try {
@@ -524,7 +522,9 @@ public class FXMLChatScreenController implements Initializable {
                            fileSender.setAppend(append);
                            fileSender.setData(data);
                            fileSender.setDataLength(dataLength);
-                            Service.sendFile2(fileSender);
+                          //  Service.sendFile2(fileSender);
+                          ClientInt receiver=Service.getClinetInt(message.getTo().get(0));
+                          receiver.sendFileToReciever(fileSender);
                             dataLength = in.read(data);
                             append = true;
                         }
@@ -544,16 +544,16 @@ public class FXMLChatScreenController implements Initializable {
         
     }
 
-    public void downloadFile(int file_id) {
+    public void downloadFile(FileSender fileSender) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                FileSender fileSender= ClientImpl.files.get(file_id + "");
                 File file = fileSender.getFile();
-                FileChooser fileChooser = new FileChooser();
+               /* FileChooser fileChooser = new FileChooser();
                 fileChooser.setInitialFileName(file.getName());
                 File pfile = fileChooser.showSaveDialog(null);
-                String path = pfile.getAbsolutePath();
+                String path = pfile.getAbsolutePath();*/
+               String path="E:\\";
                 Thread tr = new Thread(() -> {
                     try {
                         FileInputStream in = null;

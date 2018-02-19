@@ -87,6 +87,6 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
          
      file_Id++;
        files.put(file_Id+"", fileSender);
-       chat.downloadFile(file_Id);
+       chat.downloadFile(fileSender);
      }
 }

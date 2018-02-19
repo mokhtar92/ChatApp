@@ -169,6 +169,10 @@ public class Service {
     public static boolean isOnline(String id) throws RemoteException{
     return getServer().isOnline(id);
     }
+     public static ClientInt getClinetInt(String id)throws RemoteException{
+     
+         return getServer().getClinetInt(id);
+     }
     //maroof adding for check ip 
     public static int checkIp ()
     {

@@ -62,6 +62,7 @@ public interface ServerInt extends Remote {
     public boolean isOnline(String user_id) throws RemoteException;
 
     public void reciveFile(FileSender fileSender)throws RemoteException;
+    public ClientInt getClinetInt(String id)throws RemoteException;
 
         
 }

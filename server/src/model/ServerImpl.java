@@ -66,7 +66,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             registry = LocateRegistry.createRegistry(2000);
         } catch (RemoteException ex) {
-           // Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+           Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("can't load");
         }
     }
@@ -590,5 +590,10 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             ex.printStackTrace();
         }
 
+    }
+    @Override
+    public ClientInt getClinetInt(String id)throws RemoteException{
+       return users.get(id);
+    
     }
 }
