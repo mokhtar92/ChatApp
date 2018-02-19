@@ -27,6 +27,7 @@ public class ChatServer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        if(!ServerImpl.isServerFlag()){
         Parent root = FXMLLoader.load(getClass().getResource("FXMLServerScreen.fxml"));
 
         Scene scene = new Scene(root);
@@ -50,7 +51,7 @@ public class ChatServer extends Application {
             }
         });
         stage.show();
-
+        }
     }
 
     /**

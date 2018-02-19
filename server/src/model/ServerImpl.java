@@ -57,8 +57,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         return serverFlag;
     }
 
-    public static void setServerFlag(boolean serverFlag) {
-        serverFlag = serverFlag;
+    public static void setServerFlag(boolean serverFlag1) {
+        serverFlag = serverFlag1;
     }
     private static Registry registry = null;
 
@@ -66,7 +66,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             registry = LocateRegistry.createRegistry(2000);
         } catch (RemoteException ex) {
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+           // Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("can't load");
         }
     }
 

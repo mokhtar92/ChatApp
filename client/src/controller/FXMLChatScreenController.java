@@ -433,6 +433,7 @@ public class FXMLChatScreenController implements Initializable {
 
     public void saveChatHistory() throws JAXBException, IOException, RemoteException, SQLException {
         Tab currentTab = chatTabPane.getSelectionModel().getSelectedItem();
+        if(currentTab!=null){
         if (!currentTab.getId().contains("group")) {
             int i = 0;
             ArrayList<Message> messages = null;
@@ -476,7 +477,7 @@ public class FXMLChatScreenController implements Initializable {
             }
         }
     }
-
+    }
     public void sendFile() throws RemoteException {
            Platform.runLater(new Runnable() {
             @Override
