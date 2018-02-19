@@ -21,6 +21,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import interfaces.ClientInt;
 import interfaces.ServerInt;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -88,6 +91,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     public static void stopServer() throws RemoteException, NotBoundException {
         sendAnnouncement("###!!!");
+        clients=new HashMap<>();
+        users=new HashMap<>();
         registry.unbind("chat");
     }
 
@@ -185,7 +190,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void sendFile(FileSender fileSender) throws RemoteException {
-        file_Id++;
+       /* file_Id++;
         files.put(file_Id + "", fileSender);
         Message message = fileSender.getMessage();
 //        message.setBody(fileSender.getFile().getName().toString());
@@ -200,7 +205,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             client = users.get(message.getTo().get(0));
             client.sendFileToReciever(fileSender);
             client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
-        }
+        }*/
     }
 
     @Override
@@ -546,5 +551,43 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         }
         return flag;
+    }
+    @Override
+    public void reciveFile(FileSender fileSender) {
+        try {
+            String [] split = fileSender.getPath().split("\\.(?=[^\\.]+$)");
+             File file =null ; 
+            if(split.length <2){
+                split = fileSender.getFileName().split("\\.(?=[^\\.]+$)");
+                String extension = "."+split[1];
+                file = new File(fileSender.getPath()+extension);
+            }else{
+                file = new File(fileSender.getPath());
+            }
+            
+
+            file.createNewFile();
+            FileOutputStream out = new FileOutputStream(file, fileSender.isAppend());
+            out.write(fileSender.getData(), 0, fileSender.getDataLength());
+            out.flush();
+            out.close();
+            Message message=fileSender.getMessage();
+           // fileSender.setPath("F:\\"+file.getName());
+            ClientInt client = users.get(message.getFrom());
+        User user = null;
+        try {
+            user = getUserById(Long.parseLong(message.getFrom()));
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (users.containsKey(message.getTo().get(0))) {
+            client = users.get(message.getTo().get(0));
+            client.sendFileToReciever(fileSender);
+            client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
+        }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 }

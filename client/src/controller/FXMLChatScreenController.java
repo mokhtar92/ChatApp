@@ -431,7 +431,7 @@ public class FXMLChatScreenController implements Initializable {
 
     }
 
-    public void saveChatHistory() throws JAXBException, IOException {
+    public void saveChatHistory() throws JAXBException, IOException, RemoteException, SQLException {
         Tab currentTab = chatTabPane.getSelectionModel().getSelectedItem();
         if (!currentTab.getId().contains("group")) {
             int i = 0;
@@ -443,11 +443,21 @@ public class FXMLChatScreenController implements Initializable {
                 if (tab.getId() != null) {
                     if (tab.getId().equals(selectedTab.getId())) {
                         messages = controllers.get(i).getMessages();
+                       
                     }
                     i++;
                 }
             }
-
+           
+            for(int j=0;j<messages.size();j++){
+                Message message=messages.get(j);
+                User from=Service.getUserById(Long.parseLong(message.getFrom()));
+                User to=Service.getUserById(Long.parseLong(message.getTo().get(0)));
+                messages.get(j).setFrom(from.getFirstName());
+                messages.get(j).getTo().add(0,to.getFirstName());
+               
+  
+            }
             //chat object to contain messages
             Chat myChat = new Chat();
             myChat.getMessage().addAll(messages);
@@ -468,14 +478,22 @@ public class FXMLChatScreenController implements Initializable {
     }
 
     public void sendFile() throws RemoteException {
-        Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+           Platform.runLater(new Runnable() {
+            @Override
+            public void run() { 
+              Tab selectedTab = chatTabPane.getSelectionModel().getSelectedItem();
+              if(selectedTab!=null){
         if (!selectedTab.getId().contains("group")) {
             message.setFrom(UserSession.getUser().getRecId() + "");
             message.getTo().add(chatTabPane.getSelectionModel().getSelectedItem().getId());
-            if (Service.isOnline(message.getTo().get(0))) {
-                chooseFile(message);
-            }
+                  try {
+                      if (Service.isOnline(message.getTo().get(0))) {
+                          chooseFile(message);
+                      }     } catch (RemoteException ex) {
+                      Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                  }
         }
+              }
     }
 
     @FXML
@@ -488,14 +506,48 @@ public class FXMLChatScreenController implements Initializable {
             fileSender.setFile(file);
             fileSender.setMessage(message);
             Service.sendFile(fileSender);
+            String path="E://"+file.getName();
+            Thread tr = new Thread(() -> {
+                    try {
+                        FileInputStream in = null;
+                        if (path == null) {
+                            return;
+                        }
+                        in = new FileInputStream(file);
+                        byte[] data = new byte[1024 * 1024];
+                        int dataLength = in.read(data);
+                        boolean append = false;
+                        while (dataLength > 0) {
+                           fileSender.setPath(path);
+                           fileSender.setFileName(file.getName());
+                           fileSender.setAppend(append);
+                           fileSender.setData(data);
+                           fileSender.setDataLength(dataLength);
+                            Service.sendFile(fileSender);
+                            dataLength = in.read(data);
+                            append = true;
+                        }
+
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                tr.start();
         }
+            }
+        });
+        
     }
 
     public void downloadFile(int file_id) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                FileSender fileSender = ClientImpl.files.get(file_id + "");
+                FileSender fileSender= ClientImpl.files.get(file_id + "");
                 File file = fileSender.getFile();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setInitialFileName(file.getName());

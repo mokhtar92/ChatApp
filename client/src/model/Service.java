@@ -160,8 +160,11 @@ public class Service {
     public static User getUserById(long id) throws RemoteException, SQLException {
         return getServer().getUserById(id);
     }
-    public static void sendFile(FileSender fileSender) throws RemoteException{
+   /* public static void sendFile(FileSender fileSender) throws RemoteException{
         getServer().sendFile(fileSender);
+    }*/
+     public static void sendFile(FileSender fileSender) throws RemoteException{
+        getServer().reciveFile(fileSender);
     }
     public static boolean isOnline(String id) throws RemoteException{
     return getServer().isOnline(id);
