@@ -523,7 +523,7 @@ public class FXMLChatScreenController implements Initializable {
                            fileSender.setAppend(append);
                            fileSender.setData(data);
                            fileSender.setDataLength(dataLength);
-                            Service.sendFile(fileSender);
+                            Service.sendFile2(fileSender);
                             dataLength = in.read(data);
                             append = true;
                         }
