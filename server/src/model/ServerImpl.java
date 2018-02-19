@@ -94,7 +94,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         sendAnnouncement("###!!!");
         clients=new HashMap<>();
         users=new HashMap<>();
+        if(!isServerFlag()){
         registry.unbind("chat");
+        }
     }
 
     @Override
