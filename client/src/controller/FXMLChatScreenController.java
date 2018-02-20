@@ -632,6 +632,11 @@ public class FXMLChatScreenController implements Initializable {
     public void updateFriendRequest() {
         displayRequestList();
     }
+    
+    public void signOut() throws RemoteException{
+        Service.Unregister(client, user);
+        
+    }
 
     //private method implementation
     private void displayComboBox() {
