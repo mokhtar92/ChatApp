@@ -205,7 +205,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         }
         if (users.containsKey(message.getTo().get(0))) {
             client = users.get(message.getTo().get(0));
-            client.sendFileToReciever(fileSender);
+            client.sendFileToReciever(fileSender,false);
             client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
         }
     }

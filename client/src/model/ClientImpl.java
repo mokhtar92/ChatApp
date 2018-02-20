@@ -19,58 +19,57 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
+
+
 public class ClientImpl extends UnicastRemoteObject implements ClientInt {
 
-   
     static int file_Id = 0;
-    public static HashMap<String,FileSender> files = new HashMap<>();
+    public static HashMap<String, String> files = new HashMap<>();
     FXMLChatScreenController chat;
+
     public ClientImpl() throws RemoteException {
-       
+
     }
+
     public ClientImpl(FXMLChatScreenController chat) throws RemoteException {
-        this.chat=chat;
+        this.chat = chat;
     }
 
     @Override
-  public void recieve(Message message,String group)throws RemoteException {
-      
-        chat.getMessage(message,group);
-        
-        
+    public void recieve(Message message, String group) throws RemoteException {
+
+        chat.getMessage(message, group);
+
     }
-  @Override
-  public void recieveAnnoncement(String message)throws RemoteException{
-  
-      chat.getAnnouncement(message);
-  }
-  @Override
-  public void recieveNotification(int status,User user)throws RemoteException{
-      chat.getNotification(status,user);
-  }
-  @Override
-  public void recieveFileNotification(int status,User user)throws RemoteException{
-      chat.getFileNotification(status,user);
-  }
-   @Override
-  public void requestNotification(int status,User user)throws RemoteException{
-      chat.requestNotification(status,user);
-  }
-  @Override
-    public void reciveFile(String path, String filename,boolean append, byte[] data, int dataLength) {
+
+    @Override
+    public void recieveAnnoncement(String message) throws RemoteException {
+
+        chat.getAnnouncement(message);
+    }
+
+    @Override
+    public void recieveNotification(int status, User user) throws RemoteException {
+        chat.getNotification(status, user);
+    }
+
+    @Override
+    public void recieveFileNotification(int status, User user) throws RemoteException {
+        chat.getFileNotification(status, user);
+    }
+
+    @Override
+    public void requestNotification(int status, User user) throws RemoteException {
+        chat.requestNotification(status, user);
+    }
+
+    @Override
+    public void reciveFile(String path, String filename, boolean append, byte[] data, int dataLength) {
 
         try {
-            String [] split = path.split("\\.(?=[^\\.]+$)");
-             File file =null ; 
-            /*if(split.length <2){*/
-                /*split = filename.split("\\.(?=[^\\.]+$)");
-                String extension = "."+split[1];*/
-                file = new File(path);
-            /*}else{
-                file = new File(path);
-            }*/
-            
-
+           
+            File file = null;
+            file = new File(path);
             file.createNewFile();
             FileOutputStream out = new FileOutputStream(file, append);
             out.write(data, 0, dataLength);
@@ -82,11 +81,33 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
         }
 
     }
+
     @Override
-     public void sendFileToReciever(FileSender fileSender)throws RemoteException{
-         
-    /* file_Id++;
-       files.put(file_Id+"", fileSender);*/
-       chat.downloadFile(fileSender);
-     }
+    public void sendFileToReciever(FileSender fileSender, boolean isFirst) throws RemoteException {
+
+        chat.downloadFile(fileSender, isFirst);
+    }
+
+    @Override
+    public void setPath(boolean isFirst, boolean isSender, String path) throws RemoteException {
+        if (isFirst) {
+
+            file_Id++;
+
+            files.put(file_Id + "", path);
+        }
+
+    }
+
+    @Override
+    public String getFilePath(String id) throws RemoteException {
+        return files.get(id);
+
+    }
+
+    @Override
+    public String getFileId() throws RemoteException {
+        return file_Id + "";
+
+    }
 }

@@ -12,23 +12,34 @@ import java.io.Serializable;
  *
  * @author Hanaa
  */
-public class FileSender  implements Serializable{
+public class FileSender implements Serializable {
+
     private File file;
-    private Message message;  
-    String path;
-    String fileName;
-    boolean append;
-    byte[] data;
-    int dataLength;
+    private Message message;
+    private String path;
+    private String fileName;
+    private boolean append;
+    private byte[] data;
+    private int dataLength;
+    String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public FileSender() {
     }
-    public FileSender(String path,String fileName,boolean append,byte [] data,int dataLength) {
-        this.path=path;
-        this.fileName=fileName;
-        this.append=append;
-        this.data=data;
-        this.dataLength=dataLength;
+
+    public FileSender(String path, String fileName, boolean append, byte[] data, int dataLength) {
+        this.path = path;
+        this.fileName = fileName;
+        this.append = append;
+        this.data = data;
+        this.dataLength = dataLength;
     }
 
     public String getPath() {
