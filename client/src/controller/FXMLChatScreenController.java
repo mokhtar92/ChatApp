@@ -633,7 +633,18 @@ public class FXMLChatScreenController implements Initializable {
     
     public void signOut() throws RemoteException{
         Service.Unregister(client, user);
-        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
+                    Scene scene = new Scene(root);
+                    myStage.setScene(scene);
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLFirstScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     //private method implementation

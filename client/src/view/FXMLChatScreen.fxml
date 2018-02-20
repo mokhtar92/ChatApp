@@ -90,12 +90,12 @@
                   <Font name="Bauhaus 93" size="25.0" />
                </font>
             </Button>
-            <ImageView fitHeight="35.0" fitWidth="25.0" layoutX="2.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="35.0" fitWidth="25.0" layoutX="1.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/signout.png" />
                </image>
             </ImageView>
-            <Label layoutX="30.0" layoutY="13.0" onMouseClicked="#signOut" text="Sign out" textFill="WHITE" underline="true">
+            <Label layoutX="31.0" layoutY="12.0" onMouseClicked="#signOut" text="Sign out" textFill="WHITE" underline="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
