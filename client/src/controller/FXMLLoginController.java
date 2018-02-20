@@ -3,7 +3,6 @@ package controller;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import entity.User;
-import interfaces.ClientInt;
 import interfaces.ServerInt;
 import java.io.IOException;
 import java.net.URL;
@@ -55,7 +54,7 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void checkLogin(ActionEvent ev) {
         User user = new User();
-
+        if(Service.getServer()!=null){
         String email = loginEmailTextField.getText().toLowerCase();
         String password = loginPasswordTextField.getText();
         user.setEmail(email);
@@ -84,8 +83,22 @@ public class FXMLLoginController implements Initializable {
             invalidOnlineUser.setVisible(false);
         }
 
-    }
+    }else{
+             Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLServerOfflineScreen.fxml"));
+                        Scene scene = new Scene(root);
+                        myStage.setScene(scene);
 
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(new Runnable() {

@@ -76,10 +76,12 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     public static void startServer() {
         try {
+            if(!serverFlag){
             Operation op = new Operation();
             op.getUsers();
             serverFlag = true;
             registry.rebind("chat", new ServerImpl());
+            }
 
         } catch (RemoteException ex) {
 
@@ -93,8 +95,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         sendAnnouncement("###!!!");
         clients=new HashMap<>();
         users=new HashMap<>();
-        if(!isServerFlag()){
+        if(serverFlag){
         registry.unbind("chat");
+        serverFlag=false;
         }
     }
 
@@ -235,6 +238,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public Long checkLogin(User user) throws RemoteException {
+        
         Long userID = 0L;
         if (isEmailExist(user.getEmail())) {
             PreparedStatement ps = Database.getInstance().getPreparedStatement("SELECT * FROM ITI_CHATAPP_USER WHERE email=? AND password=?");
@@ -256,7 +260,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         return userID;
     }
-
+    
     @Override
     public boolean isEmailExist(String userEmail) throws RemoteException {
         boolean isExist = false;
@@ -276,6 +280,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public boolean signUp(User user) throws RemoteException {
+      
         boolean storedFlag = false;
         if (!isEmailExist(user.getEmail())) {
             PreparedStatement ps = Database.getInstance().getPreparedStatement("INSERT INTO ITI_CHATAPP_USER (firstName,lastName,password,email,country,birthdate,Gender,imgURL, myStatus) VALUES (?,?,?,?,?,?,?,?,?)");
@@ -303,8 +308,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         }
         return storedFlag;
+    
     }
-
     @Override
     public ArrayList<User> getFriendList(Long userId) {
         ArrayList<User> list = new ArrayList<>();
