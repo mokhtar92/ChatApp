@@ -62,13 +62,13 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
         try {
             String [] split = path.split("\\.(?=[^\\.]+$)");
              File file =null ; 
-            if(split.length <2){
-                split = filename.split("\\.(?=[^\\.]+$)");
-                String extension = "."+split[1];
-                file = new File(path+extension);
-            }else{
+            /*if(split.length <2){*/
+                /*split = filename.split("\\.(?=[^\\.]+$)");
+                String extension = "."+split[1];*/
                 file = new File(path);
-            }
+            /*}else{
+                file = new File(path);
+            }*/
             
 
             file.createNewFile();
