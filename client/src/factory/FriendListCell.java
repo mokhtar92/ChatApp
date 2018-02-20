@@ -64,6 +64,7 @@ public class FriendListCell extends ListCell<User> {
 
             HBox hBox = new HBox(userImg, username, statusImg);
             hBox.setPrefWidth(180);
+            hBox.setStyle("-fx-alignment: CENTER_LEFT;");
             hBox.getStyleClass().add("friendList");
             if (status) {
                 hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {

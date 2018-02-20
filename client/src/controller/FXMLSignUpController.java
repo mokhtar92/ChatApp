@@ -76,19 +76,19 @@ public class FXMLSignUpController implements Initializable {
 
     @FXML
     private Label invalidEmail;
-
-    @FXML
-    private Label invalidPassword;
-
-    @FXML
-    private Label invalidDate;
     
     @FXML
     private Label invalidCountry;
 
     @FXML
-    private Label invalidGeneralLable;
+    private Label invalidPassword;
 
+    @FXML
+    private Label invalidConfirmPassword;
+    
+    @FXML
+    private Label invalidDate;
+    
     @FXML
     private ComboBox<String> ChooseAvatarComboBox;
 
@@ -105,9 +105,10 @@ public class FXMLSignUpController implements Initializable {
         invalidIFName.setVisible(false);
         invalidLname.setVisible(false);
         invalidEmail.setVisible(false);
-        invalidPassword.setVisible(false);
-        invalidDate.setVisible(false);
         invalidCountry.setVisible(false);
+        invalidPassword.setVisible(false);
+        invalidConfirmPassword.setVisible(false);
+        invalidDate.setVisible(false);
 
         if (!user.setFirstName(firstNameTextField.getText())) {
             isValid = false;
@@ -120,10 +121,12 @@ public class FXMLSignUpController implements Initializable {
         if (!passwordTextField.getText().equals(confirmPasswordTextField.getText())) {
             isValid = false;
             invalidPassword.setVisible(!isValid);
+            invalidConfirmPassword.setVisible(!isValid);
         }
         if (!user.setPassword(passwordTextField.getText())) {
             isValid = false;
             invalidPassword.setVisible(!isValid);
+            invalidConfirmPassword.setVisible(!isValid);
         }
         if (!user.setEmail(emailTextField.getText())) {
             isValid = false;
@@ -170,7 +173,6 @@ public class FXMLSignUpController implements Initializable {
         if(Service.getServer()!=null){
         if (validation(user) && service.signUp(user)) {
             try {
-                invalidGeneralLable.setVisible(false);
 
                 Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
                 Scene scene = new Scene(root);
@@ -181,7 +183,7 @@ public class FXMLSignUpController implements Initializable {
                 ex.printStackTrace(System.out);
             }
         } else {
-            invalidGeneralLable.setVisible(true);
+            //invalidGeneralLable.setVisible(true);
         }
     }
         else{
@@ -227,6 +229,22 @@ public class FXMLSignUpController implements Initializable {
     public void setMousePosition(MouseEvent event) {
         xOffset = event.getSceneX();
         yOffset = event.getSceneY();
+    }
+    
+    public void goBackToLogin(){
+        Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLLoginScreen.fxml"));
+                        Scene scene = new Scene(root);
+                        myStage.setScene(scene);
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
     }
 
     //private implementation of methods

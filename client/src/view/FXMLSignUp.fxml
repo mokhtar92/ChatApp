@@ -12,7 +12,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveSignUpWindow" onMousePressed="#setMousePosition" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLSignUpController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#moveSignUpWindow" onMousePressed="#setMousePosition" prefHeight="650.0" prefWidth="800.0" style="-fx-background-color: #1c2038;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FXMLSignUpController">
    <children>
       <Button layoutX="739.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#closeSignUpWindow" style="-fx-background-color: transparent;" text="X" textFill="#3c999c">
          <font>
@@ -30,46 +30,49 @@
             <Font name="Bauhaus 93" size="25.0" />
          </font>
       </Button>
-      <Label layoutX="358.0" layoutY="124.0" text="Select Avatar" textFill="WHITE" />
-      <ComboBox fx:id="ChooseAvatarComboBox" layoutX="300.0" layoutY="34.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 100; -fx-text-inner-fill: #FFFFFF;" visibleRowCount="2">
+      <Label layoutX="343.0" layoutY="111.0" text="Select Avatar" textFill="#afb0b2">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <ComboBox fx:id="ChooseAvatarComboBox" layoutX="300.0" layoutY="26.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 100; -fx-text-inner-fill: #FFFFFF;" visibleRowCount="2">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ComboBox>
-      <TextField fx:id="firstNameTextField" layoutX="79.0" layoutY="241.0" prefHeight="45.0" prefWidth="300.0" promptText="First name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="firstNameTextField" layoutX="79.0" layoutY="254.0" prefHeight="45.0" prefWidth="300.0" promptText="First name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font></TextField>
-      <TextField fx:id="lastNameTextField" layoutX="426.0" layoutY="241.0" prefHeight="45.0" prefWidth="300.0" promptText="Last name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="lastNameTextField" layoutX="426.0" layoutY="254.0" prefHeight="45.0" prefWidth="300.0" promptText="Last name" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="emailTextField" layoutX="76.0" layoutY="307.0" prefHeight="45.0" prefWidth="300.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="emailTextField" layoutX="76.0" layoutY="335.0" prefHeight="45.0" prefWidth="300.0" promptText="Email" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="countryTextField" layoutX="426.0" layoutY="307.0" prefHeight="45.0" prefWidth="300.0" promptText="Country" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <TextField fx:id="countryTextField" layoutX="426.0" layoutY="335.0" prefHeight="45.0" prefWidth="300.0" promptText="Country" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="passwordTextField" layoutX="79.0" layoutY="373.0" prefHeight="45.0" prefWidth="300.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <PasswordField fx:id="passwordTextField" layoutX="79.0" layoutY="416.0" prefHeight="45.0" prefWidth="300.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="confirmPasswordTextField" layoutX="426.0" layoutY="373.0" prefHeight="45.0" prefWidth="300.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
+      <PasswordField fx:id="confirmPasswordTextField" layoutX="426.0" layoutY="416.0" prefHeight="45.0" prefWidth="300.0" promptText="Confirm Password" style="-fx-background-color: transparent; -fx-border-color: #afb0b2; -fx-border-radius: 50; -fx-border-width: 2; -fx-text-inner-color: #afb0b2;">
          <font>
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <Label layoutX="79.0" layoutY="439.0" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Gender" textFill="#afb0b2">
+      <Label layoutX="79.0" layoutY="497.0" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Gender" textFill="#afb0b2">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <JFXRadioButton fx:id="maleRadioBtn" layoutX="169.0" layoutY="447.0" selected="true" text="Male" textFill="#afb0b2">
+      <JFXRadioButton fx:id="maleRadioBtn" layoutX="169.0" layoutY="505.0" selected="true" text="Male" textFill="#afb0b2">
          <toggleGroup>
             <ToggleGroup fx:id="Gender" />
          </toggleGroup>
@@ -77,60 +80,36 @@
             <Font size="20.0" />
          </font>
       </JFXRadioButton>
-      <JFXRadioButton layoutX="256.0" layoutY="447.0" text="Female" textFill="#afb0b2" toggleGroup="$Gender">
+      <JFXRadioButton layoutX="256.0" layoutY="505.0" text="Female" textFill="#afb0b2" toggleGroup="$Gender">
          <font>
             <Font size="20.0" />
          </font>
       </JFXRadioButton>
-      <Label layoutX="426.0" layoutY="440.0" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Date of birth" textFill="#afb0b2">
+      <Label layoutX="426.0" layoutY="498.0" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: #afb0b2; -fx-border-width: 2; -fx-border-radius: 50;" text="  Date of birth" textFill="#afb0b2">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <DatePicker fx:id="signUpDatePicker" layoutX="562.0" layoutY="447.0" prefWidth="150.0" style="-fx-background-color: transparent;" />
-      <JFXButton buttonType="RAISED" layoutX="308.0" layoutY="524.0" onAction="#signUp" prefHeight="50.0" prefWidth="185.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Create Account" textFill="WHITE">
+      <DatePicker fx:id="signUpDatePicker" layoutX="562.0" layoutY="505.0" prefWidth="150.0" style="-fx-background-color: transparent;" />
+      <JFXButton buttonType="RAISED" layoutX="308.0" layoutY="572.0" onAction="#signUp" prefHeight="50.0" prefWidth="185.0" ripplerFill="WHITE" style="-fx-background-color: #3c999c; -fx-background-radius: 50;" text="Create Account" textFill="WHITE">
          <font>
             <Font name="System Bold" size="20.0" />
          </font></JFXButton>
-      <Label fx:id="invalidGeneralLable" layoutX="283.0" layoutY="492.0" text="fields with * are invalid, try again!" textFill="RED" visible="false">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidIFName" alignment="CENTER" layoutX="57.0" layoutY="241.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidEmail" alignment="CENTER" layoutX="57.0" layoutY="307.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidLname" alignment="CENTER" layoutX="407.0" layoutY="241.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidDate" alignment="CENTER" layoutX="407.0" layoutY="439.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidPassword" alignment="CENTER" layoutX="407.0" layoutY="373.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidImage" alignment="CENTER" layoutX="508.0" layoutY="112.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
-      <Label fx:id="invalidCountry" alignment="CENTER" layoutX="407.0" layoutY="307.0" prefHeight="31.0" prefWidth="13.0" text="*" textAlignment="CENTER" textFill="RED" visible="false">
-         <font>
-            <Font size="45.0" />
-         </font>
-      </Label>
+      <Label fx:id="invalidImage" alignment="CENTER" layoutX="325.0" layoutY="224.0" text="* must select an avatar!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidIFName" alignment="CENTER" layoutX="79.0" layoutY="300.0" text="* only characters are allowed!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidLname" alignment="CENTER" layoutX="426.0" layoutY="300.0" text="* only characters are allowed!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidEmail" alignment="CENTER" layoutX="76.0" layoutY="383.0" text="* invalid/existing email!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidCountry" alignment="CENTER" layoutX="426.0" layoutY="383.0" text="* only characters are allowed!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidPassword" alignment="CENTER" layoutX="79.0" layoutY="463.0" text="* passwords must match (min. 6 characters)!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidConfirmPassword" alignment="CENTER" layoutX="426.0" layoutY="463.0" text="* passwords must match (min. 6 characters)!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <Label fx:id="invalidDate" alignment="CENTER" layoutX="426.0" layoutY="541.0" text="* must be at least 15 years old!" textAlignment="CENTER" textFill="RED" visible="false" />
+      <ImageView fitHeight="150.0" fitWidth="40.0" layoutX="20.0" layoutY="18.0" onMouseClicked="#goBackToLogin" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/back.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
    </children>
 </AnchorPane>
