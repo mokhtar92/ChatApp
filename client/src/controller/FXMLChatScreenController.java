@@ -563,14 +563,14 @@ public class FXMLChatScreenController implements Initializable {
                             return;
                         }
                         in = new FileInputStream(file);
-                        byte[] data = new byte[1024 * 1024];
-                        int dataLength = in.read(data);
-                        boolean append = false;
-                        while (dataLength > 0) {
-                            client.reciveFile(path, file.getName(), append, data, dataLength);
-                            dataLength = in.read(data);
+                        //byte[] data = new byte[1024 * 1024];
+                        //int dataLength = in.read(data);
+                        //boolean append = false;
+                       // while (fileSender.getDataLength()> 0) {
+                            client.reciveFile(path, file.getName(), fileSender.isAppend(), fileSender.getData(), fileSender.getDataLength());
+                         /*   dataLength = in.read(data);
                             append = true;
-                        }
+                        }*/
 
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
