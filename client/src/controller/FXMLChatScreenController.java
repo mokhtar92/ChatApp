@@ -64,6 +64,7 @@ import model.Service;
 import model.UserSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 
 /**
  * FXML Controller class
@@ -517,7 +518,10 @@ public class FXMLChatScreenController implements Initializable {
                         byte[] data = new byte[1024 * 1024];
                         int dataLength = in.read(data);
                         boolean append = false;
+                        boolean isFirst=true;
+                       client.setPath(isFirst,true,null);
                         while (dataLength > 0) {
+                           fileSender.setId(client.getFileId());
                            fileSender.setPath(path);
                            fileSender.setFileName(file.getName());
                            fileSender.setAppend(append);
@@ -525,9 +529,10 @@ public class FXMLChatScreenController implements Initializable {
                            fileSender.setDataLength(dataLength);
                           //  Service.sendFile2(fileSender);
                           ClientInt receiver=Service.getClinetInt(message.getTo().get(0));
-                          receiver.sendFileToReciever(fileSender);
+                          receiver.sendFileToReciever(fileSender,isFirst);
                             dataLength = in.read(data);
                             append = true;
+                            isFirst=false;
                         }
 
                     } catch (RemoteException ex) {
@@ -545,31 +550,33 @@ public class FXMLChatScreenController implements Initializable {
         
     }
 
-    public void downloadFile(FileSender fileSender) {
+    public void downloadFile(FileSender fileSender,boolean isFirst) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-             //   File file = fileSender.getFile();
-               /* FileChooser fileChooser = new FileChooser();
-                fileChooser.setInitialFileName(file.getName());
-                File pfile = fileChooser.showSaveDialog(null);
-                String path = pfile.getAbsolutePath();*/
-               String path="E:\\"+fileSender.getFileName();
+             File pfile=null;
+             if(isFirst){
+               FileChooser fileChooser = new FileChooser();
+                fileChooser.setInitialFileName(fileSender.getFileName());
+                 pfile = fileChooser.showSaveDialog(null);
+                 try {
+                     if(pfile!=null){
+                     client.setPath(isFirst,false,pfile.getAbsolutePath());
+                     }
+                 } catch (RemoteException ex) {
+                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
+                if(pfile!=null){    
+
                 Thread tr = new Thread(() -> {
                     try {
+                 String path=client.getFilePath(fileSender.getId());
                         FileInputStream in = null;
                         if (path == null) {
                             return;
                         }
-                       // in = new FileInputStream(file);
-                        //byte[] data = new byte[1024 * 1024];
-                        //int dataLength = in.read(data);
-                        //boolean append = false;
-                       // while (fileSender.getDataLength()> 0) {
                             client.reciveFile(path, fileSender.getFileName(), fileSender.isAppend(), fileSender.getData(), fileSender.getDataLength());
-                         /*   dataLength = in.read(data);
-                            append = true;
-                        }*/
 
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -577,8 +584,9 @@ public class FXMLChatScreenController implements Initializable {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
+                
                 tr.start();
-            }
+            }}
         });
     }
 

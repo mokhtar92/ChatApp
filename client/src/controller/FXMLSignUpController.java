@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -165,7 +167,7 @@ public class FXMLSignUpController implements Initializable {
     @FXML
     private void signUp(ActionEvent ev) {
         User user = new User();
-
+        if(Service.getServer()!=null){
         if (validation(user) && service.signUp(user)) {
             try {
                 invalidGeneralLable.setVisible(false);
@@ -182,7 +184,22 @@ public class FXMLSignUpController implements Initializable {
             invalidGeneralLable.setVisible(true);
         }
     }
+        else{
+             Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/view/FXMLServerOfflineScreen.fxml"));
+                        Scene scene = new Scene(root);
+                        myStage.setScene(scene);
 
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+        }
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(new Runnable() {
