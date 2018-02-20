@@ -29,7 +29,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  *
@@ -193,7 +192,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void sendFile(FileSender fileSender) throws RemoteException {
-       /* file_Id++;
+        file_Id++;
         files.put(file_Id + "", fileSender);
         Message message = fileSender.getMessage();
 //        message.setBody(fileSender.getFile().getName().toString());
@@ -208,7 +207,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             client = users.get(message.getTo().get(0));
             client.sendFileToReciever(fileSender);
             client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
-        }*/
+        }
     }
 
     @Override
@@ -557,7 +556,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     }
     @Override
     public void reciveFile(FileSender fileSender) {
-        try {
+      /*  try {
             String [] split = fileSender.getPath().split("\\.(?=[^\\.]+$)");
              File file =null ; 
             if(split.length <2){
@@ -591,7 +590,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+*/
     }
     @Override
     public ClientInt getClinetInt(String id)throws RemoteException{

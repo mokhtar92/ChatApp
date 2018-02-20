@@ -85,8 +85,8 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInt {
     @Override
      public void sendFileToReciever(FileSender fileSender)throws RemoteException{
          
-     file_Id++;
-       files.put(file_Id+"", fileSender);
+    /* file_Id++;
+       files.put(file_Id+"", fileSender);*/
        chat.downloadFile(fileSender);
      }
 }
