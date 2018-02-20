@@ -550,33 +550,31 @@ public class FXMLChatScreenController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                File file = fileSender.getFile();
+             //   File file = fileSender.getFile();
                /* FileChooser fileChooser = new FileChooser();
                 fileChooser.setInitialFileName(file.getName());
                 File pfile = fileChooser.showSaveDialog(null);
                 String path = pfile.getAbsolutePath();*/
-               String path="E:\\";
+               String path="E:\\"+fileSender.getFileName();
                 Thread tr = new Thread(() -> {
                     try {
                         FileInputStream in = null;
                         if (path == null) {
                             return;
                         }
-                        in = new FileInputStream(file);
+                       // in = new FileInputStream(file);
                         //byte[] data = new byte[1024 * 1024];
                         //int dataLength = in.read(data);
                         //boolean append = false;
                        // while (fileSender.getDataLength()> 0) {
-                            client.reciveFile(path, file.getName(), fileSender.isAppend(), fileSender.getData(), fileSender.getDataLength());
+                            client.reciveFile(path, fileSender.getFileName(), fileSender.isAppend(), fileSender.getData(), fileSender.getDataLength());
                          /*   dataLength = in.read(data);
                             append = true;
                         }*/
 
                     } catch (RemoteException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                    }  catch (IOException ex) {
                         Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
