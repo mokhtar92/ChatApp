@@ -32,9 +32,9 @@ public class FriendListCell extends ListCell<User> {
     FXMLChatScreenController controller;
     boolean status;
 
-    FriendListCell(FXMLChatScreenController controller,boolean status) {
+    FriendListCell(FXMLChatScreenController controller, boolean status) {
         this.controller = controller;
-        this.status=status;
+        this.status = status;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FriendListCell extends ListCell<User> {
         super.updateItem(friend, empty);
 
         if (friend != null && !empty) {
-            Label username = new Label(friend.getFirstName() + " " + friend.getLastName());
+            Label username = new Label(friend.getFirstName());
             username.getStyleClass().add("listText");
 
             ImageView userImg = new ImageView(friend.getImgURL());
@@ -51,10 +51,10 @@ public class FriendListCell extends ListCell<User> {
 
             ImageView statusImg = null;
             try {
-                if(Service.isOnline(friend.getRecId()+"")){
-                    statusImg=new ImageView("/resources/available.png");
-                }else{
-                statusImg=new ImageView("/resources/offline.png");
+                if (Service.isOnline(friend.getRecId() + "")) {
+                    statusImg = new ImageView("/resources/available.png");
+                } else {
+                    statusImg = new ImageView("/resources/offline.png");
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,48 +63,48 @@ public class FriendListCell extends ListCell<User> {
             statusImg.setFitHeight(25);
 
             HBox hBox = new HBox(userImg, username, statusImg);
+            hBox.setPrefWidth(180);
             hBox.getStyleClass().add("friendList");
-            if(status){
-            hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if(Service.isOnline(friend.getRecId()+"")){
-                                    TabPane tabPane = controller.getChatTabPane();
-                                    ObservableList<Tab> tabs = tabPane.getTabs();
-                                    boolean flag = false;
-                                    for (Tab tab : tabs) {
-                                        if (tab.getId() != null) {
-                                            if (tab.getId().equals(friend.getRecId() + "")) {
-                                                tabPane.getSelectionModel().select(tab);
-                                                flag = true;
+            if (status) {
+                hBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (Service.isOnline(friend.getRecId() + "")) {
+                                        TabPane tabPane = controller.getChatTabPane();
+                                        ObservableList<Tab> tabs = tabPane.getTabs();
+                                        boolean flag = false;
+                                        for (Tab tab : tabs) {
+                                            if (tab.getId() != null) {
+                                                if (tab.getId().equals(friend.getRecId() + "")) {
+                                                    tabPane.getSelectionModel().select(tab);
+                                                    flag = true;
+                                                }
                                             }
-                                            
+                                        }
+                                        if (!flag) {
+                                            try {
+                                                controller.insertNewChatTab(friend.getFirstName(), friend, false, null);
+                                            } catch (RemoteException ex) {
+                                                Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
                                         }
                                     }
-                                    if (!flag) {
-                                        try {
-                                            controller.insertNewChatTab(friend.getFirstName(), friend, false, null);
-                                        } catch (RemoteException ex) {
-                                            Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                    }
-                                }   } catch (RemoteException ex) {
-                                Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
-}
-                    });
-
-                }
-            });}
+                        });
+                    }
+                });
+            }
             setGraphic(hBox);
 
         } else {
             setGraphic(null);
         }
     }
-
 }

@@ -82,12 +82,10 @@ public class FXMLChatScreenController implements Initializable {
     private ClientInt client = null;
     private NotificationImpl notification = new NotificationImpl();
     private ArrayList<TempchatMessageController> controllers = new ArrayList<>();
-    private String msgFontColor = "000000";
+    private String msgFontColor = "FFFFFF";
     private String msgFontSize = "10";
     private String msgFontFamiliy = "Arial";
     private String msgFontStyle = "normal";
-    private String msgDate;
-    private String msgTime;
     
     @FXML
     private ImageView userImage;
@@ -141,6 +139,7 @@ public class FXMLChatScreenController implements Initializable {
         setUserProfile();
         setMessageFormatter();
         displayRequestList();
+        chatTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
 
         message = new Message();
         server = Service.getServer();

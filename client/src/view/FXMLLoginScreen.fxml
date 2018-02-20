@@ -30,7 +30,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXButton>
-      <Label layoutX="255.0" layoutY="567.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
+      <Label layoutX="251.0" layoutY="567.0" onMouseClicked="#redirectToSignUp" text="sign up" textFill="#3c999c" underline="true">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -75,7 +75,7 @@
             <Image url="@../resources/password_icon.png" />
          </image>
       </ImageView>
-      <Label layoutX="94.0" layoutY="567.0" text="don't have account ?" textFill="WHITE">
+      <Label layoutX="98.0" layoutY="567.0" text="don't have account ?" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>

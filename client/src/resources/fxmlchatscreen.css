@@ -19,16 +19,19 @@
 .friendList {
     -fx-background-color:  #454762;
     -fx-background-radius: 30 0 30 0;
+    -fx-alignment: CENTER_LEFT;
+    
 }
 
 .requestList {
     -fx-background-color:  #454762;
     -fx-background-radius: 30 0 30 0;
+    -fx-alignment: CENTER_LEFT;
 }
 
 .listText {
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
-    -fx-font-size: 11pt;
-    -fx-padding: 10;
+    -fx-font-size: 10pt;
+    -fx-padding: 5;
 }

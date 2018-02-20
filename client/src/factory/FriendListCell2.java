@@ -30,31 +30,35 @@ public class FriendListCell2 extends ListCell<User> {
 
         if (friend != null && !empty) {
 
-            Label username = new Label(friend.getFirstName() + " " + friend.getLastName());
+            Label username = new Label(friend.getFirstName());
+
             Label label = new Label("not");
+
             ImageView userImg = new ImageView(friend.getImgURL());
             userImg.setFitWidth(80);
             userImg.setFitHeight(80);
-             ImageView statusImg = null;
+            ImageView statusImg = null;
             try {
-                if(Service.isOnline(friend.getRecId()+"")){
-                    statusImg=new ImageView("/resources/available.png");
-                }else{
-                statusImg=new ImageView("/resources/offline.png");
+                if (Service.isOnline(friend.getRecId() + "")) {
+                    statusImg = new ImageView("/resources/available.png");
+                } else {
+                    statusImg = new ImageView("/resources/offline.png");
                 }
             } catch (RemoteException ex) {
                 Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
             }
             statusImg.setFitWidth(25);
             statusImg.setFitHeight(25);
-            HBox hBox = new HBox(userImg, username,statusImg);
+            HBox hBox = new HBox(userImg, username, statusImg);
+            hBox.setStyle("-fx-alignment: CENTER_LEFT;");
+            hBox.setPrefWidth(180);
             hBox.setOnMouseClicked(new EventHandler() {
                 @Override
                 public void handle(Event event) {
                     if (label.getText().equals("not")) {
                         setStyle("-fx-control-inner-background:#0096c9");
                         label.setText("yes");
-                    
+
                     } else {
                         setStyle("-fx-control-inner-background: white");
                         label.setText("not");

@@ -166,7 +166,7 @@
                         <Image url="@../resources/add_file_icon.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="447.0" layoutY="9.0" onMouseClicked="#sendFile" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="45.0" fitWidth="40.0" layoutX="447.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

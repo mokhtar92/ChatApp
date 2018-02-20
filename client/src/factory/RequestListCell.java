@@ -35,13 +35,12 @@ public class RequestListCell extends ListCell<User> {
         super.updateItem(request, empty);
 
         if (request != null) {
-            Label username = new Label(request.getFirstName() + " " + request.getLastName());
+            Label username = new Label(request.getFirstName());
             username.getStyleClass().add("listText");
-            username.setTextAlignment(TextAlignment.CENTER);
 
             ImageView userImage = new ImageView(request.getImgURL());
-            userImage.setFitWidth(50);
-            userImage.setFitHeight(50);
+            userImage.setFitWidth(80);
+            userImage.setFitHeight(80);
 
             ImageView acceptButton = new ImageView("/resources/accept.png");
             acceptButton.setFitWidth(25);
@@ -66,6 +65,8 @@ public class RequestListCell extends ListCell<User> {
             });
 
             HBox hBox = new HBox(userImage, username, acceptButton, declineButton);
+            hBox.setPrefWidth(180);
+            hBox.getStyleClass().add("requestList");
             setGraphic(hBox);
 
         } else {
