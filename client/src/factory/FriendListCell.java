@@ -49,7 +49,16 @@ public class FriendListCell extends ListCell<User> {
             userImg.setFitWidth(80);
             userImg.setFitHeight(80);
 
-            ImageView statusImg = new ImageView("/resources/" + friend.getMyStatus() + ".png");
+            ImageView statusImg = null;
+            try {
+                if(Service.isOnline(friend.getRecId()+"")){
+                    statusImg=new ImageView("/resources/available.png");
+                }else{
+                statusImg=new ImageView("/resources/offline.png");
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(FriendListCell.class.getName()).log(Level.SEVERE, null, ex);
+            }
             statusImg.setFitWidth(25);
             statusImg.setFitHeight(25);
 

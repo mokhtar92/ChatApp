@@ -320,6 +320,7 @@ public class FXMLChatScreenController implements Initializable {
                 NotificationInt impl = new NotificationImpl();
                 if (status == NotificationStatus.onlineStatus) {
                     impl.createNotification("Announcement", user.getFirstName() + " become online", user.getImgURL());
+                    updateFriendList();
                 }
             }
         });
@@ -346,6 +347,7 @@ public class FXMLChatScreenController implements Initializable {
                 if (status == NotificationStatus.friendRequest) {
                     System.out.println(user);
                     impl.createNotification("Announcement", user.getFirstName() + " you have new friend request!", user.getImgURL());
+                    updateFriendRequest();
                 }
             }
         });
