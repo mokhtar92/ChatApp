@@ -91,9 +91,8 @@ public class TempchatMessageController implements Initializable {
         } else {
             label.setStyle(cssStyle);
             label.getStyleClass().add("receiver");
-            
+           
             User receiver = Service.getUserById(Long.parseLong(styledMessage.getFrom()));
-
             img = new ImageView(receiver.getImgURL());
             img.setFitWidth(45);
             img.setFitHeight(45);

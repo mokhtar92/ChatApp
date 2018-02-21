@@ -460,7 +460,7 @@ public class FXMLChatScreenController implements Initializable {
             for (Tab tab : tabs) {
                 if (tab.getId() != null) {
                     if (tab.getId().equals(selectedTab.getId())) {
-                        messages = controllers.get(i).getMessages();
+                        messages = controllers.get(tab.getId()).getMessages();
                        
                     }
                     i++;
@@ -469,10 +469,10 @@ public class FXMLChatScreenController implements Initializable {
            
             for(int j=0;j<messages.size();j++){
                 Message message=messages.get(j);
-                User from=Service.getUserById(Long.parseLong(message.getFrom()));
-                User to=Service.getUserById(Long.parseLong(message.getTo().get(0)));
-                messages.get(j).setFrom(from.getFirstName());
-                messages.get(j).getTo().add(0,to.getFirstName());
+                /*User from=message.getFrom();
+                User to=Service.getUserById(Long.parseLong(message.getTo().get(0)));*/
+                messages.get(j).setFrom(message.getFrom());
+                messages.get(j).getTo().add(0,message.getTo().get(0));
                
   
             }
