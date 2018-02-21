@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -65,6 +66,9 @@ import model.UserSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -82,7 +86,8 @@ public class FXMLChatScreenController implements Initializable {
     private ServerInt server = null;
     private ClientInt client = null;
     private NotificationImpl notification = new NotificationImpl();
-    private ArrayList<TempchatMessageController> controllers = new ArrayList<>();
+    //private ArrayList<TempchatMessageController> controllers = new ArrayList<>();
+     private HashMap<String,TempchatMessageController> controllers = new HashMap<>();
     private String msgFontColor = "FFFFFF";
     private String msgFontSize = "10";
     private String msgFontFamiliy = "Arial";
@@ -151,6 +156,16 @@ public class FXMLChatScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        myStage.setOnCloseRequest(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                
+                  //Service.Unregister(client, user);
+                     myStage.close();
+                     System.exit(0);
+               
+            }
+        });
         //Just for Testing :))
         message.setFrom(user.getRecId() + "");
     }
@@ -159,15 +174,17 @@ public class FXMLChatScreenController implements Initializable {
     public void sendMessage(KeyEvent event) {
 
         String msg = sendTextField.getText().trim();
+        message=new Message();
 
         if (msg != null) {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 message.setFrom(user.getRecId() + "");
+               
                 try {
                     Tab tab = chatTabPane.getSelectionModel().getSelectedItem();
                     if (tab != null) {
                         message.setBody(msg);
-                        
+                         message.getTo().add(tab.getId());
                         message.setFontColor(msgFontColor);
                         message.setFontSize(msgFontSize);
                         message.setFontFamily(msgFontFamiliy);
@@ -183,6 +200,7 @@ public class FXMLChatScreenController implements Initializable {
                             message.getTo().add(tab.getId());
                             sendTextField.setText("");
                             Service.tellOne(message);
+                           
                         }
                     }
                 } catch (RemoteException ex) {
@@ -248,24 +266,24 @@ public class FXMLChatScreenController implements Initializable {
                     }
                 }
                 for (Tab tab : tabs) {
-
                     if (tab.getId() != null) {
                         if (group == null) {
-                            if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0))) && group == null) {
+                            if ((tab.getId().equals(message.getFrom()) || tab.getId().equals(message.getTo().get(0)))) {
                                 try {
-                                    controllers.get(i).createMessageStyle(message, user);
+                                   
+                                    controllers.get(tab.getId()).createMessageStyle(message, user);
                                 } catch (RemoteException ex) {
                                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (SQLException ex) {
                                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                controllers.get(i).getMessages(message);
+                                controllers.get(tab.getId()).getMessages(message);
                             }
                         } else {
 
                             if (tab.getId().equals(group)) {
                                 try {
-                                    controllers.get(i).createMessageStyle(message, user);
+                                    controllers.get(tab.getId()).createMessageStyle(message, user);
                                     //controllers.get(i).getMessages(message);
                                 } catch (RemoteException ex) {
                                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
@@ -345,7 +363,6 @@ public class FXMLChatScreenController implements Initializable {
             public void run() {
                 NotificationInt impl = new NotificationImpl();
                 if (status == NotificationStatus.friendRequest) {
-                    System.out.println(user);
                     impl.createNotification("Announcement", user.getFirstName() + " you have new friend request!", user.getImgURL());
                     updateFriendRequest();
                 }
@@ -556,6 +573,16 @@ public class FXMLChatScreenController implements Initializable {
             public void run() {
              File pfile=null;
              if(isFirst){
+                 User u=null;
+                 try {
+                     u = Service.getUserById(Long.parseLong(fileSender.getMessage().getFrom()));
+                 } catch (RemoteException ex) {
+                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (SQLException ex) {
+                     Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+                 getFileNotification(NotificationStatus.fileSendStatus,u);
+          
                FileChooser fileChooser = new FileChooser();
                 fileChooser.setInitialFileName(fileSender.getFileName());
                  pfile = fileChooser.showSaveDialog(null);
@@ -617,6 +644,13 @@ public class FXMLChatScreenController implements Initializable {
             newChaTab.setId(groupId);
         }
         newChaTab.setClosable(true);
+        newChaTab.setOnClosed(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+               newChaTab.setId(null);
+               controllers.remove(user.getRecId()+"");
+            }
+        });
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TempchatMessage.fxml"));
         TempchatMessageController tabController = new TempchatMessageController();
         loader.setController(tabController);
@@ -625,7 +659,11 @@ public class FXMLChatScreenController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        controllers.add(tabController);
+        if(groupId==null){
+        controllers.put(user.getRecId()+"",tabController);
+        }else{
+        controllers.put(groupId,tabController);
+        }
         chatTabPane.getTabs().add(newChaTab);
         chatTabPane.getSelectionModel().select(newChaTab);
     }

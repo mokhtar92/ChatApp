@@ -24,14 +24,12 @@ import model.ServerImpl;
  * @author Ahmed_Mokhtar
  */
 public class ChatServer extends Application {
-
     @Override
     public void start(Stage stage) throws Exception {
         if(!ServerImpl.isServerFlag()){
         Parent root = FXMLLoader.load(getClass().getResource("FXMLServerScreen.fxml"));
-
         Scene scene = new Scene(root);
-
+      
         stage.setResizable(false);
         stage.setScene(scene);
         stage.setOnCloseRequest(new EventHandler() {

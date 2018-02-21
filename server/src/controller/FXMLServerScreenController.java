@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -30,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import model.Operation;
 import model.ServerDbOperation;
 import model.ServerImpl;
@@ -81,12 +83,25 @@ public class FXMLServerScreenController implements Initializable {
     TextArea annoncementTextArea;
     
     Operation operation = null;
+    public Stage myStage=null;
     
     public ObservableList<User> data;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        ServerImpl serverImpl=null;
+        try {
+            serverImpl = new ServerImpl();
+        } catch (RemoteException ex) {
+            Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        serverImpl.setController(this);
+          Platform.runLater(new Runnable() {
+            @Override
+            public void run() { 
+                myStage = (Stage) updateBtn.getScene().getWindow();
+            }
+        });
         operation = new Operation();
         drawStatistics();
         try {
@@ -94,7 +109,7 @@ public class FXMLServerScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLServerScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ServerImpl.setController(this);
+        
         firstName.setCellValueFactory(
                 new PropertyValueFactory<User, String>("firstName"));
         lastName.setCellValueFactory(

@@ -2,9 +2,6 @@ package interfaces;
 
 import entity.FileSender;
 import entity.User;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -55,13 +52,9 @@ public interface ServerInt extends Remote {
 
     public String getGroupName(String id) throws RemoteException;
 
-    public void sendFile(entity.FileSender file) throws RemoteException;
-
     public User getUserById(long id) throws RemoteException, SQLException;
 
     public boolean isOnline(String user_id) throws RemoteException;
-
-    public void reciveFile(FileSender fileSender)throws RemoteException;
     public ClientInt getClinetInt(String id)throws RemoteException;
 
         

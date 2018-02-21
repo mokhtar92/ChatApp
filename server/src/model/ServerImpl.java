@@ -29,6 +29,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import view.ChatServer;
 
 /**
  *
@@ -44,7 +49,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
     private HashMap<String, FileSender> files = new HashMap<>();
     static FXMLServerScreenController controller = null;
 
-    public static void setController(FXMLServerScreenController c) {
+    public void setController(FXMLServerScreenController c) {
         controller = c;
     }
     static int group_Id = 0;
@@ -65,8 +70,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         try {
             registry = LocateRegistry.createRegistry(2000);
         } catch (RemoteException ex) {
-           Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+      
             System.out.println("can't load");
+           Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -112,13 +118,11 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void tellOne(Message message) throws RemoteException {
-
         if (users.containsKey(message.getTo().get(0))) {
             ClientInt client = users.get(message.getTo().get(0));
             client.recieve(message, null);
             client = users.get(message.getFrom());
             client.recieve(message, null);
-
         }
 
     }
@@ -162,7 +166,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
     @Override
     public void unregister(ClientInt client, User user) throws RemoteException {
-        users.remove(user.getRecId());
+        //users.remove(user.getRecId());
         Iterator it = clients.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry) it.next();
@@ -177,8 +181,9 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         while (it.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry) it.next();
             ClientInt iteratorClient = (ClientInt) pair.getValue();
+            String id =(String)pair.getKey();
             if (client != null) {
-                if (client.equals(iteratorClient)) {
+                if (id.equals(user.getRecId()+"")) {
                     it.remove();
                 }
             }
@@ -193,26 +198,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         groupsName.put("group" + group_Id, name);
     }
 
-    @Override
-    public void sendFile(FileSender fileSender) throws RemoteException {
-        file_Id++;
-        files.put(file_Id + "", fileSender);
-        Message message = fileSender.getMessage();
-//        message.setBody(fileSender.getFile().getName().toString());
-        ClientInt client = users.get(message.getFrom());
-        User user = null;
-        try {
-            user = getUserById(Long.parseLong(message.getFrom()));
-        } catch (SQLException ex) {
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (users.containsKey(message.getTo().get(0))) {
-            client = users.get(message.getTo().get(0));
-            client.sendFileToReciever(fileSender,false);
-            client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
-        }
-    }
-
+   
     @Override
     public int getGroupId() throws RemoteException {
         return group_Id;
@@ -559,44 +545,7 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
         }
         return flag;
     }
-    @Override
-    public void reciveFile(FileSender fileSender) {
-      /*  try {
-            String [] split = fileSender.getPath().split("\\.(?=[^\\.]+$)");
-             File file =null ; 
-            if(split.length <2){
-                split = fileSender.getFileName().split("\\.(?=[^\\.]+$)");
-                String extension = "."+split[1];
-                file = new File(fileSender.getPath()+extension);
-            }else{
-                file = new File(fileSender.getPath());
-            }
-            
-
-            file.createNewFile();
-            FileOutputStream out = new FileOutputStream(file, fileSender.isAppend());
-            out.write(fileSender.getData(), 0, fileSender.getDataLength());
-            out.flush();
-            out.close();
-            Message message=fileSender.getMessage();
-           // fileSender.setPath("F:\\"+file.getName());
-            ClientInt client = users.get(message.getFrom());
-        User user = null;
-        try {
-            user = getUserById(Long.parseLong(message.getFrom()));
-        } catch (SQLException ex) {
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (users.containsKey(message.getTo().get(0))) {
-            client = users.get(message.getTo().get(0));
-            client.sendFileToReciever(fileSender);
-            client.recieveFileNotification(NotificationStatus.fileSendStatus, user);
-        }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-*/
-    }
+ 
     @Override
     public ClientInt getClinetInt(String id)throws RemoteException{
        return users.get(id);
