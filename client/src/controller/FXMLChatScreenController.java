@@ -156,7 +156,7 @@ public class FXMLChatScreenController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(FXMLChatScreenController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        myStage.setOnCloseRequest(new EventHandler() {
+        /*myStage.setOnCloseRequest(new EventHandler() {
             @Override
             public void handle(Event event) {
                 
@@ -165,7 +165,7 @@ public class FXMLChatScreenController implements Initializable {
                      System.exit(0);
                
             }
-        });
+        });*/
         //Just for Testing :))
         message.setFrom(user.getRecId() + "");
     }

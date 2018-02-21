@@ -5,6 +5,7 @@
  */
 package model;
 
+import com.sun.org.apache.bcel.internal.generic.D2F;
 import entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.controlsfx.control.WorldMapView;
 
 /**
  *
@@ -40,6 +42,7 @@ public class Operation {
             user.setMyStatus(resultSet.getString(9));
             users.add(user);
         }
+        Database.getInstance().release();
 
         return users;
 
@@ -53,8 +56,10 @@ public class Operation {
         PreparedStatement preparedStatement = db.getPreparedStatement(query);
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
+            Database.getInstance().release();
             return true;
         }
+        Database.getInstance().release();
         return false;
     }
 
@@ -79,6 +84,8 @@ public class Operation {
 
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+           Database.getInstance().release();
         }
         return user;
     }
@@ -94,6 +101,8 @@ public class Operation {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return friendID;
     }

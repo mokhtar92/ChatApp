@@ -260,6 +260,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return isExist;
     }
@@ -327,6 +329,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
 
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return list;
 
@@ -352,6 +356,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return isSend;
     }
@@ -378,6 +384,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return requestSend;
     }
@@ -403,6 +411,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return allRequest;
     }
@@ -424,6 +434,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return isAccepted;
     }
@@ -443,6 +455,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
+        }finally{
+             Database.getInstance().release();
         }
         return isDeleted;
     }
@@ -471,6 +485,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+             Database.getInstance().release();
         }
 
         return null;
@@ -485,6 +501,8 @@ public class ServerImpl extends UnicastRemoteObject implements ServerInt {
             preparedStatement.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+             Database.getInstance().release();
         }
     }
 
