@@ -1,0 +1,320 @@
+--
+-- Create Schema Script 
+--   Database Version   : 11.2.0.2.0 
+--   Toad Version       : 10.1.1.8 
+--   DB Connect String  : XE 
+--   Schema             : CHAT_APP 
+--   Script Created by  : CHAT_APP 
+--   Script Created at  : 2/21/2018 8:53:01 AM 
+--   Physical Location  :  
+--   Notes              :  
+--
+
+-- Object Counts: 
+--   Functions: 2       Lines of Code: 55 
+--   Indexes: 4         Columns: 4          
+--   Sequences: 11 
+--   Tables: 3          Columns: 16         Constraints: 7      
+--   Triggers: 3 
+
+
+CREATE SEQUENCE DEMO_CUST_SEQ
+  START WITH 21
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE DEMO_ORDER_ITEMS_SEQ
+  START WITH 61
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE DEMO_ORD_SEQ
+  START WITH 11
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE DEMO_PROD_SEQ
+  START WITH 21
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE DEMO_USERS_SEQ
+  START WITH 21
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_FRIENDLIST_SEQ
+  START WITH 45
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_FRIENDREQUEST_SEQ
+  START WITH 56
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_GROUP_SEQ
+  START WITH 1
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_IMAGE_SEQ
+  START WITH 1
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_USERGROUP_SEQ
+  START WITH 1
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE SEQUENCE ITI_CHATAPP_USER_SEQ
+  START WITH 75
+  MAXVALUE 999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+
+CREATE TABLE ITI_CHATAPP_FRIENDLIST
+(
+  RECID     NUMBER                              NOT NULL,
+  USERID    NUMBER,
+  FRIENDID  NUMBER
+)
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE TABLE ITI_CHATAPP_FRIENDREQUEST
+(
+  RECID       NUMBER                            NOT NULL,
+  SENDERID    NUMBER,
+  RECEIVERID  NUMBER
+)
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE TABLE ITI_CHATAPP_USER
+(
+  RECID      NUMBER                             NOT NULL,
+  FIRSTNAME  VARCHAR2(20 BYTE),
+  LASTNAME   VARCHAR2(20 BYTE),
+  EMAIL      VARCHAR2(50 BYTE)                  NOT NULL,
+  PASSWORD   VARCHAR2(25 BYTE),
+  COUNTRY    VARCHAR2(20 BYTE),
+  BIRTHDATE  DATE,
+  GENDER     VARCHAR2(10 BYTE),
+  MYSTATUS   VARCHAR2(15 BYTE),
+  IMGURL     VARCHAR2(200 BYTE)
+)
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE UNIQUE INDEX ITI_CHATAPP_FRIENDREQUEST_PK ON ITI_CHATAPP_FRIENDREQUEST
+(RECID)
+LOGGING
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX ITI_CHATAPP_FRIEND_PK ON ITI_CHATAPP_FRIENDLIST
+(RECID)
+LOGGING
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX ITI_CHATAPP_USER_U01 ON ITI_CHATAPP_USER
+(EMAIL)
+LOGGING
+NOPARALLEL;
+
+
+CREATE UNIQUE INDEX USER_PK ON ITI_CHATAPP_USER
+(RECID)
+LOGGING
+NOPARALLEL;
+
+
+CREATE OR REPLACE function custom_auth (p_username in VARCHAR2, p_password in VARCHAR2)
+return BOOLEAN
+is
+  l_password varchar2(4000);
+  l_stored_password varchar2(4000);
+  l_expires_on date;
+  l_count number;
+begin
+-- First, check to see if the user is in the user table
+select count(*) into l_count from demo_users where user_name = p_username;
+if l_count > 0 then
+  -- First, we fetch the stored hashed password & expire date
+  select password, expires_on into l_stored_password, l_expires_on
+   from demo_users where user_name = p_username;
+
+  -- Next, we check to see if the user's account is expired
+  -- If it is, return FALSE
+  if l_expires_on > sysdate or l_expires_on is null then
+
+    -- If the account is not expired, we have to apply the custom hash
+    -- function to the password
+    l_password := custom_hash(p_username, p_password);
+
+    -- Finally, we compare them to see if they are the same and return
+    -- either TRUE or FALSE
+    if l_password = l_stored_password then
+      return true;
+    else
+      return false;
+    end if;
+  else
+    return false;
+  end if;
+else
+  -- The username provided is not in the DEMO_USERS table
+  return false;
+end if;
+end;
+/
+
+SHOW ERRORS;
+
+
+CREATE OR REPLACE function custom_hash (p_username in varchar2, p_password in varchar2)
+return varchar2
+is
+  l_password varchar2(4000);
+  l_salt varchar2(4000) := '952WSDZFD75NRJOIQL0FIBDN3KIW1O';
+begin
+
+-- This function should be wrapped, as the hash algorhythm is exposed here.
+-- You can change the value of l_salt or the method of which to call the
+-- DBMS_OBFUSCATOIN toolkit, but you much reset all of your passwords
+-- if you choose to do this.
+
+l_password := utl_raw.cast_to_raw(dbms_obfuscation_toolkit.md5
+  (input_string => p_password || substr(l_salt,10,13) || p_username ||
+    substr(l_salt, 4,10)));
+return l_password;
+end;
+/
+
+SHOW ERRORS;
+
+
+CREATE OR REPLACE TRIGGER ITI_CHATAPP_FRIENDLIST_TRG
+BEFORE INSERT
+ON ITI_CHATAPP_FRIENDLIST REFERENCING NEW AS New OLD AS Old
+FOR EACH ROW
+BEGIN
+-- For Toad:  Highlight column RECID
+  :new.RECID := ITI_CHATAPP_FRIENDLIST_SEQ.nextval;
+END ITI_CHATAPP_FRIENDLIST_TRG;
+/
+SHOW ERRORS;
+
+
+CREATE OR REPLACE TRIGGER ITI_CHATAPP_FRIENDREQUEST_TRG
+BEFORE INSERT
+ON ITI_CHATAPP_FRIENDREQUEST REFERENCING NEW AS New OLD AS Old
+FOR EACH ROW
+BEGIN
+-- For Toad:  Highlight column RECID
+  :new.RECID := ITI_CHATAPP_FRIENDREQUEST_SEQ.nextval;
+END ITI_CHATAPP_FRIENDREQUEST_TRG;
+/
+SHOW ERRORS;
+
+
+CREATE OR REPLACE TRIGGER ITI_CHATAPP_USER_TRG
+BEFORE INSERT
+ON ITI_CHATAPP_USER REFERENCING NEW AS New OLD AS Old
+FOR EACH ROW
+BEGIN
+-- For Toad:  Highlight column RECID
+  :new.RECID := ITI_CHATAPP_USER_SEQ.nextval;
+END ITI_CHATAPP_USER_TRG;
+/
+SHOW ERRORS;
+
+
+ALTER TABLE ITI_CHATAPP_FRIENDLIST ADD (
+  CONSTRAINT ITI_CHATAPP_FRIEND_PK
+ PRIMARY KEY
+ (RECID));
+
+ALTER TABLE ITI_CHATAPP_FRIENDREQUEST ADD (
+  CONSTRAINT ITI_CHATAPP_FRIENDREQUEST_PK
+ PRIMARY KEY
+ (RECID));
+
+ALTER TABLE ITI_CHATAPP_USER ADD (
+  CONSTRAINT USER_PK
+ PRIMARY KEY
+ (RECID));
+
+ALTER TABLE ITI_CHATAPP_FRIENDLIST ADD (
+  CONSTRAINT ITI_CHATAPP_FRIENDLIST_R01 
+ FOREIGN KEY (USERID) 
+ REFERENCES ITI_CHATAPP_USER (RECID),
+  CONSTRAINT ITI_CHATAPP_FRIENDLIST_R02 
+ FOREIGN KEY (FRIENDID) 
+ REFERENCES ITI_CHATAPP_USER (RECID));
+
+ALTER TABLE ITI_CHATAPP_FRIENDREQUEST ADD (
+  CONSTRAINT ITI_CHATAPP_FRIENDREQUEST_R01 
+ FOREIGN KEY (SENDERID) 
+ REFERENCES ITI_CHATAPP_USER (RECID),
+  CONSTRAINT ITI_CHATAPP_FRIENDREQUEST_R02 
+ FOREIGN KEY (RECEIVERID) 
+ REFERENCES ITI_CHATAPP_USER (RECID));
