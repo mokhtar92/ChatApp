@@ -22,12 +22,9 @@ hs_err_pid*
 /common/nbproject/private/
 /server/nbproject/private/
 /client/nbproject/private/
-/client/dist/
 /client/build/
 /server/build/
-/server/dist/
 /common/build/
-/common/dist/
 client/nbproject/project.properties
 common/nbproject/project.properties
 server/nbproject/project.properties
